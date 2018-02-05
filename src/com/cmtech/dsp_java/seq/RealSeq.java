@@ -1,6 +1,5 @@
 package com.cmtech.dsp_java.seq;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -12,7 +11,7 @@ public class RealSeq extends AbstractSeq<Double> {
 	}
 	
 	public RealSeq(int N) {
-		setToZeroSequence(N);
+		setToAllZeroSequence(N);
 	}
 	
 	public RealSeq(Double...d) {
@@ -30,9 +29,7 @@ public class RealSeq extends AbstractSeq<Double> {
 
 
 	@Override
-	public void setToZeroSequence(int N) {
-		//data = (Double[]) Array.newInstance(getClass().getComponentType(), N);
-		//Double zero = (Double)data[0]type name = new type();.getClass().getComponentType().newInstance();
+	public void setToAllZeroSequence(int N) {
 		data = new Double[N];
 		for(int i = 0; i < N; i++) {
 			data[i] = 0.0;

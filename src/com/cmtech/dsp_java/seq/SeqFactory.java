@@ -14,7 +14,7 @@ public class SeqFactory {
 		return seq;
 	}
 	
-	public static RealSeq createSinSeq(double A, double w, double initphi, int N)	{
+	public static RealSeq createSinSeq(double A, double w, double initphi, int N) {
 		RealSeq out = new RealSeq(N);
 		for(int i = 0; i < N; i++) {
 			out.set(i, A*Math.sin(w*i+initphi));

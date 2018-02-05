@@ -29,21 +29,13 @@ public abstract class AbstractSeq<E> implements ISeq<E> {
 	
 	@Override
 	public E get(int i) {
-		if(i < data.length)
-			return data[i];
-		else
-			return null;
+		return data[i];
 	}
 
 	@Override
 	public boolean set(int i, E element) {
-		if(i < size())
-		{
-			data[i] = element;
-			return true;
-		}
-		else
-			return false;
+		data[i] = element;
+		return true;
 	}
 
 	@Override
@@ -58,12 +50,19 @@ public abstract class AbstractSeq<E> implements ISeq<E> {
 	
 	@Override
 	public void clear() {
-		data = (E[]) Array.newInstance(data.getClass().getComponentType(), 0);
+		data = newAllNullArray(0);
 	}
 	
 	@Override
 	public ComplexSeq dtft(int N) {
 		return dtft(SeqFactory.linSpace(0, Math.PI, N));
 	}
+
+	
+	@SuppressWarnings("unchecked")
+	public E[] newAllNullArray(int N) {
+		return (E[]) Array.newInstance(data.getClass().getComponentType(), N);
+	}
+	
 
 }

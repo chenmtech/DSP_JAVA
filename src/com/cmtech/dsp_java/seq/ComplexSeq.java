@@ -1,6 +1,5 @@
 package com.cmtech.dsp_java.seq;
 
-import java.lang.reflect.Array;
 import java.util.Collection;
 
 /**
@@ -20,7 +19,7 @@ public class ComplexSeq extends AbstractSeq<Complex> {
 	}
 	
 	public ComplexSeq(int N) {
-		setToZeroSequence(N);
+		setToAllZeroSequence(N);
 	}
 	
 	public ComplexSeq(Complex... d) {
@@ -51,7 +50,7 @@ public class ComplexSeq extends AbstractSeq<Complex> {
 	
 	
 	@Override
-	public void setToZeroSequence(int N) {
+	public void setToAllZeroSequence(int N) {
 		data = new Complex[N];
 		for(int i = 0; i < N; i++) {
 			data[i] = new Complex();
@@ -160,5 +159,12 @@ public class ComplexSeq extends AbstractSeq<Complex> {
 		return out;
 	}
 	
-
+	public RealSeq dB() {
+		RealSeq out = abs();
+		double max = out.max();
+		for(int i = 0; i < out.size(); i++) {			
+			out.set(i, 20*Math.log10(out.get(i)/max));
+		}
+		return out;	
+	}
 }

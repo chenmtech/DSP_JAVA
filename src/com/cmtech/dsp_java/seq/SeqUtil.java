@@ -4,12 +4,6 @@ public class SeqUtil {
 	private SeqUtil() {
 	}
 	
-	public static RealSeq add(RealSeq seq, double a) {
-		RealSeq out = new RealSeq(seq);
-		out.plus(a);
-		return out;
-	}	
-	
 	public static RealSeq add(RealSeq seq1, RealSeq seq2) {
 		int N = Math.max(seq1.size(), seq2.size());
 		RealSeq out = new RealSeq(N);
@@ -21,12 +15,6 @@ public class SeqUtil {
 			out.set(i, tmp1+tmp2);
 		}
 		return out;	
-	}
-
-	public static ComplexSeq add(ComplexSeq seq, Complex a) {
-		ComplexSeq out = new ComplexSeq(seq);
-		out.plus(a);
-		return out;
 	}
 	
 	public static ComplexSeq add(ComplexSeq seq1, ComplexSeq seq2) {
@@ -42,12 +30,6 @@ public class SeqUtil {
 		return out;	
 	}
 	
-	public static RealSeq multiple(RealSeq seq, double a) {
-		RealSeq out = new RealSeq(seq);
-		out.multiple(a);
-		return out;
-	}	
-	
 	public static RealSeq multiple(RealSeq seq1, RealSeq seq2) {
 		int N = Math.max(seq1.size(), seq2.size());
 		RealSeq out = new RealSeq(N);
@@ -59,12 +41,6 @@ public class SeqUtil {
 			out.set(i, tmp1*tmp2);
 		}
 		return out;	
-	}
-
-	public static ComplexSeq multiple(ComplexSeq seq, Complex a) {
-		ComplexSeq out = new ComplexSeq(seq);
-		out.multiple(a);
-		return out;
 	}
 	
 	public static ComplexSeq multiple(ComplexSeq seq1, ComplexSeq seq2) {
@@ -93,40 +69,6 @@ public class SeqUtil {
 		return out;	
 	}	
 	
-	/*public static RealSeq abs(RealSeq seq) {
-		RealSeq out = new RealSeq(seq.size());
-		for(int i = 0; i < out.size(); i++) {			
-			out.set(i, Math.abs(seq.get(i)));
-		}
-		return out;	
-	}*/
-	
-	public static RealSeq abs(ComplexSeq seq) {
-		RealSeq out = new RealSeq(seq.size());
-		for(int i = 0; i < out.size(); i++) {			
-			out.set(i, seq.get(i).abs());
-		}
-		return out;	
-	}
-	
-	public static RealSeq angle(ComplexSeq seq) {
-		RealSeq out = new RealSeq(seq.size());
-		for(int i = 0; i < out.size(); i++) {			
-			out.set(i, seq.get(i).angle());
-		}
-		return out;	
-	}
-	
-	public static RealSeq dB(ComplexSeq seq) {
-		RealSeq out = SeqUtil.abs(seq);
-		double max = out.max();
-		for(int i = 0; i < out.size(); i++) {			
-			out.set(i, 20*Math.log10(out.get(i)/max));
-		}
-		return out;	
-	}
-
-	
 	public static RealSeq conv(RealSeq seq1, RealSeq seq2) {
 	    int N1 = seq1.size();
 	    int N2 = seq2.size();
@@ -152,6 +94,28 @@ public class SeqUtil {
 	    return out;
 	}
 	
-	
-	
+	public static ComplexSeq conv(ComplexSeq seq1, ComplexSeq seq2) {
+	    int N1 = seq1.size();
+	    int N2 = seq2.size();
+	    int N = N1+N2-1;
+	    
+	    ComplexSeq out = new ComplexSeq(N);
+	    
+	    int n = 0;
+	    int m = 0;
+	    int n_m = 0;  
+	    Complex tmp = new Complex();
+	    for(n = 0; n < N; n++)
+	    {
+	    		tmp = new Complex();
+	        for(m = 0; m < N1; m++)
+	        {
+	            n_m = n - m;
+	            if( (n_m >= 0) && (n_m < N2) )
+	            		tmp.add(Complex.multiple(seq1.get(m), seq2.get(n_m)));
+	        }
+	        out.set(n, tmp);
+	    }
+	    return out;
+	}
 }

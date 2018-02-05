@@ -16,6 +16,8 @@ import com.cmtech.dsp_java.filter.design.WinType;
 import com.cmtech.dsp_java.seq.Complex;
 import com.cmtech.dsp_java.seq.ComplexSeq;
 import com.cmtech.dsp_java.seq.RealSeq;
+import com.cmtech.dsp_java.seq.SeqFactory;
+import com.cmtech.dsp_java.seq.SeqUtil;
 
 public class DspJava {
 
@@ -40,13 +42,14 @@ public class DspJava {
 		System.out.println(iir.getB());
 		System.out.println(iir.getA());
 		System.out.println(iir.freq(101).abs());
+		System.out.println(iir.freq(101).dB());
 		
 		RealSeq tmp = new RealSeq(1.0);
 		System.out.println(tmp);
 		
 		RealSeq aaa = new RealSeq(1.0,0.0,-1.0);
 		System.out.println(aaa);
-		changeSize(aaa);
+		changeSize((double[])aaa.toArray());
 		System.out.println(aaa);
 		
 		ArrayList<Integer> arr = new ArrayList<Integer>();
@@ -66,10 +69,23 @@ public class DspJava {
 		RealSeq seq11 = new RealSeq();
 		seq11.clear();
 		System.out.println(seq11);
+		
+		RealSeq seq111 = SeqFactory.createRndSeq(3);
+		RealSeq seq112 = SeqFactory.createRndSeq(3);
+		RealSeq seq113 = SeqUtil.conv(seq111, seq112);
+		System.out.println(seq113);
+		ComplexSeq seq121 = new ComplexSeq(new RealSeq(3),seq111);
+		ComplexSeq seq122 = new ComplexSeq(new RealSeq(3),seq112);
+		ComplexSeq seq123 = SeqUtil.conv(seq121, seq122);
+		System.out.println(seq123);
+		
+		
+		
+		
 	}
 	
-	private static void changeSize(RealSeq seq) {
-		seq.changeSize(seq.size()+2);
+	private static double[] changeSize(double[] a) {
+		return a;
 	}
 
 }
