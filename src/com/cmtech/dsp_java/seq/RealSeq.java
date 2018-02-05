@@ -2,98 +2,69 @@ package com.cmtech.dsp_java.seq;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 
-public class RealSeq extends AbstractSeq<Double> {
+public class RealSeq implements IRealSeq {
+	protected double[] data;
 	
 	public RealSeq() {
-		data = new Double[0];
+		data = new double[0];
 	}
 	
 	public RealSeq(int N) {
-		setToAllZeroSequence(N);
+		initToZeroSequence(N);
 	}
 	
-	public RealSeq(Double...d) {
-		super(d);
+	public RealSeq(double...d) {
+		data = Arrays.copyOf(d, d.length);
 	}
 	
 	
 	public RealSeq(Collection<Double> d) {
-		super(d);
+		data = new double[d.size()];
+		int i = 0;
+		for(Double ele : d) {
+			data[i] = ele;
+		}
 	}
 	
 	public RealSeq(RealSeq seq) {
-		super(seq);
+		data = Arrays.copyOf(seq.data, seq.size());
 	}
 
-
 	@Override
-	public void setToAllZeroSequence(int N) {
-		data = new Double[N];
-		for(int i = 0; i < N; i++) {
-			data[i] = 0.0;
-		}
+	public void initToZeroSequence(int N) {
+		data = new double[N];
 	}	
 
+	/**
+	 * TODO 简单描述该方法的实现功能（可选）.
+	 * @see com.cmtech.dsp_java.seq.ISeq#clear()
+	 */
+	@Override
+	public void clear() {
+		data = new double[0];
+	}
+	
+	/**
+	 * TODO 简单描述该方法的实现功能（可选）.
+	 * @see com.cmtech.dsp_java.seq.ISeq#size()
+	 */
+	@Override
+	public int size() {
+		return data.length;
+	}
 
 	@Override
 	public void changeSize(int N) {
 		if(size() == N) return;
 		
-		Double[] buf = new Double[N];
+		double[] buf = new double[N];
 		for(int i = 0; i < N; i++) {
 			if(i < data.length) buf[i] = data[i];
 			else buf[i] = 0.0;
 		}
 		data = buf;
 	}
-	
-	@Override
-	public RealSeq reverse() {
-		RealSeq out = new RealSeq(size());
-		for(int i = 0; i < data.length; i++)
-	    {
-	        out.data[i] = data[data.length-1-i];
-	    }
-		return out;
-	}
-	
-	@Override
-	public RealSeq plus(Double a) {
-		RealSeq out = new RealSeq(this);
-		for(int i = 0; i < size(); i++) {
-			out.data[i] += a;
-		}
-		return out;
-	}
-	
-	@Override
-	public RealSeq minus(Double a) {
-		RealSeq out = new RealSeq(this);
-		for(int i = 0; i < size(); i++) {
-			out.data[i] -= a;
-		}
-		return out;
-	}
-
-	@Override
-	public RealSeq multiple(Double a) {
-		RealSeq out = new RealSeq(this);
-		for(int i = 0; i < size(); i++) {
-			out.data[i] *= a;
-		}
-		return out;
-	}	
-	
-	@Override
-	public RealSeq divide(Double a) {
-		RealSeq out = new RealSeq(this);
-		for(int i = 0; i < size(); i++) {
-			out.data[i] /= a;
-		}
-		return out;
-	}	
 	
 	
 	@Override
@@ -113,29 +84,133 @@ public class RealSeq extends AbstractSeq<Double> {
 		}
 		return out;
 	}
-
-	@Override
-	public Double sum() {
-		Double sum = 0.0;
-		for(Double ele : data) {
-			sum += ele;
-		}
-		return sum;
-	}
-	
 	
 	@Override
 	public ComplexSeq dtft(RealSeq omega) {
 		ComplexSeq out = new ComplexSeq(this).dtft(omega);
 		return out;
 	}
+	
+	/**
+	 * TODO 简单描述该方法的实现功能（可选）.
+	 * @see com.cmtech.dsp_java.seq.ISeq#dtft(int)
+	 */
+	@Override
+	public ComplexSeq dtft(int N) {
+		return dtft(SeqFactory.linSpace(0, Math.PI, N));
+	}
+	
+	/**
+	 * TODO 简单描述该方法的实现功能（可选）.
+	 * @see com.cmtech.dsp_java.seq.IRealSeq#get(int)
+	 */
+	@Override
+	public double get(int i) {
+		// TODO Auto-generated method stub
+		return data[i];
+	}
 
+	/**
+	 * TODO 简单描述该方法的实现功能（可选）.
+	 * @see com.cmtech.dsp_java.seq.IRealSeq#set(int, double)
+	 */
+	@Override
+	public boolean set(int i, double element) {
+		data[i] = element;
+		return true;
+	}
+	
+	/**
+	 * TODO 简单描述该方法的实现功能（可选）.
+	 * @see com.cmtech.dsp_java.seq.IRealSeq#toArray()
+	 */
+	@Override
+	public double[] toArray() {
+		// TODO Auto-generated method stub
+		return Arrays.copyOf(data, data.length);
+	}
+	
+	@Override
+	public String toString() {
+		return getClass().getSimpleName() + "[ size=" + data.length + " data=" + Arrays.toString(data) + " ]";
+	}
+	
+	@Override
+	public RealSeq reverse() {
+		RealSeq out = new RealSeq(size());
+		for(int i = 0; i < data.length; i++)
+	    {
+	        out.data[i] = data[data.length-1-i];
+	    }
+		return out;
+	}
+	
+	@Override
+	public RealSeq plus(double a) {
+		RealSeq out = new RealSeq(this);
+		for(int i = 0; i < size(); i++) {
+			out.data[i] += a;
+		}
+		return out;
+	}
+	
+	@Override
+	public RealSeq minus(double a) {
+		RealSeq out = new RealSeq(this);
+		for(int i = 0; i < size(); i++) {
+			out.data[i] -= a;
+		}
+		return out;
+	}
+
+	@Override
+	public RealSeq multiple(double a) {
+		RealSeq out = new RealSeq(this);
+		for(int i = 0; i < size(); i++) {
+			out.data[i] *= a;
+		}
+		return out;
+	}	
+	
+	@Override
+	public RealSeq divide(double a) {
+		RealSeq out = new RealSeq(this);
+		for(int i = 0; i < size(); i++) {
+			out.data[i] /= a;
+		}
+		return out;
+	}	
+	
+
+
+	@Override
+	public double sum() {
+		double sum = 0.0;
+		for(double ele : data) {
+			sum += ele;
+		}
+		
+		return sum;
+	}
+
+	@Override
 	public double max() {
-		return Collections.max(Arrays.asList(data));
+		if(data.length < 1) return 0.0;
+		double tmp = data[0];
+		for(int i = 1; i < data.length; i++) {
+			tmp = (tmp < data[i]) ? data[i] : tmp;
+		}
+		return tmp;
 	}
 	
+	@Override
 	public double min() {
-		return Collections.min(Arrays.asList(data));
+		if(data.length < 1) return 0.0;
+		double tmp = data[0];
+		for(int i = 1; i < data.length; i++) {
+			tmp = (tmp > data[i]) ? data[i] : tmp;
+		}
+		return tmp;
 	}
-	
+
 }

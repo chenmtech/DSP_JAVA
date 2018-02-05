@@ -1,5 +1,6 @@
 package com.cmtech.dsp_java.seq;
 
+import java.util.Arrays;
 import java.util.Collection;
 
 /**
@@ -12,26 +13,27 @@ import java.util.Collection;
  * @version 
  * @since JDK 1.6
  */
-public class ComplexSeq extends AbstractSeq<Complex> {
+public class ComplexSeq implements IComplexSeq {
+	protected Complex[] data;
 	
 	public ComplexSeq() {
 		data = new Complex[0];
 	}
 	
 	public ComplexSeq(int N) {
-		setToAllZeroSequence(N);
+		initToZeroSequence(N);
 	}
 	
 	public ComplexSeq(Complex... d) {
-		super(d);
+		data = Arrays.copyOf(d, d.length);
 	}
 	
 	public ComplexSeq(Collection<Complex> d) {
-		super(d);
+		data = (Complex[]) Arrays.copyOf(d.toArray(),d.size());
 	}
 	
 	public ComplexSeq(ComplexSeq seq) {
-		super(seq);
+		data = (Complex[]) Arrays.copyOf(seq.data, seq.size());
 	}
 	
 	public ComplexSeq(RealSeq re, RealSeq im) {
@@ -48,16 +50,33 @@ public class ComplexSeq extends AbstractSeq<Complex> {
 		this(re, new RealSeq(re.size()));
 	}
 	
-	
 	@Override
-	public void setToAllZeroSequence(int N) {
+	public void initToZeroSequence(int N) {
 		data = new Complex[N];
 		for(int i = 0; i < N; i++) {
 			data[i] = new Complex();
 		}
 	}
 
-
+	/**
+	 * TODO 简单描述该方法的实现功能（可选）.
+	 * @see com.cmtech.dsp_java.seq.ISeq#clear()
+	 */
+	@Override
+	public void clear() {
+		data = new Complex[0];
+	}
+	
+	/**
+	 * TODO 简单描述该方法的实现功能（可选）.
+	 * @see com.cmtech.dsp_java.seq.ISeq#size()
+	 */
+	@Override
+	public int size() {
+		// TODO Auto-generated method stub
+		return data.length;
+	}
+	
 	@Override
 	public void changeSize(int N) {
 		if(size() == N) return;
@@ -69,8 +88,83 @@ public class ComplexSeq extends AbstractSeq<Complex> {
 		}
 		data = buf;
 	}
-
 	
+	@Override
+	public RealSeq abs() {
+		RealSeq out = new RealSeq(size());
+		for(int i = 0; i < size(); i++) {
+			out.data[i] = data[i].abs();
+		}
+		return out;
+	}
+	
+	@Override
+	public RealSeq angle() {
+		RealSeq out = new RealSeq(size());
+		for(int i = 0; i < size(); i++) {
+			out.data[i] = data[i].angle();
+		}
+		return out;
+	}
+	
+
+	@Override
+	public ComplexSeq dtft(RealSeq omega) {
+		int Nw = omega.size();
+		ComplexSeq out = new ComplexSeq(Nw);
+		int N = size();
+		ComplexSeq ejwn, tmpseq;
+		for(int i = 0; i < Nw; i++) {
+			ejwn = SeqFactory.createEJWSeq(-omega.get(i), 0, N);
+			tmpseq = SeqUtil.multiple(this, ejwn);
+			out.set(i, tmpseq.sum());
+		}
+		return out;
+	}
+	
+	/**
+	 * TODO 简单描述该方法的实现功能（可选）.
+	 * @see com.cmtech.dsp_java.seq.ISeq#dtft(int)
+	 */
+	@Override
+	public ComplexSeq dtft(int N) {
+		return dtft(SeqFactory.linSpace(0, Math.PI, N));
+	}
+	
+	/**
+	 * TODO 简单描述该方法的实现功能（可选）.
+	 * @see com.cmtech.dsp_java.seq.IComplexSeq#get(int)
+	 */
+	@Override
+	public Complex get(int i) {
+		// TODO Auto-generated method stub
+		return data[i];
+	}
+
+	/**
+	 * TODO 简单描述该方法的实现功能（可选）.
+	 * @see com.cmtech.dsp_java.seq.IComplexSeq#set(int, com.cmtech.dsp_java.seq.Complex)
+	 */
+	@Override
+	public boolean set(int i, Complex element) {
+		data[i] = element;
+		return true;
+	}
+	
+	/**
+	 * TODO 简单描述该方法的实现功能（可选）.
+	 * @see com.cmtech.dsp_java.seq.IComplexSeq#toArray()
+	 */
+	@Override
+	public Complex[] toArray() {
+		return Arrays.copyOf(data, data.length);
+	}
+	
+	@Override
+	public String toString() {
+		return getClass().getSimpleName() + "[ size=" + data.length + " data=" + Arrays.toString(data) + " ]";
+	}
+
 	@Override
 	public ComplexSeq reverse() {
 		ComplexSeq out = new ComplexSeq(size());
@@ -119,44 +213,12 @@ public class ComplexSeq extends AbstractSeq<Complex> {
 	}
 	
 	@Override
-	public RealSeq abs() {
-		RealSeq out = new RealSeq(size());
-		for(int i = 0; i < size(); i++) {
-			out.data[i] = data[i].abs();
-		}
-		return out;
-	}
-	
-	@Override
-	public RealSeq angle() {
-		RealSeq out = new RealSeq(size());
-		for(int i = 0; i < size(); i++) {
-			out.data[i] = data[i].angle();
-		}
-		return out;
-	}
-
-	@Override
 	public Complex sum() {
 		Complex sum = new Complex();
 		for(Complex ele : data) {
 			sum.add(ele);
 		}
 		return sum;
-	}
-
-	@Override
-	public ComplexSeq dtft(RealSeq omega) {
-		int Nw = omega.size();
-		ComplexSeq out = new ComplexSeq(Nw);
-		int N = size();
-		ComplexSeq ejwn, tmpseq;
-		for(int i = 0; i < Nw; i++) {
-			ejwn = SeqFactory.createEJWSeq(-omega.get(i), 0, N);
-			tmpseq = SeqUtil.multiple(this, ejwn);
-			out.set(i, tmpseq.sum());
-		}
-		return out;
 	}
 	
 	public RealSeq dB() {

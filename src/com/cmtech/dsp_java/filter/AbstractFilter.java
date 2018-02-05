@@ -4,8 +4,8 @@ import com.cmtech.dsp_java.filter.design.Spec;
 import com.cmtech.dsp_java.seq.RealSeq;
 
 public abstract class AbstractFilter implements IFilter {
-	protected Double[] b;
-	protected Double[] a;
+	protected double[] b;
+	protected double[] a;
 	protected Spec spec;
 	
 	public AbstractFilter() {
