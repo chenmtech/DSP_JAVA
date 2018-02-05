@@ -27,4 +27,5 @@ public interface ISeq {
 	RealSeq angle();
 	ComplexSeq dtft(RealSeq omega);
 	ComplexSeq dtft(int N);
+	ComplexSeq fft();
 }

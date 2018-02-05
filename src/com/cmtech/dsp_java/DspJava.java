@@ -71,13 +71,10 @@ public class DspJava {
 		System.out.println(seq11);
 		
 		RealSeq seq111 = SeqFactory.createRndSeq(3);
-		RealSeq seq112 = SeqFactory.createRndSeq(3);
-		RealSeq seq113 = SeqUtil.conv(seq111, seq112);
-		System.out.println(seq113);
-		ComplexSeq seq121 = new ComplexSeq(new RealSeq(3),seq111);
-		ComplexSeq seq122 = new ComplexSeq(new RealSeq(3),seq112);
-		ComplexSeq seq123 = SeqUtil.conv(seq121, seq122);
-		System.out.println(seq123);
+		seq111.changeSize(4);
+		System.out.println(seq111);
+		System.out.println(seq111.dtft(3));
+		System.out.println(seq111.fft());
 		
 		
 		

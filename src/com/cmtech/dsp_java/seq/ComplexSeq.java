@@ -14,7 +14,7 @@ import java.util.Collection;
  * @since JDK 1.6
  */
 public class ComplexSeq implements IComplexSeq {
-	protected Complex[] data;
+	private Complex[] data;
 	
 	public ComplexSeq() {
 		data = new Complex[0];
@@ -93,7 +93,7 @@ public class ComplexSeq implements IComplexSeq {
 	public RealSeq abs() {
 		RealSeq out = new RealSeq(size());
 		for(int i = 0; i < size(); i++) {
-			out.data[i] = data[i].abs();
+			out.set(i, data[i].abs());
 		}
 		return out;
 	}
@@ -102,7 +102,7 @@ public class ComplexSeq implements IComplexSeq {
 	public RealSeq angle() {
 		RealSeq out = new RealSeq(size());
 		for(int i = 0; i < size(); i++) {
-			out.data[i] = data[i].angle();
+			out.set(i, data[i].angle());
 		}
 		return out;
 	}
@@ -128,7 +128,8 @@ public class ComplexSeq implements IComplexSeq {
 	 */
 	@Override
 	public ComplexSeq dtft(int N) {
-		return dtft(SeqFactory.linSpace(0, Math.PI, N));
+		//复序列的DTFT没有对称性，所以需要求0~2*PI整个周期的频谱
+		return dtft(SeqFactory.linSpace(0, 2*Math.PI, N));	
 	}
 	
 	/**
@@ -229,4 +230,12 @@ public class ComplexSeq implements IComplexSeq {
 		}
 		return out;	
 	}
+
+	@Override
+	public ComplexSeq fft() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	
 }

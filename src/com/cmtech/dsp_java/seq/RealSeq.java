@@ -3,8 +3,12 @@ package com.cmtech.dsp_java.seq;
 import java.util.Arrays;
 import java.util.Collection;
 
+import org.apache.commons.math3.transform.DftNormalization;
+import org.apache.commons.math3.transform.FastFourierTransformer;
+import org.apache.commons.math3.transform.TransformType;
+
 public class RealSeq implements IRealSeq {
-	protected double[] data;
+	private double[] data;
 	
 	public RealSeq() {
 		data = new double[0];
@@ -212,5 +216,18 @@ public class RealSeq implements IRealSeq {
 		}
 		return tmp;
 	}
+
+	@Override
+	public ComplexSeq fft() {
+		FastFourierTransformer fft = new FastFourierTransformer(DftNormalization.STANDARD);
+		org.apache.commons.math3.complex.Complex[] result = fft.transform(data, TransformType.FORWARD); 
+		ComplexSeq rtn = new ComplexSeq(result.length);
+		for(int i = 0; i < result.length; i++) {
+			rtn.set(i, new Complex(result[i].getReal(), result[i].getImaginary()));
+		}
+		return rtn;
+	}
+	
+	
 
 }
