@@ -1,5 +1,6 @@
 package com.cmtech.dsp_java.seq;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -11,7 +12,7 @@ public class RealSeq extends AbstractSeq<Double> {
 	}
 	
 	public RealSeq(int N) {
-		setAsZeroSequence(N);
+		setToZeroSequence(N);
 	}
 	
 	public RealSeq(Double...d) {
@@ -29,23 +30,20 @@ public class RealSeq extends AbstractSeq<Double> {
 
 
 	@Override
-	public void setAsZeroSequence(int N) {
-		// TODO Auto-generated method stub
+	public void setToZeroSequence(int N) {
+		//data = (Double[]) Array.newInstance(getClass().getComponentType(), N);
+		//Double zero = (Double)data[0]type name = new type();.getClass().getComponentType().newInstance();
 		data = new Double[N];
 		for(int i = 0; i < N; i++) {
 			data[i] = 0.0;
 		}
 	}	
-	
-	@Override
-	public void clear() {
-		// TODO Auto-generated method stub
-		data = new Double[0];
-	}
 
 
 	@Override
 	public void changeSize(int N) {
+		if(size() == N) return;
+		
 		Double[] buf = new Double[N];
 		for(int i = 0; i < N; i++) {
 			if(i < data.length) buf[i] = data[i];
@@ -65,7 +63,7 @@ public class RealSeq extends AbstractSeq<Double> {
 	}
 	
 	@Override
-	public RealSeq add(Double a) {
+	public RealSeq plus(Double a) {
 		RealSeq out = new RealSeq(this);
 		for(int i = 0; i < size(); i++) {
 			out.data[i] += a;
@@ -74,10 +72,28 @@ public class RealSeq extends AbstractSeq<Double> {
 	}
 	
 	@Override
+	public RealSeq minus(Double a) {
+		RealSeq out = new RealSeq(this);
+		for(int i = 0; i < size(); i++) {
+			out.data[i] -= a;
+		}
+		return out;
+	}
+
+	@Override
 	public RealSeq multiple(Double a) {
 		RealSeq out = new RealSeq(this);
 		for(int i = 0; i < size(); i++) {
 			out.data[i] *= a;
+		}
+		return out;
+	}	
+	
+	@Override
+	public RealSeq divide(Double a) {
+		RealSeq out = new RealSeq(this);
+		for(int i = 0; i < size(); i++) {
+			out.data[i] /= a;
 		}
 		return out;
 	}	
@@ -91,10 +107,18 @@ public class RealSeq extends AbstractSeq<Double> {
 		}
 		return out;
 	}
+	
+	@Override
+	public RealSeq angle() {
+		RealSeq out = new RealSeq(size());
+		for(int i = 0; i < size(); i++) {
+			out.data[i] = Math.atan2(0, data[i]);
+		}
+		return out;
+	}
 
 	@Override
 	public Double sum() {
-		// TODO Auto-generated method stub
 		Double sum = 0.0;
 		for(Double ele : data) {
 			sum += ele;
@@ -105,15 +129,7 @@ public class RealSeq extends AbstractSeq<Double> {
 	
 	@Override
 	public ComplexSeq dtft(RealSeq omega) {
-		// TODO Auto-generated method stub
 		ComplexSeq out = new ComplexSeq(this).dtft(omega);
-		return out;
-	}
-	
-	@Override
-	public ComplexSeq dtft(int N) {
-		// TODO Auto-generated method stub
-		ComplexSeq out = dtft(SeqFactory.linSpace(0, Math.PI, N));
 		return out;
 	}
 

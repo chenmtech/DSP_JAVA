@@ -1,7 +1,18 @@
 package com.cmtech.dsp_java.seq;
 
+import java.lang.reflect.Array;
 import java.util.Collection;
 
+/**
+ * ClassName: ComplexSeq
+ * Function: 复序列. 
+ * Reason: TODO ADD REASON(可选). 
+ * date: 2018年2月2日 上午5:56:24 
+ *
+ * @author bme
+ * @version 
+ * @since JDK 1.6
+ */
 public class ComplexSeq extends AbstractSeq<Complex> {
 	
 	public ComplexSeq() {
@@ -9,7 +20,7 @@ public class ComplexSeq extends AbstractSeq<Complex> {
 	}
 	
 	public ComplexSeq(int N) {
-		setAsZeroSequence(N);
+		setToZeroSequence(N);
 	}
 	
 	public ComplexSeq(Complex... d) {
@@ -25,7 +36,9 @@ public class ComplexSeq extends AbstractSeq<Complex> {
 	}
 	
 	public ComplexSeq(RealSeq re, RealSeq im) {
-		int N = Math.min(re.size(), im.size());
+		int N = Math.max(re.size(), im.size());
+		re.changeSize(N);
+		im.changeSize(N);
 		data = new Complex[N];
 		for(int i = 0; i < N; i++) {
 			data[i] = new Complex(re.get(i), im.get(i));
@@ -38,7 +51,7 @@ public class ComplexSeq extends AbstractSeq<Complex> {
 	
 	
 	@Override
-	public void setAsZeroSequence(int N) {
+	public void setToZeroSequence(int N) {
 		data = new Complex[N];
 		for(int i = 0; i < N; i++) {
 			data[i] = new Complex();
@@ -48,6 +61,8 @@ public class ComplexSeq extends AbstractSeq<Complex> {
 
 	@Override
 	public void changeSize(int N) {
+		if(size() == N) return;
+		
 		Complex[] buf = new Complex[N];
 		for(int i = 0; i < N; i++) {
 			if(i < data.length) buf[i] = data[i];
@@ -56,10 +71,6 @@ public class ComplexSeq extends AbstractSeq<Complex> {
 		data = buf;
 	}
 
-	@Override
-	public void clear() {
-		data = new Complex[0];
-	}
 	
 	@Override
 	public ComplexSeq reverse() {
@@ -72,7 +83,7 @@ public class ComplexSeq extends AbstractSeq<Complex> {
 	}
 	
 	@Override
-	public ComplexSeq add(Complex a) {
+	public ComplexSeq plus(Complex a) {
 		ComplexSeq out = new ComplexSeq(this);
 		for(int i = 0; i < size(); i++) {
 			out.data[i].add(a);
@@ -80,11 +91,30 @@ public class ComplexSeq extends AbstractSeq<Complex> {
 		return out;
 	}
 	
+	
+	@Override
+	public ComplexSeq minus(Complex a) {
+		ComplexSeq out = new ComplexSeq(this);
+		for(int i = 0; i < size(); i++) {
+			out.data[i].subtract(a);
+		}
+		return out;
+	}
+
 	@Override
 	public ComplexSeq multiple(Complex a) {
 		ComplexSeq out = new ComplexSeq(this);
 		for(int i = 0; i < size(); i++) {
 			out.data[i].multiple(a);
+		}
+		return out;
+	}
+	
+	@Override
+	public ComplexSeq divide(Complex a) {
+		ComplexSeq out = new ComplexSeq(this);
+		for(int i = 0; i < size(); i++) {
+			out.data[i].divide(a);
 		}
 		return out;
 	}
@@ -98,6 +128,7 @@ public class ComplexSeq extends AbstractSeq<Complex> {
 		return out;
 	}
 	
+	@Override
 	public RealSeq angle() {
 		RealSeq out = new RealSeq(size());
 		for(int i = 0; i < size(); i++) {
@@ -108,7 +139,6 @@ public class ComplexSeq extends AbstractSeq<Complex> {
 
 	@Override
 	public Complex sum() {
-		// TODO Auto-generated method stub
 		Complex sum = new Complex();
 		for(Complex ele : data) {
 			sum.add(ele);
@@ -118,7 +148,6 @@ public class ComplexSeq extends AbstractSeq<Complex> {
 
 	@Override
 	public ComplexSeq dtft(RealSeq omega) {
-		// TODO Auto-generated method stub
 		int Nw = omega.size();
 		ComplexSeq out = new ComplexSeq(Nw);
 		int N = size();
@@ -128,13 +157,6 @@ public class ComplexSeq extends AbstractSeq<Complex> {
 			tmpseq = SeqUtil.multiple(this, ejwn);
 			out.set(i, tmpseq.sum());
 		}
-		return out;
-	}
-	
-	@Override
-	public ComplexSeq dtft(int N) {
-		// TODO Auto-generated method stub
-		ComplexSeq out = dtft(SeqFactory.linSpace(0, Math.PI, N));
 		return out;
 	}
 	

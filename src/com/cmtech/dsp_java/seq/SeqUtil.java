@@ -6,7 +6,7 @@ public class SeqUtil {
 	
 	public static RealSeq add(RealSeq seq, double a) {
 		RealSeq out = new RealSeq(seq);
-		out.add(a);
+		out.plus(a);
 		return out;
 	}	
 	
@@ -25,7 +25,7 @@ public class SeqUtil {
 
 	public static ComplexSeq add(ComplexSeq seq, Complex a) {
 		ComplexSeq out = new ComplexSeq(seq);
-		out.add(a);
+		out.plus(a);
 		return out;
 	}
 	
@@ -93,13 +93,13 @@ public class SeqUtil {
 		return out;	
 	}	
 	
-	public static RealSeq abs(RealSeq seq) {
+	/*public static RealSeq abs(RealSeq seq) {
 		RealSeq out = new RealSeq(seq.size());
 		for(int i = 0; i < out.size(); i++) {			
 			out.set(i, Math.abs(seq.get(i)));
 		}
 		return out;	
-	}
+	}*/
 	
 	public static RealSeq abs(ComplexSeq seq) {
 		RealSeq out = new RealSeq(seq.size());

@@ -1,24 +1,27 @@
 package com.cmtech.dsp_java.seq;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Collection;
 
 public abstract class AbstractSeq<E> implements ISeq<E> {
 	protected E[] data;
 	
+	@SafeVarargs
 	public AbstractSeq(E... d) {
 		data = Arrays.copyOf(d, d.length);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public AbstractSeq(Collection<E> d) {
-		data = Arrays.copyOf((E[])d.toArray(),d.size());
+		data = (E[]) Arrays.copyOf(d.toArray(),d.size());
 	}
 	
-	public AbstractSeq(AbstractSeq seq) {
-		data = Arrays.copyOf((E[])seq.toArray(), seq.size());
+	public AbstractSeq(AbstractSeq<E> seq) {
+		data = (E[]) Arrays.copyOf(seq.toArray(), seq.size());
 	}
 
-	
+
 	@Override
 	public String toString() {
 		return getClass().getSimpleName() + "[ size=" + data.length + " data=" + Arrays.toString(data) + " ]";
@@ -51,6 +54,16 @@ public abstract class AbstractSeq<E> implements ISeq<E> {
 	@Override
 	public int size() {
 		return data.length;
+	}
+	
+	@Override
+	public void clear() {
+		data = (E[]) Array.newInstance(data.getClass().getComponentType(), 0);
+	}
+	
+	@Override
+	public ComplexSeq dtft(int N) {
+		return dtft(SeqFactory.linSpace(0, Math.PI, N));
 	}
 
 }

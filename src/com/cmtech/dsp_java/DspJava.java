@@ -1,5 +1,9 @@
 package com.cmtech.dsp_java;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import com.cmtech.dsp_java.filter.FIRFilter;
 import com.cmtech.dsp_java.filter.IIRFilter;
 import com.cmtech.dsp_java.filter.design.AFType;
@@ -9,6 +13,8 @@ import com.cmtech.dsp_java.filter.design.FilterType;
 import com.cmtech.dsp_java.filter.design.IIRDesigner;
 import com.cmtech.dsp_java.filter.design.IIRSpec;
 import com.cmtech.dsp_java.filter.design.WinType;
+import com.cmtech.dsp_java.seq.Complex;
+import com.cmtech.dsp_java.seq.ComplexSeq;
 import com.cmtech.dsp_java.seq.RealSeq;
 
 public class DspJava {
@@ -38,6 +44,32 @@ public class DspJava {
 		RealSeq tmp = new RealSeq(1.0);
 		System.out.println(tmp);
 		
+		RealSeq aaa = new RealSeq(1.0,0.0,-1.0);
+		System.out.println(aaa);
+		changeSize(aaa);
+		System.out.println(aaa);
+		
+		ArrayList<Integer> arr = new ArrayList<Integer>();
+		for(int i = 0; i < 10; i++)
+			arr.add((int)Math.random()*10);
+		
+		//Double[] d = {1.0};
+		Complex[] darr = (Complex[]) Array.newInstance(Complex.class, 10);
+		System.out.println(Arrays.asList(darr));
+		
+		aaa.clear();
+		System.out.println(aaa);
+		ComplexSeq cseq = new ComplexSeq(aaa,aaa);
+		cseq.clear();
+		System.out.println(cseq);
+		
+		RealSeq seq11 = new RealSeq();
+		seq11.clear();
+		System.out.println(seq11);
+	}
+	
+	private static void changeSize(RealSeq seq) {
+		seq.changeSize(seq.size()+2);
 	}
 
 }

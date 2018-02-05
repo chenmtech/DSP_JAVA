@@ -1,9 +1,23 @@
 package com.cmtech.dsp_java.seq;
 
+/**
+ * ClassName: Complex
+ * Function: 复数. 
+ * Reason: TODO ADD REASON(可选). 
+ * date: 2018年2月2日 上午6:00:36 
+ *
+ * @author bme
+ * @version 
+ * @since JDK 1.6
+ */
 public class Complex {
 	private double real;
 	private double imag;
 	
+	/**
+	 * Creates a new instance of Complex.
+	 *
+	 */
 	public Complex()
 	{
 		real = 0.0;
@@ -21,6 +35,13 @@ public class Complex {
 		imag = c.imag;
 	}
 
+	/**
+	 * getReal:获取实部
+	 *
+	 * @author bme
+	 * @return
+	 * @since JDK 1.6
+	 */
 	public double getReal() {
 		return real;
 	}
@@ -47,10 +68,28 @@ public class Complex {
 		imag += a;
 	}
 	
+	/**
+	 * subtract:减去一个实数
+	 *
+	 * @author bme
+	 * @param a
+	 * @since JDK 1.6
+	 */
+	public void subtract(double a) {
+		real -= a;
+		imag -= a;
+	}
+	
 	public void add(Complex c) {
 		real += c.real;
 		imag += c.imag;
 	}
+	
+	public void subtract(Complex c) {
+		real -= c.real;
+		imag -= c.real;
+	}
+	
 	
 	public void multiple(double a) {
 		real *= a;
@@ -62,6 +101,11 @@ public class Complex {
 		double im = real*c.imag + imag*c.real;
 		real = re;
 		imag = im;
+	}
+	
+	public void divide(double a) {
+		real /= a;
+		imag /= a;
 	}
 	
 	public void divide(Complex c) {
