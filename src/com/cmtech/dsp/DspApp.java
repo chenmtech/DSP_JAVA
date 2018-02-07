@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.Arrays;
 
 import com.cmtech.dsp.filter.FIRFilter;
 import com.cmtech.dsp.filter.IIRFilter;
@@ -48,15 +49,17 @@ public class DspApp {
 		System.out.println(iir.freq(101).dB());
 		
 		RealSeq seq1 = SeqFactory.createRndSeq(10);
-		//RealSeq seq2 = SeqFactory.createRndSeq(10);
-		//ComplexSeq seq3 = new ComplexSeq(seq1, seq2);
-		//System.out.println(seq1);
+		RealSeq seq2 = SeqFactory.createRndSeq(10);
+		ComplexSeq seq3 = new ComplexSeq(seq1, seq2);
+		System.out.println(seq3);
 		//seq1.changeSize(8);
 		//ComplexSeq fft = seq3.fft();
-		ComplexSeq fft = seq1.fft();
-		System.out.println(fft);
-		ComplexSeq dtft = seq1.dtft(9);
-		System.out.println(dtft);
+		ComplexSeq fft = seq3.fft();
+		seq3 = fft.ifft();
+		System.out.println(seq3);
+		//System.out.println(fft);
+		//ComplexSeq dtft = seq1.dtft(9);
+		//System.out.println(dtft);
 	}
 	
 	private static double[] changeSize(double[] a) {

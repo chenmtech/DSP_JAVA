@@ -310,4 +310,14 @@ public class ComplexSeq implements IComplexSeq {
 	public ComplexSeq fft(int N) {
 		return FFT.fft(this, N);
 	}
+	
+	@Override
+	public ComplexSeq ifft() {
+		return FFT.ifft(this);
+	}
+	
+	@Override
+	public ComplexSeq ifft(int N) {
+		return FFT.fft(this, N);
+	}
 }

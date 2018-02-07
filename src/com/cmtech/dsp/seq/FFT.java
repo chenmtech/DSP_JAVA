@@ -42,6 +42,33 @@ public class FFT {
 		return new ComplexSeq(re, im);
 	}
 	
+	public static ComplexSeq ifft(RealSeq seq) {
+		return ifft(seq, seq.size());
+	}
+	
+	//FFT反变换 
+	public static ComplexSeq ifft(RealSeq seq, int wishN)
+	{
+		if(seq == null || wishN <= 0) return null;
+	    if(!initFFT(seq, new RealSeq(seq.size()), wishN)) return null;
+	    
+	    //取共轭 
+	    int i = 0;
+	    for(i = 0; i < N; i++)
+	         im[i] = -im[i];
+	    
+	    bitReverse();
+	    doFFT();   
+	    
+	    for(i = 0; i < N; i++)
+	    {
+	         re[i] /= N;
+	         im[i] /= -N;
+	    } 
+	    
+	    return new ComplexSeq(re, im);
+	}
+	
 	public static ComplexSeq fft(ComplexSeq seq) {
 		return fft(seq, seq.size());
 	}
@@ -53,6 +80,35 @@ public class FFT {
 		doFFT();
 		return new ComplexSeq(re, im);
 	}
+	
+	public static ComplexSeq ifft(ComplexSeq seq) {
+		return ifft(seq, seq.size());
+	}
+	
+	//FFT反变换 
+	public static ComplexSeq ifft(ComplexSeq seq, int wishN)
+	{
+		if(seq == null || wishN <= 0) return null;
+	    if(!initFFT(seq, wishN)) return null;
+	    
+	    //取共轭 
+	    int i = 0;
+	    for(i = 0; i < N; i++)
+	         im[i] = -im[i];
+	    
+	    bitReverse();
+	    doFFT();   
+	    
+	    for(i = 0; i < N; i++)
+	    {
+	         re[i] /= N;
+	         im[i] /= -N;
+	    } 
+	    
+	    return new ComplexSeq(re, im);
+	}
+	
+	
 	
 	private static boolean initFFT(ComplexSeq seq, int wishN) {
 		if(seq == null || seq.size() == 0) return false;
