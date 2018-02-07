@@ -3,10 +3,6 @@ package com.cmtech.dsp.seq;
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.apache.commons.math3.transform.DftNormalization;
-import org.apache.commons.math3.transform.FastFourierTransformer;
-import org.apache.commons.math3.transform.TransformType;
-
 /**
  * ClassName: ComplexSeq
  * Function: 复序列. 
@@ -52,6 +48,18 @@ public class ComplexSeq implements IComplexSeq {
 		data = new Complex[N];
 		for(int i = 0; i < N; i++) {
 			data[i] = new Complex(re.get(i), im.get(i));
+		}
+	}
+	
+	public ComplexSeq(double[] re, double[] im) {
+		int N = Math.max(re.length, im.length);
+		data = new Complex[N];
+		double R = 0.0;
+		double I = 0.0;
+		for(int i = 0; i < N; i++) {
+			R = (i < re.length) ? re[i] : 0.0;
+			I = (i < im.length) ? im[i] : 0.0;
+			data[i] = new Complex(R, I);
 		}
 	}
 	
@@ -171,6 +179,16 @@ public class ComplexSeq implements IComplexSeq {
 	}
 	
 	@Override
+	public Complex[] toArray(int N) {
+		Complex[] rtn = new Complex[N];
+		for(int i = 0; i < N; i++) {
+			if(i < data.length) rtn[i] = new Complex(data[i]);
+			else rtn[i] = new Complex();
+		}
+		return rtn;
+	}
+	
+	@Override
 	public double[] realToArray() {
 		double[] out = new double[data.length];
 		for(int i = 0; i < data.length; i++) {
@@ -180,10 +198,30 @@ public class ComplexSeq implements IComplexSeq {
 	}
 	
 	@Override
+	public double[] realToArray(int N) {
+		double[] out = new double[N];
+		for(int i = 0; i < N; i++) {
+			if(i < data.length) out[i] = data[i].getReal();
+			else out[i] = 0.0;
+		}
+		return out;
+	}
+	
+	@Override
 	public double[] imagToArray() {
 		double[] out = new double[data.length];
 		for(int i = 0; i < data.length; i++) {
 			out[i] = data[i].getImag();
+		}
+		return out;
+	}
+	
+	@Override
+	public double[] imagToArray(int N) {
+		double[] out = new double[N];
+		for(int i = 0; i < N; i++) {
+			if(i < data.length) out[i] = data[i].getImag();
+			else out[i] = 0.0;
 		}
 		return out;
 	}
@@ -260,11 +298,16 @@ public class ComplexSeq implements IComplexSeq {
 
 	@Override
 	public ComplexSeq fft() {
-		double[][] buf = {realToArray(), imagToArray()};
+		/*int N = SeqUtil.findPowerOfTwo(data.length);
+		double[][] buf = {realToArray(N), imagToArray(N)};
 		FastFourierTransformer.transformInPlace(buf, DftNormalization.STANDARD, TransformType.FORWARD);
 		ComplexSeq rtn = new ComplexSeq(new RealSeq(buf[0]), new RealSeq(buf[1]));
-		return rtn;
+		return rtn;*/
+		return FFT.fft(this);
 	}
 	
-	
+	@Override
+	public ComplexSeq fft(int N) {
+		return FFT.fft(this, N);
+	}
 }

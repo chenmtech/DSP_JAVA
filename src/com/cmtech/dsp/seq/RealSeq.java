@@ -3,10 +3,6 @@ package com.cmtech.dsp.seq;
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.apache.commons.math3.transform.DftNormalization;
-import org.apache.commons.math3.transform.FastFourierTransformer;
-import org.apache.commons.math3.transform.TransformType;
-
 public class RealSeq implements IRealSeq {
 	/**
 	 * serialVersionUID:TODO(用一句话描述这个变量表示什么).
@@ -228,14 +224,17 @@ public class RealSeq implements IRealSeq {
 
 	@Override
 	public ComplexSeq fft() {
-		int N = SeqUtil.findPowerOfTwo(data.length);
+		/*int N = SeqUtil.findPowerOfTwo(data.length);
 		double[][] buf = {toArray(N), new double[N]};
 		FastFourierTransformer.transformInPlace(buf, DftNormalization.STANDARD, TransformType.FORWARD);
 		ComplexSeq rtn = new ComplexSeq(new RealSeq(buf[0]), new RealSeq(buf[1]));
-		
-		return rtn;
+		return rtn;*/
+		return FFT.fft(this);
 	}
 	
-	
+	@Override
+	public ComplexSeq fft(int N) {
+		return FFT.fft(this, N);
+	}
 
 }

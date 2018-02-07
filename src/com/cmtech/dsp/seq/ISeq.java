@@ -30,4 +30,5 @@ public interface ISeq extends Serializable{
 	ComplexSeq dtft(RealSeq omega);
 	ComplexSeq dtft(int N);
 	ComplexSeq fft();
+	ComplexSeq fft(int N);
 }

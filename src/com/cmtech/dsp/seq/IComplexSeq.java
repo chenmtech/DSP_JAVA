@@ -22,8 +22,11 @@ public interface IComplexSeq extends ISeq {
 	Complex get(int i);
 	boolean set(int i, Complex element);
 	Complex[] toArray();
+	Complex[] toArray(int N);
 	double[] realToArray();
+	double[] realToArray(int N);
 	double[] imagToArray();
+	double[] imagToArray(int N);
 	IComplexSeq reverse();
 	IComplexSeq plus(Complex a);
 	IComplexSeq minus(Complex a);
