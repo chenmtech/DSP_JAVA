@@ -57,9 +57,11 @@ public class DspApp {
 		ComplexSeq fft = seq3.fft();
 		seq3 = fft.ifft();
 		System.out.println(seq3);
-		//System.out.println(fft);
-		//ComplexSeq dtft = seq1.dtft(9);
-		//System.out.println(dtft);
+
+		ComplexSeq seq4 = new ComplexSeq(seq3);
+		System.out.println(seq3.hashCode());
+		System.out.println(seq4.hashCode());
+		System.out.println(seq3.equals(seq1));
 	}
 	
 	private static double[] changeSize(double[] a) {

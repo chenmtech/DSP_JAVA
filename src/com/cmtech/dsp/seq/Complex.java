@@ -70,9 +70,10 @@ public class Complex implements Serializable{
 		imag = im;
 	}
 	
-	public void add(double a) {
+	public Complex add(double a) {
 		real += a;
 		imag += a;
+		return this;
 	}
 	
 	/**
@@ -82,45 +83,52 @@ public class Complex implements Serializable{
 	 * @param a
 	 * @since JDK 1.6
 	 */
-	public void subtract(double a) {
+	public Complex subtract(double a) {
 		real -= a;
 		imag -= a;
+		return this;
 	}
 	
-	public void add(Complex c) {
+	public Complex add(Complex c) {
 		real += c.real;
 		imag += c.imag;
+		return this;
 	}
 	
-	public void subtract(Complex c) {
+	public Complex subtract(Complex c) {
 		real -= c.real;
 		imag -= c.real;
+		return this;
 	}
 	
 	
-	public void multiple(double a) {
+	public Complex multiple(double a) {
 		real *= a;
 		imag *= a;
+		return this;
 	}
 	
-	public void multiple(Complex c) {
+	public Complex multiple(Complex c) {
 		double re = real*c.real - imag*c.imag;
 		double im = real*c.imag + imag*c.real;
 		real = re;
 		imag = im;
+		return this;
 	}
 	
-	public void divide(double a) {
+	public Complex divide(double a) {
 		real /= a;
 		imag /= a;
+		return this;
 	}
 	
-	public void divide(Complex c) {
+	public Complex divide(Complex c) {
 		double mod = c.real*c.real + c.imag*c.imag;
 		double re = (real*c.real + imag*c.imag)/mod;
 		double im = (imag*c.real - real*c.imag)/mod;
 		real = re;
 		imag = im;
+		return this;
 	}
 	
 	public double abs() {
@@ -136,6 +144,22 @@ public class Complex implements Serializable{
 		return real + "+i*" + imag;
 	}
 	
+	@Override
+	public boolean equals(Object otherObject) {
+		if(this == otherObject) return true;
+		if(otherObject == null) return false;
+		if(getClass() != otherObject.getClass()) return false;
+		Complex other = (Complex)otherObject;
+		return  real == other.real && imag == other.imag;
+	}
+	
+	
+	
+	@Override
+	public int hashCode() {
+		return 7*Double.hashCode(real) + 11*Double.hashCode(imag);
+	}
+
 	public static Complex add(Complex c, double a) {
 		Complex out = new Complex(c);
 		out.add(a);

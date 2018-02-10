@@ -247,4 +247,20 @@ public class RealSeq implements IRealSeq {
 		return FFT.ifft(this, N);
 	}
 
+	@Override
+	public boolean equals(Object otherObject) {
+		if(this == otherObject) return true;
+		if(otherObject == null) return false;
+		if(getClass() != otherObject.getClass()) return false;
+		RealSeq other = (RealSeq)otherObject;
+		return  Arrays.equals(data, other.data);
+	}
+
+	@Override
+	public int hashCode() {
+		return Arrays.hashCode(data);
+	}
+	
+	
+
 }

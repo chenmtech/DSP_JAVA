@@ -320,4 +320,18 @@ public class ComplexSeq implements IComplexSeq {
 	public ComplexSeq ifft(int N) {
 		return FFT.fft(this, N);
 	}
+	
+	@Override
+	public boolean equals(Object otherObject) {
+		if(this == otherObject) return true;
+		if(otherObject == null) return false;
+		if(getClass() != otherObject.getClass()) return false;
+		ComplexSeq other = (ComplexSeq)otherObject;
+		return  Arrays.equals(data, other.data);
+	}
+
+	@Override
+	public int hashCode() {
+		return Arrays.hashCode(data);
+	}
 }
