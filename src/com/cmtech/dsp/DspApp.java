@@ -8,6 +8,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Arrays;
 
+import com.cmtech.dsp.exception.DspException;
+import com.cmtech.dsp.file.BmeFile;
 import com.cmtech.dsp.filter.FIRFilter;
 import com.cmtech.dsp.filter.IIRFilter;
 import com.cmtech.dsp.filter.design.AFType;
@@ -62,6 +64,8 @@ public class DspApp {
 		System.out.println(seq3.hashCode());
 		System.out.println(seq4.hashCode());
 		System.out.println(seq3.equals(seq1));
+		
+		System.out.println(BmeFile.configFileDirectory("/Users/bme/Documents"));
 	}
 	
 	private static double[] changeSize(double[] a) {
