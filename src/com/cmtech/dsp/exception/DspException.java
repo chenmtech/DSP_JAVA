@@ -49,7 +49,8 @@ public class DspException extends Exception implements Serializable {
 
     @Override
     public String toString() {
-        return "DspException{" +
+        return getClass().getSimpleName() + 
+        		  	'{' +
                 "code=" + code +
                 ", description='" + description + '\'' +
                 '}';

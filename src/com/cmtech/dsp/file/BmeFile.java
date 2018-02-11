@@ -8,14 +8,20 @@
  */
 package com.cmtech.dsp.file;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.DataOutputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 
-import com.cmtech.dsp.exception.DspException;
-import com.cmtech.dsp.exception.DspExceptionCode;
-import static com.cmtech.dsp.exception.DspExceptionCode.*;
+import com.cmtech.dsp.exception.FileException;
+import com.cmtech.dsp.util.FormatTransfer;
 
 /**
  * ClassName: BmeFile
@@ -28,33 +34,141 @@ import static com.cmtech.dsp.exception.DspExceptionCode.*;
  * @since JDK 1.6
  */
 public class BmeFile {
-	private static Path dir;
+	private static Path rootPath = Paths.get(System.getProperty("user.dir"));
 	
-	private static final byte[] bme = {'B', 'M', 'E'};
+	public static final byte[] BME = {'B', 'M', 'E'};
+	private static final byte[] DEFAULT_VERSION = {0x00, 0x01};
+	
+	private static final int MODE_READ = 0;
+	private static final int MODE_WRITE = 0;
+	
 	private byte[] ver = new byte[2];
-	private String fileName;
+	private Path file;
 	
-	public BmeFile(String fileName) {
+	private BufferedInputStream in;
+	private BufferedOutputStream out;
+	
+	private BmeFileHead fileHead;
+	
+	public BmeFile(String fileName) throws FileException{
+		Path tmpFile = rootPath.resolve(fileName);
+		Path parent = tmpFile.getParent();
+		if(!Files.exists(parent)) throw new FileException(parent.toString(), "文件所在路径不存在");
+		file = tmpFile;
+	}
+
+	public static void setFileDirectory(String pathName) throws FileException{
+		Path p = null;
 		
+		if(pathName == null || "".equals(pathName)) 
+			throw new FileException("", "路径为空");
+		else {
+			p = Paths.get(pathName);
+			if(p.getRoot() == null) 
+				throw new FileException(pathName, "路径必须包含根目录");
+			else if(!Files.exists(p)) 
+				throw new FileException(pathName, "路径不存在");
+			else if(!Files.isDirectory(p))
+				throw new FileException(pathName, "不是路径名");
+		}
+		
+		rootPath = p;
 	}
 	
-	public static DspException configFileDirectory(String pathName) {
-		if(pathName == null || "".equals(pathName)) 
-			return new DspException(BMEFILE_OPERATION_ERR, "路径为空");
+	public boolean openAsBmeFile() throws FileException{
+		if(file == null) 
+			throw new FileException("", "文件未正常设置");
 		
-		Path p = Paths.get(pathName);
-		if(p.getRoot() == null) 
-			return new DspException(BMEFILE_OPERATION_ERR, "路径必须包含根目录");
+		try	{
+			if(!Files.exists(file))	Files.createFile(file);
+			in = new BufferedInputStream(new FileInputStream(file.toString()));
+			out = new BufferedOutputStream(new FileOutputStream(file.toString()));
+		} catch (IOException e) {
+			throw new FileException(file.toString(), "文件不存在");
+		} finally {
+			try {
+				if(in != null) {
+					in.close();
+					in = null;
+				}
+				if(out != null) {
+					out.close();
+					out = null;
+				}
+			} catch(IOException ioe) {
+				throw new FileException(file.toString(), "文件操作错误");
+			}
+		}
 		
-		if(!Files.exists(p)) 
-			return new DspException(BMEFILE_OPERATION_ERR, "路径不存在");
+		return false;
+	}
+	
+	public BmeFile createNewBmeFile(byte[] ver) throws FileException{
+		if(file == null) 
+			throw new FileException("", "文件路径设置错误");
 		
-		if(!Files.isDirectory(p))
-			return new DspException(BMEFILE_OPERATION_ERR, "不是路径名");
+		try {
+			Files.deleteIfExists(file);
+			Files.createFile(file);
+			in = new BufferedInputStream(new FileInputStream(file.toString()));
+			out = new BufferedOutputStream(new FileOutputStream(file.toString()));
+			out.write(BME);
+			out.write(ver);
+			if(Arrays.equals(ver, BmeFileHead10.VER)){
+				fileHead = new BmeFileHead10();
+				fileHead.setFs(100);
+				fileHead.writeToStream(out);
+			}
+			
+		} catch(IOException ioe) {
+			throw new FileException(file.toString(), "创建文件错误");
+		}
+		return this;
+	}
+	
+	public BmeFile writeData(double[] data) throws FileException{
+		if(in == null || out == null || fileHead == null) {
+			throw new FileException("", "请先打开或创建文件");
+		}
 		
-		dir = p;
-		
-		return null;
+		try {
+			DataOutputStream dOut = new DataOutputStream(out);
+			int order = fileHead.getByteOrder();
+			if(order == BmeFileHead.MSB) {
+				for(int i = 0; i < data.length; i++) {
+					dOut.writeDouble(data[i]);
+				}				
+			} else {
+				for(int i = 0; i < data.length; i++) {
+					dOut.write(FormatTransfer.toLH(data[i]));
+				}
+			}
+		} catch(IOException ioe) {
+			throw new FileException(file.toString(), "写数据错误");
+		}
+		return this;
+	}
+	
+	public void close() throws FileException{
+		try {
+			if(in != null) {
+				in.close();
+				in = null;
+			}
+			if(out != null) {
+				out.flush();
+				out.close();
+				out = null;
+			}
+		} catch(IOException ioe) {
+			throw new FileException(file.toString(), "文件操作错误");
+		}
+	}
+	
+	
+	public String getFileName() {
+		if(file == null) return "";
+		return file.toString();
 	}
 
 }

@@ -9,6 +9,7 @@ import java.io.ObjectOutputStream;
 import java.util.Arrays;
 
 import com.cmtech.dsp.exception.DspException;
+import com.cmtech.dsp.exception.FileException;
 import com.cmtech.dsp.file.BmeFile;
 import com.cmtech.dsp.filter.FIRFilter;
 import com.cmtech.dsp.filter.IIRFilter;
@@ -65,7 +66,24 @@ public class DspApp {
 		System.out.println(seq4.hashCode());
 		System.out.println(seq3.equals(seq1));
 		
-		System.out.println(BmeFile.configFileDirectory("/Users/bme/Documents"));
+		BmeFile file = null;
+		try {
+			BmeFile.setFileDirectory("/Users/bme/Documents");
+			file = new BmeFile("matlab/dfs.bme");
+			file.createNewBmeFile(new byte[] {0x00,0x01});
+			double[] data = new double[] {1.1,2.21,3.3};
+			file.writeData(data).writeData(data);
+			file.close();
+		} catch (FileException e) {
+			if(file != null) {
+				try {
+					file.close();
+				} catch (FileException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		}
 	}
 	
 	private static double[] changeSize(double[] a) {
