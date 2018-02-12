@@ -10,9 +10,7 @@ package com.cmtech.dsp.file;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.nio.ByteOrder;
 import java.util.Arrays;
 
 import com.cmtech.dsp.exception.FileException;
@@ -28,20 +26,14 @@ import com.cmtech.dsp.exception.FileException;
  * @since JDK 1.6
  */
 public abstract class BmeFileHead {
-	public static final int UINT8 = 0;
-	public static final int DOUBLE = 5;
-	
-	public static final int MSB = 0;
-	public static final int LSB = 1;
-	
 	private String info = "Unknown";
-	private byte dataType = DOUBLE;
+	private BmeFileDataType dataType = BmeFileDataType.DOUBLE;
 	private int fs = -1;
 	
 	public BmeFileHead() {
 	}
 	
-	public BmeFileHead(String info, byte dataType, int fs) {
+	public BmeFileHead(String info, BmeFileDataType dataType, int fs) {
 		this.info = info;
 		this.dataType = dataType;
 		this.fs = fs;
@@ -50,28 +42,46 @@ public abstract class BmeFileHead {
 	public String getInfo() {
 		return info;
 	}
-	public void setInfo(String info) {
+	
+	public BmeFileHead setInfo(String info) {
 		this.info = info;
+		return this;
 	}
-	public byte getDataType() {
+	
+	public BmeFileDataType getDataType() {
 		return dataType;
 	}
-	public void setDataType(byte dataType) {
+	
+	public BmeFileHead setDataType(BmeFileDataType dataType) {
 		this.dataType = dataType;
+		return this;
 	}
+	
 	public int getFs() {
 		return fs;
 	}
-	public void setFs(int fs) {
+	
+	public BmeFileHead setFs(int fs) {
 		this.fs = fs;
+		return this;
+	}
+	
+	@Override
+	public String toString() {
+		return "[文件信息：" 
+				+ Arrays.toString(getVersion()) + ";"
+				+ getInfo() + ";"
+				+ getDataType() + ";"
+				+ getFs() + ";"
+				+ getByteOrder() + "]";
 	}
 	
 	public abstract byte[] getVersion();
 	
-	public abstract int getByteOrder();
+	public abstract ByteOrder getByteOrder();
 	
-	public abstract void readFromStream(InputStream in) throws FileException;
+	public abstract void readFromStream(DataInputStream in) throws FileException;
 	
-	public abstract void writeToStream(OutputStream out) throws FileException;
+	public abstract void writeToStream(DataOutputStream out) throws FileException;
 
 }

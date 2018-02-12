@@ -11,8 +11,7 @@ package com.cmtech.dsp.file;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.nio.ByteOrder;
 import java.util.Arrays;
 
 import com.cmtech.dsp.exception.FileException;
@@ -35,7 +34,7 @@ public class BmeFileHead10 extends BmeFileHead {
 		super();
 	}
 	
-	public BmeFileHead10(String info, byte dataType, int fs) {
+	public BmeFileHead10(String info, BmeFileDataType dataType, int fs) {
 		super(info, dataType, fs);
 	}
 
@@ -45,40 +44,46 @@ public class BmeFileHead10 extends BmeFileHead {
 	}
 	
 	@Override
-	public int getByteOrder() {
-		return LSB;
+	public ByteOrder getByteOrder() {
+		return ByteOrder.LITTLE_ENDIAN;
 	}
 	
 	@Override
-	public void readFromStream(InputStream in) throws FileException{
+	public void readFromStream(DataInputStream in) throws FileException{
 		try {
-			DataInputStream dIn = new DataInputStream(in);
 			// ver1.0内部数据为LSB，要反过来变为MSB
-			int infoLen = FormatTransfer.reverseInt(dIn.readInt());
+			int infoLen = FormatTransfer.reverseInt(in.readInt());
 			byte[] str = new byte[infoLen];
-			dIn.read(str);
-			setInfo(Arrays.toString(str));
-			setDataType(dIn.readByte());
-			setFs(FormatTransfer.reverseInt(dIn.readInt()));
+			in.read(str);
+			setInfo(new String(str));
+			int dType = in.readByte();
+			setDataType(BmeFileDataType.UNKNOWN);
+			for(BmeFileDataType type : BmeFileDataType.values()) {
+				if(dType == type.getCode()) {
+					setDataType(type);
+					break;
+				}
+			}
+			setFs(FormatTransfer.reverseInt(in.readInt()));
 		} catch(IOException ioe) {
 			throw new FileException("文件头", "读入错误");
 		}
 	}
 	
 	@Override
-	public void writeToStream(OutputStream out) throws FileException {
+	public void writeToStream(DataOutputStream out) throws FileException {
 		try {
-			DataOutputStream dOut = new DataOutputStream(out);
 			int infoLen = getInfo().length();
 			// ver1.0要写为LSB
-			dOut.writeInt(FormatTransfer.reverseInt(infoLen));	
-			dOut.write(getInfo().getBytes());
-			dOut.writeByte(getDataType());
+			out.write(FormatTransfer.toLH(infoLen));
+			out.write(getInfo().getBytes());
+			out.writeByte((byte)getDataType().getCode());
 			// ver1.0要写为LSB
-			dOut.writeInt(FormatTransfer.reverseInt(getFs()));
+			out.write(FormatTransfer.toLH(getFs()));
 		} catch(IOException ioe) {
 			throw new FileException("文件头", "写出错误");
 		}
 	}
 
+	
 }

@@ -10,15 +10,21 @@ package com.cmtech.dsp.file;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import com.cmtech.dsp.exception.FileException;
 import com.cmtech.dsp.util.FormatTransfer;
@@ -34,27 +40,40 @@ import com.cmtech.dsp.util.FormatTransfer;
  * @since JDK 1.6
  */
 public class BmeFile {
+	private static Set<String> fileInOperation = new HashSet<>();
+	
 	private static Path rootPath = Paths.get(System.getProperty("user.dir"));
 	
 	public static final byte[] BME = {'B', 'M', 'E'};
-	private static final byte[] DEFAULT_VERSION = {0x00, 0x01};
 	
-	private static final int MODE_READ = 0;
-	private static final int MODE_WRITE = 0;
-	
-	private byte[] ver = new byte[2];
 	private Path file;
 	
-	private BufferedInputStream in;
-	private BufferedOutputStream out;
+	private DataInputStream in;
+	private DataOutputStream out;
 	
 	private BmeFileHead fileHead;
 	
 	public BmeFile(String fileName) throws FileException{
+		checkFile(fileName);
+		open();
+	}
+	
+	public BmeFile(String fileName, BmeFileHead head) throws FileException{
+		checkFile(fileName);
+		create(head);
+	}
+	
+	private void checkFile(String fileName) throws FileException{
 		Path tmpFile = rootPath.resolve(fileName);
 		Path parent = tmpFile.getParent();
 		if(!Files.exists(parent)) throw new FileException(parent.toString(), "文件所在路径不存在");
-		file = tmpFile;
+
+		if(fileInOperation.contains(tmpFile.toString())) 
+			throw new FileException(tmpFile.toString(), "文件已经打开");
+		else {
+			file = tmpFile;
+			fileInOperation.add(file.toString());
+		}
 	}
 
 	public static void setFileDirectory(String pathName) throws FileException{
@@ -69,79 +88,220 @@ public class BmeFile {
 			else if(!Files.exists(p)) 
 				throw new FileException(pathName, "路径不存在");
 			else if(!Files.isDirectory(p))
-				throw new FileException(pathName, "不是路径名");
+				throw new FileException(pathName, "不是有效路径名");
 		}
 		
 		rootPath = p;
 	}
 	
-	public boolean openAsBmeFile() throws FileException{
+	private void open() throws FileException{
 		if(file == null) 
 			throw new FileException("", "文件未正常设置");
+		if(!Files.exists(file))
+			throw new FileException(file.toString(), "文件不存在");
+		if(in != null || out != null)
+			throw new FileException(file.toString(), "文件已经打开，需要关闭后重新打开");
 		
 		try	{
-			if(!Files.exists(file))	Files.createFile(file);
-			in = new BufferedInputStream(new FileInputStream(file.toString()));
-			out = new BufferedOutputStream(new FileOutputStream(file.toString()));
-		} catch (IOException e) {
-			throw new FileException(file.toString(), "文件不存在");
-		} finally {
-			try {
-				if(in != null) {
-					in.close();
-					in = null;
-				}
-				if(out != null) {
-					out.close();
-					out = null;
-				}
-			} catch(IOException ioe) {
-				throw new FileException(file.toString(), "文件操作错误");
+			in = new DataInputStream(
+					new BufferedInputStream(
+							new FileInputStream(file.toString())));
+			byte[] bme = new byte[3];
+			in.read(bme);
+			if(!Arrays.equals(bme, BME)) throw new FileException(file.toString(), "文件格式不对");
+			byte[] ver = new byte[2];
+			in.read(ver);
+			if(Arrays.equals(ver, BmeFileHead10.VER)) {
+				fileHead = new BmeFileHead10();
+				fileHead.readFromStream(in);
+			} else {
+				throw new FileException(file.toString(), "文件版本不支持");
 			}
+		} catch (IOException e) {
+			throw new FileException(file.toString(), "文件打开错误");
 		}
-		
-		return false;
 	}
 	
-	public BmeFile createNewBmeFile(byte[] ver) throws FileException{
+	public double[] readData(double[] d) throws FileException{
+		if(in == null || fileHead == null) {
+			throw new FileException("", "请先打开文件");
+		}
+		
+		if(fileHead.getDataType() != BmeFileDataType.DOUBLE) {
+			throw new FileException(file.toString(), "读取数据类型错误");
+		}
+		
+		List<Double> lst = new ArrayList<Double>();
+		double[] data = new double[0];
+		byte[] buf = new byte[8];
+		ByteBuffer big = ByteBuffer.wrap(buf).order(ByteOrder.BIG_ENDIAN);
+		ByteBuffer little = ByteBuffer.wrap(buf).order(ByteOrder.LITTLE_ENDIAN);
+		try {
+			if(fileHead.getByteOrder() == ByteOrder.BIG_ENDIAN) {
+				while(in.available() > 0) 
+					lst.add(in.readDouble());				
+			} else {
+				while(in.available() > 0) {
+					little.putDouble(0, in.readDouble());
+					lst.add(big.getDouble(0));
+				}
+			}
+			
+			data = new double[lst.size()];
+			for(int i = 0; i < lst.size(); i++) {
+				data[i] = lst.get(i);
+			}
+		} catch(IOException ioe) {
+			throw new FileException(file.toString(), "读数据错误");
+		}
+		return data;
+	}
+	
+	public int[] readData(int[] d) throws FileException{
+		if(in == null || fileHead == null) {
+			throw new FileException("", "请先打开文件");
+		}
+		
+		if(fileHead.getDataType() != BmeFileDataType.INT32) {
+			throw new FileException(file.toString(), "读取数据类型错误");
+		}
+		
+		List<Integer> lst = new ArrayList<Integer>();
+		int[] data = new int[0];
+		byte[] buf = new byte[4];
+		ByteBuffer big = ByteBuffer.wrap(buf).order(ByteOrder.BIG_ENDIAN);
+		ByteBuffer little = ByteBuffer.wrap(buf).order(ByteOrder.LITTLE_ENDIAN);
+		try {
+			if(fileHead.getByteOrder() == ByteOrder.BIG_ENDIAN) {
+				while(in.available() > 0) 
+					lst.add(in.readInt());				
+			} else {
+				while(in.available() > 0) {
+					little.putInt(0, in.readInt());
+					lst.add(big.getInt(0));
+				}
+			}
+			
+			data = new int[lst.size()];
+			for(int i = 0; i < lst.size(); i++) {
+				data[i] = lst.get(i);
+			}
+		} catch(IOException ioe) {
+			throw new FileException(file.toString(), "读数据错误");
+		}
+		return data;
+	}
+	
+	public byte[] readData(byte[] d) throws FileException{
+		if(in == null || fileHead == null) {
+			throw new FileException("", "请先打开文件");
+		}
+		
+		if(fileHead.getDataType() != BmeFileDataType.UINT8) {
+			throw new FileException(file.toString(), "读取数据类型错误");
+		}
+		
+		List<Byte> lst = new ArrayList<>();
+		byte[] data = new byte[0];
+		try {
+			while(in.available() > 0) 
+				lst.add(in.readByte());
+			
+			data = new byte[lst.size()];
+			for(int i = 0; i < lst.size(); i++) {
+				data[i] = lst.get(i);
+			}
+		} catch(IOException ioe) {
+			throw new FileException(file.toString(), "读数据错误");
+		}
+		return data;
+	}
+	
+	private void create(BmeFileHead head) throws FileException{
 		if(file == null) 
 			throw new FileException("", "文件路径设置错误");
+		if(head == null)
+			throw new FileException("file head", "文件头错误");
+		if(in != null || out != null)
+			throw new FileException(file.toString(), "文件已经打开，需要关闭后重新打开");
 		
 		try {
 			Files.deleteIfExists(file);
 			Files.createFile(file);
-			in = new BufferedInputStream(new FileInputStream(file.toString()));
-			out = new BufferedOutputStream(new FileOutputStream(file.toString()));
+			out = new DataOutputStream(
+					new BufferedOutputStream(
+							new FileOutputStream(file.toString())));
 			out.write(BME);
-			out.write(ver);
-			if(Arrays.equals(ver, BmeFileHead10.VER)){
-				fileHead = new BmeFileHead10();
-				fileHead.setFs(100);
-				fileHead.writeToStream(out);
-			}
-			
+			fileHead = head;
+			out.write(fileHead.getVersion());
+			fileHead.writeToStream(out);
 		} catch(IOException ioe) {
 			throw new FileException(file.toString(), "创建文件错误");
+		}
+	}
+	
+	public BmeFile writeData(double[] data) throws FileException{
+		if(out == null || fileHead == null) {
+			throw new FileException("", "请先创建文件");
+		}
+		
+		if(fileHead.getDataType() != BmeFileDataType.DOUBLE) {
+			throw new FileException("", "写入数据类型错误");
+		}
+		
+		try {
+			if(fileHead.getByteOrder() == ByteOrder.BIG_ENDIAN) {
+				for(int i = 0; i < data.length; i++) {
+					out.writeDouble(data[i]);
+				}				
+			} else {
+				for(int i = 0; i < data.length; i++) {
+					out.write(FormatTransfer.toLH(data[i]));
+				}
+			}
+		} catch(IOException ioe) {
+			throw new FileException(file.toString(), "写数据错误");
 		}
 		return this;
 	}
 	
-	public BmeFile writeData(double[] data) throws FileException{
-		if(in == null || out == null || fileHead == null) {
-			throw new FileException("", "请先打开或创建文件");
+	public BmeFile writeData(int[] data) throws FileException{
+		if(out == null || fileHead == null) {
+			throw new FileException("", "请先创建文件");
+		}
+		
+		if(fileHead.getDataType() != BmeFileDataType.INT32) {
+			throw new FileException("", "写入数据类型错误");
 		}
 		
 		try {
-			DataOutputStream dOut = new DataOutputStream(out);
-			int order = fileHead.getByteOrder();
-			if(order == BmeFileHead.MSB) {
+			if(fileHead.getByteOrder() == ByteOrder.BIG_ENDIAN) {
 				for(int i = 0; i < data.length; i++) {
-					dOut.writeDouble(data[i]);
+					out.writeInt(data[i]);
 				}				
 			} else {
 				for(int i = 0; i < data.length; i++) {
-					dOut.write(FormatTransfer.toLH(data[i]));
+					out.write(FormatTransfer.toLH(data[i]));
 				}
+			}
+		} catch(IOException ioe) {
+			throw new FileException(file.toString(), "写数据错误");
+		}
+		return this;
+	}
+	
+	public BmeFile writeData(byte[] data) throws FileException{
+		if(out == null || fileHead == null) {
+			throw new FileException("", "请先创建文件");
+		}
+		
+		if(fileHead.getDataType() != BmeFileDataType.UINT8) {
+			throw new FileException("", "写入数据类型错误");
+		}
+		
+		try {
+			for(int i = 0; i < data.length; i++) {
+				out.writeByte(data[i]);
 			}
 		} catch(IOException ioe) {
 			throw new FileException(file.toString(), "写数据错误");
@@ -156,12 +316,13 @@ public class BmeFile {
 				in = null;
 			}
 			if(out != null) {
-				out.flush();
 				out.close();
 				out = null;
 			}
 		} catch(IOException ioe) {
-			throw new FileException(file.toString(), "文件操作错误");
+			throw new FileException(file.toString(), "关闭文件操作错误");
+		} finally {
+			fileInOperation.remove(file.toString());
 		}
 	}
 	
@@ -170,5 +331,34 @@ public class BmeFile {
 		if(file == null) return "";
 		return file.toString();
 	}
+	
+	public String getInfo() {
+		if(fileHead == null) return "";
+		return fileHead.getInfo();
+	}
 
+	public BmeFileDataType getDataType() {
+		if(fileHead == null) return null;
+		return fileHead.getDataType();
+	}
+
+	public int getFs() {
+		if(fileHead == null) return -1;
+		return fileHead.getFs();
+	}
+	
+	public byte[] getVersion() {
+		if(fileHead == null) return null;
+		return fileHead.getVersion();
+	}
+	
+	public ByteOrder getByteOrder() {
+		if(fileHead == null) return null;
+		return fileHead.getByteOrder();
+	}
+
+	@Override
+	public String toString() {
+		return "[文件名：" + getFileName() + ":"+ fileHead + "]";
+	}
 }
