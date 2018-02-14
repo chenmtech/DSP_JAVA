@@ -10,7 +10,7 @@ public class IIRPara extends DFPara {
 		
 	}
 	
-	public IIRPara(double[] wp, double[] ws, double Rp, double As, FilterType fType, AFType afType) {
+	public IIRPara(double[] wp, double[] ws, double Rp, double As, AFType afType, FilterType fType) {
 		super(wp, ws, Rp, As, fType);
 		this.afType = afType;
 	}

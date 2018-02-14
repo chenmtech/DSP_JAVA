@@ -1,28 +1,33 @@
 package com.cmtech.dsp.filter.design;
 
+import static java.lang.Math.PI;
+import static java.lang.Math.abs;
+import static java.lang.Math.cos;
+import static java.lang.Math.cosh;
+import static java.lang.Math.log;
+import static java.lang.Math.log10;
+import static java.lang.Math.pow;
+import static java.lang.Math.sin;
+import static java.lang.Math.sinh;
+import static java.lang.Math.sqrt;
+
 import java.util.HashMap;
 import java.util.Map;
 
-import com.cmtech.dsp.exception.FilterException;
 import com.cmtech.dsp.filter.AnalogFilter;
-import com.cmtech.dsp.filter.FIRFilter;
 import com.cmtech.dsp.filter.para.AFPara;
 import com.cmtech.dsp.seq.RealSeq;
 import com.cmtech.dsp.seq.SeqUtil;
-
-import static java.lang.Math.*;
 
 public class ALPDesigner {
 	//最小数值 
 	private static final double EPS = 2.220446049250313E-016;
 	
-	private static Map<String, Object> rtnMap = new HashMap<>();
-	
 	private ALPDesigner() {			
 	}
 	
 	public static AnalogFilter design(double wp, double ws, double Rp, double As, AFType afType){
-		DesignAnalogLowPassFilter(wp, ws, Rp, As, afType);
+		Map<String, Object> rtnMap = DesignAnalogLowPassFilter(wp, ws, Rp, As, afType);
 		
 		RealSeq bs = (RealSeq)rtnMap.get("bs");
 		RealSeq as = (RealSeq)rtnMap.get("as");
@@ -42,24 +47,20 @@ public class ALPDesigner {
 	//afType：模拟滤波器的类型
 	//pBs：返回的模拟滤波器的系统函数Ha(s)分子多项式系数数组
 	//pAs：返回的模拟滤波器的系统函数Ha(s)分母多项式系数数组 
-	public static void DesignAnalogLowPassFilter(double Qp, double Qs, double Rp, double As, AFType afType)//, RealSeq * pBs, RealSeq * pAs)
+	public static Map<String, Object> DesignAnalogLowPassFilter(double Qp, double Qs, double Rp, double As, AFType afType)//, RealSeq * pBs, RealSeq * pAs)
 	{
 	    switch(afType)
 	    {
 	    case BUTT:
-	        DesignAnalogButter1(Qp, Qs, Rp, As);//, pBs, pAs);
-	        return;
+	        return DesignAnalogButter1(Qp, Qs, Rp, As);
 	    case CHEB1:
-	        DesignAnalogCheby11(Qp, Qs, Rp, As);//, pBs, pAs);
-	        return; 
+	        return DesignAnalogCheby11(Qp, Qs, Rp, As);
 	    case CHEB2:
-	        DesignAnalogCheby21(Qp, Qs, Rp, As);//, pBs, pAs);
-	        return;
+	        return DesignAnalogCheby21(Qp, Qs, Rp, As);
 	    case ELLIP:
-	    		DesignAnalogEllip1(Qp, Qs, Rp, As);//, pBs, pAs);
-	        return;  
+	    		return DesignAnalogEllip1(Qp, Qs, Rp, As);
 	    default:
-	    		return;          
+	    		return null;          
 	    }
 	}
 
@@ -70,12 +71,12 @@ public class ALPDesigner {
 	//As：阻带最小衰减
 	//pBs：返回的模拟滤波器的系统函数Ha(s)分子多项式系数数组
 	//pAs：返回的模拟滤波器的系统函数Ha(s)分母多项式系数数组
-	private static void DesignAnalogButter1(double Qp, double Qs, double Rp, double As)//, RealSeq * pBs, RealSeq * pAs)
+	private static Map<String, Object> DesignAnalogButter1(double Qp, double Qs, double Rp, double As)//, RealSeq * pBs, RealSeq * pAs)
 	{
-	    GetButterMagHPara(Qp, Qs, Rp, As);
-	    int N = (int)rtnMap.get("N");
-	    double Qc = (double)rtnMap.get("Qc");
-	    DesignAnalogButterWithPara(N, Qc);
+		Map<String, Object> tmpMap = GetButterMagHPara(Qp, Qs, Rp, As);
+	    int N = (int)tmpMap.get("N");
+	    double Qc = (double)tmpMap.get("Qc");
+	    return DesignAnalogButterWithPara(N, Qc);
 	    //printf("Analog Butt: N = %d, Qc = %f\n", N, Qc);
 	}
 
@@ -84,9 +85,9 @@ public class ALPDesigner {
 	//Qc：模拟滤波器的截止频率，对于Butterworth指3dB截止频率
 	//pBs：返回的模拟滤波器的系统函数Ha(s)分子多项式系数数组
 	//pAs：返回的模拟滤波器的系统函数Ha(s)分母多项式系数数组 
-	private static void DesignAnalogButter2(int N, double Qc)//, RealSeq * pBs, RealSeq * pAs)
+	private static Map<String, Object> DesignAnalogButter2(int N, double Qc)//, RealSeq * pBs, RealSeq * pAs)
 	{
-	    DesignAnalogButterWithPara(N, Qc);
+	    return DesignAnalogButterWithPara(N, Qc);
 	} 
 
 	//用模拟滤波器的设计规格获取Butterworth滤波器幅度响应函数中的参数，阶数N，截止频率Qc（3dB截止频率）
@@ -96,7 +97,7 @@ public class ALPDesigner {
 	//As：阻带最小衰减
 	//pN：返回的模拟滤波器的阶数
 	//pQc：返回的模拟滤波器的截止频率
-	private static void GetButterMagHPara(double Qp, double Qs, double Rp, double As)//, int * pN, double * pQc)
+	private static Map<String, Object> GetButterMagHPara(double Qp, double Qs, double Rp, double As)//, int * pN, double * pQc)
 	{
 	    double tmp1 = pow(10, Rp/10) - 1;
 	    double tmp2 = pow(10, As/10) - 1;
@@ -107,8 +108,11 @@ public class ALPDesigner {
 	    double Qc1 = Qp/pow( tmp1, 1.0/2/N );       //7.5.27a
 	    double Qc2 = Qs/pow( tmp2, 1.0/2/N );       //7.5.27b
 	    double Qc= (Qc1 + Qc2)/2;                            //7.5.27c
+	    
+	    Map<String, Object> rtnMap = new HashMap<>();
 	    rtnMap.put("N", N);
 	    rtnMap.put("Qc", Qc);
+	    return rtnMap;
 	}
 
 	//用幅度响应函数的参数设计Butterworth模拟低通滤波器
@@ -116,15 +120,11 @@ public class ALPDesigner {
 	//Qc：模拟滤波器的截止频率，对于Butterworth指3dB截止频率
 	//pBs：返回的模拟滤波器的系统函数Ha(s)分子多项式系数数组
 	//pAs：返回的模拟滤波器的系统函数Ha(s)分母多项式系数数组 
-	private static void DesignAnalogButterWithPara(int N, double Qc)//, RealSeq * pBs, RealSeq * pAs)
+	private static Map<String, Object> DesignAnalogButterWithPara(int N, double Qc)//, RealSeq * pBs, RealSeq * pAs)
 	{
-	    if( N <= 0) {return;}
+	    if( N <= 0) {return null;}
 	    
-	    //生成Bm：Qc^N      //(7.5.8) 
-	    //double * bm = (double *)malloc(1 * sizeof(double));    
-	    //bm[0] = pow(Qc, N);
-	    //pBs->pData = bm;
-	    //pBs->len = 1;     
+	    //生成Bm：Qc^N      //(7.5.8)    
 	    RealSeq bs = new RealSeq(pow(Qc, N));
 	    
 	    //生成一个一阶节：Qc/(s+Qc)         (7.5.9) 
@@ -139,10 +139,11 @@ public class ALPDesigner {
 	        as = new RealSeq(1.0, Qc);
 	    }    
 	    
+	    Map<String, Object> rtnMap = new HashMap<>();
 	    if( N == 1) {
 	    		rtnMap.put("bs", bs);
 	    		rtnMap.put("as", as);
-	    		return;     //一阶滤波器，直接返回
+	    		return rtnMap;     //一阶滤波器，直接返回
 	    }
 	    
 	    int biN = N/2;  //二阶节的个数
@@ -159,7 +160,7 @@ public class ALPDesigner {
 	    }
 		rtnMap.put("bs", bs);
 		rtnMap.put("as", as);
-		return;    
+		return rtnMap;    
 	}
 
 
@@ -170,13 +171,13 @@ public class ALPDesigner {
 	//As：阻带最小衰减
 	//pBs：返回的模拟滤波器的系统函数Ha(s)分子多项式系数数组
 	//pAs：返回的模拟滤波器的系统函数Ha(s)分母多项式系数数组
-	private static void DesignAnalogCheby11(double Qp, double Qs, double Rp, double As)//, RealSeq * pBs, RealSeq * pAs)
+	private static Map<String, Object> DesignAnalogCheby11(double Qp, double Qs, double Rp, double As)//, RealSeq * pBs, RealSeq * pAs)
 	{
-	    GetCheby1MagHPara(Qp, Qs, Rp, As);
-	    int N = (int)rtnMap.get("N");
-	    double Qc = (double)rtnMap.get("Qc");
-	    double E = (double)rtnMap.get("E");
-	    DesignAnalogCheby1WithPara(N, Qc, E);
+		Map<String, Object> tmpMap = GetCheby1MagHPara(Qp, Qs, Rp, As);
+	    int N = (int)tmpMap.get("N");
+	    double Qc = (double)tmpMap.get("Qc");
+	    double E = (double)tmpMap.get("E");
+	    return DesignAnalogCheby1WithPara(N, Qc, E);
 	    //printf("Analog Cheb1: N = %d, Qc = %f, E = %f\n", N, Qc, E);   
 	}
 
@@ -186,10 +187,10 @@ public class ALPDesigner {
 	//Rp：模拟滤波器的通带衰减 
 	//pBs：返回的模拟滤波器的系统函数Ha(s)分子多项式系数数组
 	//pAs：返回的模拟滤波器的系统函数Ha(s)分母多项式系数数组
-	private static void DesignAnalogCheby12(int N, double Qp, double Rp)//, RealSeq * pBs, RealSeq * pAs)
+	private static Map<String, Object> DesignAnalogCheby12(int N, double Qp, double Rp)//, RealSeq * pBs, RealSeq * pAs)
 	{
 	    double E = sqrt( pow(10, Rp/10) - 1 );           //7.5.58
-	    DesignAnalogCheby1WithPara(N, Qp, E);
+	    return DesignAnalogCheby1WithPara(N, Qp, E);
 	}
 
 	//用模拟滤波器的设计规格获取Chebyshev-I型滤波器幅度响应函数中的参数，阶数N，截止频率Qc（通带截止频率），通带波纹epsilon 
@@ -200,7 +201,7 @@ public class ALPDesigner {
 	//pN：返回的模拟滤波器的阶数
 	//pQc：返回的模拟滤波器的截止频率
 	//pE：返回的模拟滤波器的通带波纹
-	private static void GetCheby1MagHPara(double Qp, double Qs, double Rp, double As)//, int * pN, double * pQc, double * pE)
+	private static Map<String, Object> GetCheby1MagHPara(double Qp, double Qs, double Rp, double As)//, int * pN, double * pQc, double * pE)
 	{
 	    double Qc = Qp;    
 	    double E = sqrt( pow(10, Rp/10) - 1 );           //7.5.58
@@ -211,10 +212,11 @@ public class ALPDesigner {
 	    double g = sqrt(tmp2/tmp1);                     //7.5.25b
 	    int N = (int)( log10(g+sqrt(g*g-1))/log10(lbd+sqrt(lbd*lbd-1)) ) + 1;      //7.5.68
 	    
+	    Map<String, Object> rtnMap = new HashMap<>();
 	    rtnMap.put("N", N);
 	    rtnMap.put("Qc", Qc);
 	    rtnMap.put("E", E);
-	    return; 
+	    return rtnMap; 
 	}
 
 	//用幅度响应函数的参数设计Chebyshev-I型模拟低通滤波器
@@ -223,13 +225,12 @@ public class ALPDesigner {
 	//E：模拟滤波器的通带波纹 
 	//pBs：返回的模拟滤波器的系统函数Ha(s)分子多项式系数数组
 	//pAs：返回的模拟滤波器的系统函数Ha(s)分母多项式系数数组
-	private static void DesignAnalogCheby1WithPara(int N, double Qc, double E)//, RealSeq * pBs, RealSeq * pAs)
+	private static Map<String, Object> DesignAnalogCheby1WithPara(int N, double Qc, double E)//, RealSeq * pBs, RealSeq * pAs)
 	{
-	    if( N <= 0) {return;}
+	    if( N <= 0) {return null;}
 
 	    //生成Bm：Qc^N/(E*2^(N-1))      //(7.5.47)  
 	    RealSeq bs = new RealSeq(pow(Qc, N)/E/pow(2, N-1));
-	    
 	    
 	    double gama = 1.0/E + sqrt(1.0/E/E+1);  //(7.5.44)
 	    double tmp = pow(gama, 1.0/N);
@@ -248,10 +249,11 @@ public class ALPDesigner {
 	        as = new RealSeq(1.0, Qc*a);
 	    }    
 	    
+	    Map<String, Object> rtnMap = new HashMap<>();
 	    if( N == 1) {
 	    		rtnMap.put("bs", bs);
 	    		rtnMap.put("as", as);
-	    		return;     //一阶滤波器，直接返回
+	    		return rtnMap;     //一阶滤波器，直接返回
 	    }
 	    
 	    int biN = N/2;  //二阶节的个数
@@ -277,7 +279,7 @@ public class ALPDesigner {
 	     
 		rtnMap.put("bs", bs);
 		rtnMap.put("as", as);
-		return;     //一阶滤波器，直接返回   
+		return rtnMap;     //一阶滤波器，直接返回   
 	}
 
 	//用设计指标设计Chebyshev-II型模拟低通滤波器
@@ -287,13 +289,13 @@ public class ALPDesigner {
 	//As：阻带最小衰减
 	//pBs：返回的模拟滤波器的系统函数Ha(s)分子多项式系数数组
 	//pAs：返回的模拟滤波器的系统函数Ha(s)分母多项式系数数组
-	private static void DesignAnalogCheby21(double Qp, double Qs, double Rp, double As)//, RealSeq * pBs, RealSeq * pAs)
+	private static Map<String, Object> DesignAnalogCheby21(double Qp, double Qs, double Rp, double As)//, RealSeq * pBs, RealSeq * pAs)
 	{
-	    GetCheby2MagHPara(Qp, Qs, Rp, As);
-	    int N = (int)rtnMap.get("N");
-	    double Qc = (double)rtnMap.get("Qc");
-	    double E = (double)rtnMap.get("E");
-	    DesignAnalogCheby2WithPara(N, Qc, E);
+		Map<String, Object> tmpMap = GetCheby2MagHPara(Qp, Qs, Rp, As);
+	    int N = (int)tmpMap.get("N");
+	    double Qc = (double)tmpMap.get("Qc");
+	    double E = (double)tmpMap.get("E");
+	    return DesignAnalogCheby2WithPara(N, Qc, E);
 	    //printf("Analog Cheb2: N = %d, Qc = %f, E = %f\n", N, Qc, E);      
 	}
 
@@ -303,10 +305,10 @@ public class ALPDesigner {
 	//As：模拟滤波器的阻带衰减 
 	//pBs：返回的模拟滤波器的系统函数Ha(s)分子多项式系数数组
 	//pAs：返回的模拟滤波器的系统函数Ha(s)分母多项式系数数组
-	private static void DesignAnalogCheby22(int N, double Qs, double As)//, RealSeq * pBs, RealSeq * pAs)
+	private static Map<String, Object> DesignAnalogCheby22(int N, double Qs, double As)//, RealSeq * pBs, RealSeq * pAs)
 	{
 	    double E = 1.0/sqrt( pow(10, As/10) - 1 );           //7.5.75
-	    DesignAnalogCheby2WithPara(N, Qs, E);
+	    return DesignAnalogCheby2WithPara(N, Qs, E);
 	}
 
 	//用模拟滤波器的设计规格获取Chebyshev-II型滤波器幅度响应函数中的参数，阶数N，截止频率Qc（阻带截止频率），通带波纹epsilon 
@@ -317,7 +319,7 @@ public class ALPDesigner {
 	//pN：返回的模拟滤波器的阶数
 	//pQc：返回的模拟滤波器的截止频率
 	//pE：返回的模拟滤波器的通带波纹
-	private static void GetCheby2MagHPara(double Qp, double Qs, double Rp, double As)//, int * pN, double * pQc, double * pE)
+	private static Map<String, Object> GetCheby2MagHPara(double Qp, double Qs, double Rp, double As)//, int * pN, double * pQc, double * pE)
 	{
 	    double Qc = Qs;    
 	    double E = 1.0/sqrt( pow(10, As/10) - 1 );           //7.5.75
@@ -328,10 +330,11 @@ public class ALPDesigner {
 	    double g = sqrt(tmp2/tmp1);                     //7.5.25b
 	    int N = (int)( log10(g+sqrt(g*g-1))/log10(lbd+sqrt(lbd*lbd-1)) ) + 1;      //7.5.77
 	    
+	    Map<String, Object> rtnMap = new HashMap<>();
 	    rtnMap.put("N", N);
 	    rtnMap.put("Qc", Qc);
 	    rtnMap.put("E", E);
-	    return;    
+	    return rtnMap;    
 	}
 
 	//用幅度响应函数的参数设计Chebyshev-II型模拟低通滤波器
@@ -340,9 +343,9 @@ public class ALPDesigner {
 	//E：模拟滤波器的通带波纹 
 	//pBs：返回的模拟滤波器的系统函数Ha(s)分子多项式系数数组
 	//pAs：返回的模拟滤波器的系统函数Ha(s)分母多项式系数数组
-	private static void DesignAnalogCheby2WithPara(int N, double Qc, double E)//, RealSeq * pBs, RealSeq * pAs)
+	private static Map<String, Object> DesignAnalogCheby2WithPara(int N, double Qc, double E)//, RealSeq * pBs, RealSeq * pAs)
 	{
-		if( N <= 0) {return;}
+		if( N <= 0) {return null;}
 	    
 	    double gama = 1.0/E + sqrt(1.0/E/E+1);  //(7.5.44)
 	    double tmp = pow(gama, 1.0/N);
@@ -364,11 +367,12 @@ public class ALPDesigner {
 	        as = new RealSeq(1.0, Qc/a);
 	    }    
 	    
+	    Map<String, Object> rtnMap = new HashMap<>();
 	    if( N == 1) {
 	    		bs.set(0, as.get(1));
 	    		rtnMap.put("bs", bs);
 	    		rtnMap.put("as", as);
-	    		return;
+	    		return rtnMap;
 	    	}     //一阶滤波器，直接返回
 	    
 	    int biN = N/2;  //二阶节的个数
@@ -413,21 +417,21 @@ public class ALPDesigner {
 
 	    rtnMap.put("bs", bs);
 		rtnMap.put("as", as);
-		return;      
+		return rtnMap;      
 	}
 
 	//用设计指标设计Elliptic模拟低通滤波器 
-	private static void DesignAnalogEllip1(double Qp, double Qs, double Rp, double As)//, RealSeq * pBs, RealSeq * pAs)
+	private static Map<String, Object> DesignAnalogEllip1(double Qp, double Qs, double Rp, double As)//, RealSeq * pBs, RealSeq * pAs)
 	{
-		GetEllipOrder(Qp, Qs, Rp, As);
-		int N = (int)rtnMap.get("N");
-		double ActuralAs = (double)rtnMap.get("ActuralAs");
+		Map<String, Object> tmpMap = GetEllipOrder(Qp, Qs, Rp, As);
+		int N = (int)tmpMap.get("N");
+		double ActuralAs = (double)tmpMap.get("ActuralAs");
 		//printf("Analog Ellipti: N = %d, 实际达到的As = %lf\n", N, ActuralAs);
-		DesignAnalogEllip2(N, Qp, Qs, Rp);
+		return DesignAnalogEllip2(N, Qp, Qs, Rp);
 	}
 
 	//直接指定滤波器阶数来设计Elliptic模拟低通滤波器 
-	private static void DesignAnalogEllip2(int N, double Qp, double Qs, double Rp)//, RealSeq * pBs, RealSeq * pAs)
+	private static Map<String, Object> DesignAnalogEllip2(int N, double Qp, double Qs, double Rp)//, RealSeq * pBs, RealSeq * pAs)
 	{
 		//本函数前半部来自算法5.2，求归一化的椭圆型滤波器 
 		 
@@ -453,9 +457,9 @@ public class ALPDesigner {
 		int r = (N % 2 == 0) ? N/2 : (N-1)/2;
 		
 		//计算Xi和Yi 
-		CalculateXandYForEllip(N, q, k);		//(5.15)和(5.16) 
-		RealSeq Xi = (RealSeq)rtnMap.get("Xi");
-		RealSeq Yi = (RealSeq)rtnMap.get("Yi");
+		Map<String, Object> tmpMap = CalculateXandYForEllip(N, q, k);		//(5.15)和(5.16) 
+		RealSeq Xi = (RealSeq)tmpMap.get("Xi");
+		RealSeq Yi = (RealSeq)tmpMap.get("Yi");
 		
 		RealSeq ai = new RealSeq(r);
 		RealSeq bi = new RealSeq(r);
@@ -518,13 +522,14 @@ public class ALPDesigner {
 			as = SeqUtil.conv(as, DenSeq);
 		}
 
+		Map<String, Object> rtnMap = new HashMap<>();
 		rtnMap.put("bs", bs);
 		rtnMap.put("as", as);
-		return;
+		return rtnMap;
 	}
 
 	//用模拟滤波器的设计规格获取Elliptic型滤波器的阶数N和实际达到的阻带最小衰减As
-	private static void GetEllipOrder(double Qp, double Qs, double Rp, double As)//, int * pN, double * pActuralAs)
+	private static Map<String, Object> GetEllipOrder(double Qp, double Qs, double Rp, double As)//, int * pN, double * pActuralAs)
 	{
 		//本函数来自算法5.1
 		 
@@ -546,9 +551,10 @@ public class ALPDesigner {
 		//计算实际达到的As 
 		double ActuralAs = 10*log10( 1+(pow(10.0, Rp/10)-1)/16.0/pow(q, N) );		//(5.5)
 		
+		Map<String, Object> rtnMap = new HashMap<>();
 		rtnMap.put("N", N);
 		rtnMap.put("ActuralAs", ActuralAs);
-		return;
+		return rtnMap;
 	}
 
 	//实现算法5.2中公式(5.13)用于计算p0值 
@@ -577,7 +583,7 @@ public class ALPDesigner {
 	}
 
 	//实现算法5.2中公式(5.15)用于计算Xi,Yi,i=1,2,...,r的值
-	private static void CalculateXandYForEllip(int N, double q, double k)//, RealSeq * pXi, RealSeq * pYi)
+	private static Map<String, Object> CalculateXandYForEllip(int N, double q, double k)//, RealSeq * pXi, RealSeq * pYi)
 	{
 		//确定二阶节个数
 		int r = (N % 2 == 0) ? N/2 : (N-1)/2;
@@ -615,9 +621,11 @@ public class ALPDesigner {
 			Xi.set(i-1, rlt);
 			Yi.set(i-1, sqrt( (1-rlt*rlt/k)*(1-k*rlt*rlt) ));		//(5.16)
 		}		
+		
+		Map<String, Object> rtnMap = new HashMap<>();
 		rtnMap.put("Xi", Xi);
 		rtnMap.put("Yi", Yi);
-		return;
+		return rtnMap;
 	}
 
 	//用于计算第一类完全椭圆积分K(k) 

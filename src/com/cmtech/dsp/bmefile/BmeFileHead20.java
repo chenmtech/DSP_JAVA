@@ -6,7 +6,7 @@
  * Copyright (c) 2018, e_yujunquan@163.com All Rights Reserved.
  *
  */
-package com.cmtech.dsp.file;
+package com.cmtech.dsp.bmefile;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -61,7 +61,7 @@ public class BmeFileHead20 extends BmeFileHead {
 	
 	/**
 	 * TODO 简单描述该方法的实现功能（可选）.
-	 * @see com.cmtech.dsp.file.BmeFileHead#getByteOrder()
+	 * @see com.cmtech.dsp.bmefile.BmeFileHead#getByteOrder()
 	 */
 	@Override
 	public ByteOrder getByteOrder() {
@@ -76,7 +76,7 @@ public class BmeFileHead20 extends BmeFileHead {
 
 	/**
 	 * TODO 简单描述该方法的实现功能（可选）.
-	 * @see com.cmtech.dsp.file.BmeFileHead#readFromStream(java.io.DataInputStream)
+	 * @see com.cmtech.dsp.bmefile.BmeFileHead#readFromStream(java.io.DataInputStream)
 	 */
 	@Override
 	public void readFromStream(DataInputStream in) throws FileException {
@@ -113,7 +113,7 @@ public class BmeFileHead20 extends BmeFileHead {
 
 	/**
 	 * TODO 简单描述该方法的实现功能（可选）.
-	 * @see com.cmtech.dsp.file.BmeFileHead#writeToStream(java.io.DataOutputStream)
+	 * @see com.cmtech.dsp.bmefile.BmeFileHead#writeToStream(java.io.DataOutputStream)
 	 */
 	@Override
 	public void writeToStream(DataOutputStream out) throws FileException {

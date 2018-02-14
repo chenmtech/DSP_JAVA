@@ -6,7 +6,7 @@
  * Copyright (c) 2018, e_yujunquan@163.com All Rights Reserved.
  *
  */
-package com.cmtech.dsp.file;
+package com.cmtech.dsp.bmefile;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

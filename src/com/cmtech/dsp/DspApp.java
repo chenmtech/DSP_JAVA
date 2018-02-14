@@ -2,9 +2,9 @@ package com.cmtech.dsp;
 
 import java.util.Arrays;
 
+import com.cmtech.dsp.bmefile.BmeFile;
+import com.cmtech.dsp.bmefile.BmeFileHead10;
 import com.cmtech.dsp.exception.DspException;
-import com.cmtech.dsp.file.BmeFile;
-import com.cmtech.dsp.file.BmeFileHead10;
 import com.cmtech.dsp.filter.AnalogFilter;
 import com.cmtech.dsp.filter.FIRFilter;
 import com.cmtech.dsp.filter.IIRFilter;
@@ -33,20 +33,23 @@ public class DspApp {
 		System.out.println(fir.getHn());		
 		System.out.println(fir.freq(101).abs());
 
-		AnalogFilter afilter = ALPDesigner.design(10.0,20.0,1,30,AFType.ELLIP);
+		AnalogFilter afilter = ALPDesigner.design(10.0,20.0,1,30,AFType.CHEB2);
 		System.out.println(afilter.freq(30.0, 31).abs());
 		
-		BmeFile file = BmeFile.createNewBmeFile("affreq.bme");
-		file.writeData(afilter.freq(30.0, 31).abs().toArray());
-		file.close();
+		BmeFile file = BmeFile.createBmeFile("affreq.bme");
+		file.writeData(afilter.freq(30.0, 31).abs().toArray()).close();
 		
-		AFType afType = AFType.BUTT;
-		IIRPara iirSpec = new IIRPara(wp,ws,Rp,As,fType,afType);
-		IIRFilter iir = IIRDesigner.design(iirSpec);
+		AFType afType = AFType.ELLIP;
+		IIRFilter iir = IIRDesigner.design(wp,ws,Rp,As,afType,fType);
 		System.out.println(iir.getB());
 		System.out.println(iir.getA());
 		System.out.println(iir.freq(101).abs());
 		System.out.println(iir.freq(101).dB());
+		file = BmeFile.createBmeFile("iir.bme");
+		file.writeData(iir.freq(101).abs().toArray()).close();
+		
+		file = BmeFile.createBmeFile("omega.bme");
+		file.writeData(SeqFactory.linSpace(0, 1, 101).toArray()).close();
 		
 		
 		
@@ -72,7 +75,7 @@ public class DspApp {
 		System.out.println(file1);
 		System.out.println(Arrays.toString(buf));
 		
-		BmeFile file2 = BmeFile.createNewBmeFile("dfs.bme", 
+		BmeFile file2 = BmeFile.createBmeFile("dfs.bme", 
 				new BmeFileHead10(file1.getBmeFileHead()));
 		file2.writeData(buf).writeData(10);
 		file2.close();

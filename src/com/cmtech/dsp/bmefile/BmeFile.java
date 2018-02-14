@@ -6,7 +6,7 @@
  * Copyright (c) 2018, e_yujunquan@163.com All Rights Reserved.
  *
  */
-package com.cmtech.dsp.file;
+package com.cmtech.dsp.bmefile;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -68,11 +68,11 @@ public class BmeFile {
 		return new BmeFile(fileName);
 	}
 	
-	public static BmeFile createNewBmeFile(String fileName) throws FileException{
+	public static BmeFile createBmeFile(String fileName) throws FileException{
 		return new BmeFile(fileName, null);
 	}
 	
-	public static BmeFile createNewBmeFile(String fileName, BmeFileHead head) throws FileException{
+	public static BmeFile createBmeFile(String fileName, BmeFileHead head) throws FileException{
 		return new BmeFile(fileName, head);
 	}
 	
