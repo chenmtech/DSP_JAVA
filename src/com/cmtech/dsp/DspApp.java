@@ -1,11 +1,10 @@
 package com.cmtech.dsp;
 
+import java.nio.ByteOrder;
 import java.util.Arrays;
 
 import com.cmtech.dsp.exception.FileException;
 import com.cmtech.dsp.file.BmeFile;
-import com.cmtech.dsp.file.BmeFileDataType;
-import com.cmtech.dsp.file.BmeFileHead;
 import com.cmtech.dsp.file.BmeFileHead10;
 import com.cmtech.dsp.filter.FIRFilter;
 import com.cmtech.dsp.filter.IIRFilter;
@@ -63,29 +62,29 @@ public class DspApp {
 		
 		BmeFile.setFileDirectory("/Users/bme/Documents/matlab");
 		
-		BmeFile file1 = new BmeFile("dfs.bme");
-		double[] buf = file1.readData(new double[0]);
+		BmeFile file1 = BmeFile.openBmeFile("dfs1.bme");
+		int[] buf = file1.readData(new int[0]);
 		file1.close();
 		System.out.println(file1);
+		System.out.println(Arrays.toString(buf));
 		
-		byte[] buf1 = new byte[buf.length];
-		for(int i = 0; i < buf.length; i++) {
-			buf1[i] = (byte)buf[i];
-		}
-		
-		BmeFileHead head = new BmeFileHead10();
-		head.setDataType(BmeFileDataType.UINT8);
-		BmeFile file2 = new BmeFile("dfs1.bme", head);
-		file2.writeData(buf1);
+		BmeFile file2 = BmeFile.createNewBmeFile("dfs.bme", 
+				new BmeFileHead10(file1.getBmeFileHead()));
+		file2.writeData(buf);
 		file2.close();
 		System.out.println(file2);
 		
-		BmeFile file3 = new BmeFile("dfs1.bme");
-		byte[] buf2 = file3.readData(new byte[0]);
+		BmeFile file3 = BmeFile.openBmeFile("dfs.bme");
+		System.out.println(file3);
+		int[] buf2 = file3.readData(new int[0]);
 		file3.close();
 		System.out.println(Arrays.toString(buf2));
 		
-		/*BmeFileHead head1 = new BmeFileHead10();
+		/*Field f = head.getClass().getDeclaredField("VER");
+		f.setAccessible(true);
+		System.out.println(Arrays.toString((byte[])f.get(head)));
+		
+		BmeFileHead head1 = new BmeFileHead10();
 		head1.setInfo("hi,all").setFs(111);
 		BmeFile file1 = new BmeFile("dfs.bme", head1);
 		double[] data = new double[] {1.11,2.22,3.33};

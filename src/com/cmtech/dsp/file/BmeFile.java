@@ -41,7 +41,6 @@ import com.cmtech.dsp.util.FormatTransfer;
  */
 public class BmeFile {
 	private static Set<String> fileInOperation = new HashSet<>();
-	
 	private static Path rootPath = Paths.get(System.getProperty("user.dir"));
 	
 	public static final byte[] BME = {'B', 'M', 'E'};
@@ -51,17 +50,32 @@ public class BmeFile {
 	private DataInputStream in;
 	private DataOutputStream out;
 	
-	private BmeFileHead fileHead;
+	private final BmeFileHead fileHead;
 	
-	public BmeFile(String fileName) throws FileException{
+	private BmeFile(String fileName) throws FileException{
 		checkFile(fileName);
-		open();
+		fileHead = open();
 	}
 	
-	public BmeFile(String fileName, BmeFileHead head) throws FileException{
+	private BmeFile(String fileName, BmeFileHead head) throws FileException{
 		checkFile(fileName);
-		create(head);
+		if(head == null) head = new BmeFileHead10();
+		fileHead = create(head);
 	}
+	
+
+	public static BmeFile openBmeFile(String fileName) throws FileException{
+		return new BmeFile(fileName);
+	}
+	
+	public static BmeFile createNewBmeFile(String fileName) throws FileException{
+		return new BmeFile(fileName, null);
+	}
+	
+	public static BmeFile createNewBmeFile(String fileName, BmeFileHead head) throws FileException{
+		return new BmeFile(fileName, head);
+	}
+	
 	
 	private void checkFile(String fileName) throws FileException{
 		Path tmpFile = rootPath.resolve(fileName);
@@ -94,7 +108,9 @@ public class BmeFile {
 		rootPath = p;
 	}
 	
-	private void open() throws FileException{
+	private BmeFileHead open() throws FileException{
+		BmeFileHead fileHead;
+		
 		if(file == null) 
 			throw new FileException("", "文件未正常设置");
 		if(!Files.exists(file))
@@ -114,12 +130,16 @@ public class BmeFile {
 			if(Arrays.equals(ver, BmeFileHead10.VER)) {
 				fileHead = new BmeFileHead10();
 				fileHead.readFromStream(in);
+			} else if(Arrays.equals(ver, BmeFileHead20.VER)) {
+				fileHead = new BmeFileHead20();
+				fileHead.readFromStream(in);
 			} else {
 				throw new FileException(file.toString(), "文件版本不支持");
 			}
 		} catch (IOException e) {
 			throw new FileException(file.toString(), "文件打开错误");
 		}
+		return fileHead;
 	}
 	
 	public double[] readData(double[] d) throws FileException{
@@ -217,7 +237,7 @@ public class BmeFile {
 		return data;
 	}
 	
-	private void create(BmeFileHead head) throws FileException{
+	private BmeFileHead create(BmeFileHead head) throws FileException{
 		if(file == null) 
 			throw new FileException("", "文件路径设置错误");
 		if(head == null)
@@ -232,12 +252,12 @@ public class BmeFile {
 					new BufferedOutputStream(
 							new FileOutputStream(file.toString())));
 			out.write(BME);
-			fileHead = head;
-			out.write(fileHead.getVersion());
-			fileHead.writeToStream(out);
+			out.write(head.getVersion());
+			head.writeToStream(out);
 		} catch(IOException ioe) {
 			throw new FileException(file.toString(), "创建文件错误");
 		}
+		return head;
 	}
 	
 	public BmeFile writeData(double[] data) throws FileException{
@@ -355,6 +375,10 @@ public class BmeFile {
 	public ByteOrder getByteOrder() {
 		if(fileHead == null) return null;
 		return fileHead.getByteOrder();
+	}
+	
+	public BmeFileHead getBmeFileHead() {
+		return fileHead;
 	}
 
 	@Override

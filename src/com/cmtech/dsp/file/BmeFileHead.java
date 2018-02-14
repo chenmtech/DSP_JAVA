@@ -11,7 +11,6 @@ package com.cmtech.dsp.file;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.nio.ByteOrder;
-import java.util.Arrays;
 
 import com.cmtech.dsp.exception.FileException;
 
@@ -38,6 +37,14 @@ public abstract class BmeFileHead {
 		this.dataType = dataType;
 		this.fs = fs;
 	}
+	
+	public BmeFileHead(BmeFileHead fileHead) {
+		info = fileHead.info;
+		dataType = fileHead.dataType;
+		fs = fileHead.fs;
+	}
+	
+	public abstract byte[] getVersion();
 	
 	public String getInfo() {
 		return info;
@@ -66,19 +73,11 @@ public abstract class BmeFileHead {
 		return this;
 	}
 	
-	@Override
-	public String toString() {
-		return "[文件信息：" 
-				+ Arrays.toString(getVersion()) + ";"
-				+ getInfo() + ";"
-				+ getDataType() + ";"
-				+ getFs() + ";"
-				+ getByteOrder() + "]";
-	}
-	
-	public abstract byte[] getVersion();
-	
 	public abstract ByteOrder getByteOrder();
+	public abstract BmeFileHead setByteOrder(ByteOrder byteOrder);
+	
+	
+
 	
 	public abstract void readFromStream(DataInputStream in) throws FileException;
 	

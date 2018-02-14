@@ -37,11 +37,16 @@ public class BmeFileHead10 extends BmeFileHead {
 	public BmeFileHead10(String info, BmeFileDataType dataType, int fs) {
 		super(info, dataType, fs);
 	}
-
+	
+	public BmeFileHead10(BmeFileHead fileHead) {
+		super(fileHead);
+	}
+	
 	@Override
 	public byte[] getVersion() {
 		return VER;
 	}
+
 	
 	@Override
 	public ByteOrder getByteOrder() {
@@ -49,9 +54,14 @@ public class BmeFileHead10 extends BmeFileHead {
 	}
 	
 	@Override
+	public BmeFileHead setByteOrder(ByteOrder byteOrder) {
+		return this;
+	}
+	
+	@Override
 	public void readFromStream(DataInputStream in) throws FileException{
 		try {
-			// ver1.0内部数据为LSB，要反过来变为MSB
+			// ver1.0内部数据字节序为LSB，要反过来变为MSB
 			int infoLen = FormatTransfer.reverseInt(in.readInt());
 			byte[] str = new byte[infoLen];
 			in.read(str);
@@ -74,7 +84,7 @@ public class BmeFileHead10 extends BmeFileHead {
 	public void writeToStream(DataOutputStream out) throws FileException {
 		try {
 			int infoLen = getInfo().length();
-			// ver1.0要写为LSB
+			// ver1.0要写为LSB字节序
 			out.write(FormatTransfer.toLH(infoLen));
 			out.write(getInfo().getBytes());
 			out.writeByte((byte)getDataType().getCode());
@@ -85,5 +95,14 @@ public class BmeFileHead10 extends BmeFileHead {
 		}
 	}
 
-	
+	@Override
+	public String toString() {
+		return "[文件头信息：" 
+				+ getClass().getSimpleName() + ";"
+				+ Arrays.toString(getVersion()) + ";"
+				+ getByteOrder() + ";"
+				+ getInfo() + ";"
+				+ getDataType() + ";"
+				+ getFs() + "]";
+	}
 }
