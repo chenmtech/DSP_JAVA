@@ -1,15 +1,21 @@
-package com.cmtech.dsp.filter.design;
+package com.cmtech.dsp.filter.para;
 
 import java.util.Arrays;
 
-public abstract class Spec {
-	protected double[] wp;
-	protected double[] ws;
-	protected double Rp;
-	protected double As;
-	protected FilterType fType;
+import com.cmtech.dsp.filter.design.FilterType;
+
+public abstract class FilterPara {
+	private double[] wp;
+	private double[] ws;
+	private double Rp;
+	private double As;
+	private FilterType fType;
 	
-	public Spec(double[] wp, double[] ws, double Rp, double As, FilterType fType) {
+	public FilterPara() {
+		
+	}
+	
+	public FilterPara(double[] wp, double[] ws, double Rp, double As, FilterType fType) {
 		this.wp = Arrays.copyOf(wp, wp.length);
 		this.ws = Arrays.copyOf(ws, ws.length);
 		this.Rp = Rp;

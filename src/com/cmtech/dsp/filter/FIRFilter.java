@@ -5,11 +5,11 @@ import com.cmtech.dsp.seq.RealSeq;
 
 public class FIRFilter extends DigitalFilter{
 	
-	public FIRFilter(RealSeq hseq) {
+	public FIRFilter(RealSeq hseq){
 		super(hseq, null);
 	}
 	
-	public FIRFilter(RealSeq hseq, double a) {
+	public FIRFilter(RealSeq hseq, double a){
 		super(hseq.multiple(1/a), null);
 	}
 
@@ -24,19 +24,16 @@ public class FIRFilter extends DigitalFilter{
 
 	@Override
 	public void setA(RealSeq a) {
-		// TODO Auto-generated method stub
 		return;
 	}
 
 	@Override
 	public ComplexSeq freq(int N) {
-		// TODO Auto-generated method stub
 		return new RealSeq(b).dtft(N);
 	}
 
 	@Override
 	public ComplexSeq freq(RealSeq omega) {
-		// TODO Auto-generated method stub
 		return new RealSeq(b).dtft(omega);
 	}
 

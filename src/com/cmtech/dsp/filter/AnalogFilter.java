@@ -8,7 +8,7 @@ import com.cmtech.dsp.seq.SeqUtil;
 
 public class AnalogFilter extends AbstractFilter implements IAnalogFilter {
 	
-	public AnalogFilter(RealSeq bseq, RealSeq aseq) {
+	public AnalogFilter(RealSeq bseq, RealSeq aseq){
 		super(bseq, aseq);
 	}
 

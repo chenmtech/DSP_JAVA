@@ -20,6 +20,7 @@ package com.cmtech.dsp.exception;
  */
 public enum DspExceptionCode {
 	BMEFILE_OPERATION_ERR,
+	FILTER_ERR,
 	OTHER_ERR
 
 }

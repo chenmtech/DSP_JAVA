@@ -1,17 +1,17 @@
 package com.cmtech.dsp.filter;
 
-import com.cmtech.dsp.filter.design.Spec;
+import com.cmtech.dsp.filter.para.FilterPara;
 import com.cmtech.dsp.seq.RealSeq;
 
 public abstract class AbstractFilter implements IFilter {
 	protected double[] b;
 	protected double[] a;
-	protected Spec spec;
+	protected FilterPara para;
 	
 	public AbstractFilter() {
 	}
 	
-	public AbstractFilter(RealSeq bseq, RealSeq aseq) {
+	public AbstractFilter(RealSeq bseq, RealSeq aseq){
 		if(bseq != null) b = bseq.toArray();
 		if(aseq != null) a = aseq.toArray();
 	}
@@ -29,20 +29,22 @@ public abstract class AbstractFilter implements IFilter {
 
 	@Override
 	public void setB(RealSeq b) {
-		this.b = b.toArray();
+		if(b != null) this.b = b.toArray();
+		else this.b = null;
 	}
 
 	@Override
 	public void setA(RealSeq a) {
-		this.a = a.toArray();
+		if(a != null) this.a = a.toArray();
+		else this.a = null;
 	}
 
-	public Spec getSpec() {
-		return spec;
+	public FilterPara getFilterPara() {
+		return para;
 	}
 
-	public void setSpec(Spec spec) {
-		this.spec = spec;
+	public void setFilterPara(FilterPara para) {
+		this.para = para;
 	}
 	
 	

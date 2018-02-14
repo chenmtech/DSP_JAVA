@@ -17,6 +17,19 @@ public class SeqUtil {
 		return out;	
 	}
 	
+	public static RealSeq subtract(RealSeq seq1, RealSeq seq2) {
+		int N = Math.max(seq1.size(), seq2.size());
+		RealSeq out = new RealSeq(N);
+		double tmp1 = 0.0;
+		double tmp2 = 0.0;
+		for(int i = 0; i < N; i++) {
+			tmp1 = (i < seq1.size()) ? seq1.get(i) : 0.0;
+			tmp2 = (i < seq2.size()) ? seq2.get(i) : 0.0;
+			out.set(i, tmp1-tmp2);
+		}
+		return out;	
+	}
+	
 	public static ComplexSeq add(ComplexSeq seq1, ComplexSeq seq2) {
 		int N = Math.max(seq1.size(), seq2.size());
 		ComplexSeq out = new ComplexSeq(N);

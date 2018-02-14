@@ -285,6 +285,19 @@ public class BmeFile {
 		return this;
 	}
 	
+	public BmeFile writeData(double data) throws FileException{
+		try {
+			if(fileHead.getByteOrder() == ByteOrder.BIG_ENDIAN) {
+				out.writeDouble(data);			
+			} else {
+				out.write(FormatTransfer.toLH(data));
+			}
+		} catch(IOException ioe) {
+			throw new FileException(file.toString(), "写数据错误");
+		}
+		return this;
+	}
+	
 	public BmeFile writeData(int[] data) throws FileException{
 		if(out == null || fileHead == null) {
 			throw new FileException("", "请先创建文件");
@@ -310,6 +323,19 @@ public class BmeFile {
 		return this;
 	}
 	
+	public BmeFile writeData(int data) throws FileException{
+		try {
+			if(fileHead.getByteOrder() == ByteOrder.BIG_ENDIAN) {
+				out.writeInt(data);			
+			} else {
+				out.write(FormatTransfer.toLH(data));
+			}
+		} catch(IOException ioe) {
+			throw new FileException(file.toString(), "写数据错误");
+		}
+		return this;
+	}
+	
 	public BmeFile writeData(byte[] data) throws FileException{
 		if(out == null || fileHead == null) {
 			throw new FileException("", "请先创建文件");
@@ -323,6 +349,15 @@ public class BmeFile {
 			for(int i = 0; i < data.length; i++) {
 				out.writeByte(data[i]);
 			}
+		} catch(IOException ioe) {
+			throw new FileException(file.toString(), "写数据错误");
+		}
+		return this;
+	}
+	
+	public BmeFile writeData(byte data) throws FileException{
+		try {
+			out.writeByte(data);
 		} catch(IOException ioe) {
 			throw new FileException(file.toString(), "写数据错误");
 		}

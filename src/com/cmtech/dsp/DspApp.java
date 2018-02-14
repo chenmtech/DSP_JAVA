@@ -1,48 +1,54 @@
 package com.cmtech.dsp;
 
-import java.nio.ByteOrder;
 import java.util.Arrays;
 
-import com.cmtech.dsp.exception.FileException;
+import com.cmtech.dsp.exception.DspException;
 import com.cmtech.dsp.file.BmeFile;
 import com.cmtech.dsp.file.BmeFileHead10;
+import com.cmtech.dsp.filter.AnalogFilter;
 import com.cmtech.dsp.filter.FIRFilter;
 import com.cmtech.dsp.filter.IIRFilter;
 import com.cmtech.dsp.filter.design.AFType;
+import com.cmtech.dsp.filter.design.ALPDesigner;
 import com.cmtech.dsp.filter.design.FIRDesigner;
-import com.cmtech.dsp.filter.design.FIRSpec;
 import com.cmtech.dsp.filter.design.FilterType;
 import com.cmtech.dsp.filter.design.IIRDesigner;
-import com.cmtech.dsp.filter.design.IIRSpec;
-import com.cmtech.dsp.filter.design.WinType;
+import com.cmtech.dsp.filter.para.AFPara;
+import com.cmtech.dsp.filter.para.IIRPara;
 import com.cmtech.dsp.seq.ComplexSeq;
 import com.cmtech.dsp.seq.RealSeq;
 import com.cmtech.dsp.seq.SeqFactory;
 
 public class DspApp {
 
-	public static void main(String[] args) throws FileException{
-
-		double[] ws = {0.4*Math.PI, 0.5*Math.PI};
-		double[] wp = {0.3*Math.PI, 0.6*Math.PI};
+	public static void main(String[] args) throws DspException{
+		BmeFile.setFileDirectory("/Users/bme/Documents/matlab");
+		
+		double[] wp = {0.4*Math.PI, 0.5*Math.PI};
+		double[] ws = {0.3*Math.PI, 0.6*Math.PI};
 		double Rp = 1;
 		double As = 20;
-		FilterType fType = FilterType.BANDSTOP;
-		
-		FIRSpec firSpec = new FIRSpec(wp,ws,Rp,As,fType);
-		firSpec.setWinType(WinType.KAISER);
-		FIRFilter fir = FIRDesigner.design(firSpec);
-		System.out.println(fir.getHn());
-		
+		FilterType fType = FilterType.BANDPASS;
+		FIRFilter fir = FIRDesigner.design(wp,ws,Rp,As,fType);
+		System.out.println(fir.getHn());		
 		System.out.println(fir.freq(101).abs());
+
+		AnalogFilter afilter = ALPDesigner.design(10.0,20.0,1,30,AFType.ELLIP);
+		System.out.println(afilter.freq(30.0, 31).abs());
+		
+		BmeFile file = BmeFile.createNewBmeFile("affreq.bme");
+		file.writeData(afilter.freq(30.0, 31).abs().toArray());
+		file.close();
 		
 		AFType afType = AFType.BUTT;
-		IIRSpec iirSpec = new IIRSpec(wp,ws,Rp,As,fType,afType);
+		IIRPara iirSpec = new IIRPara(wp,ws,Rp,As,fType,afType);
 		IIRFilter iir = IIRDesigner.design(iirSpec);
 		System.out.println(iir.getB());
 		System.out.println(iir.getA());
 		System.out.println(iir.freq(101).abs());
 		System.out.println(iir.freq(101).dB());
+		
+		
 		
 		RealSeq seq1 = SeqFactory.createRndSeq(10);
 		RealSeq seq2 = SeqFactory.createRndSeq(10);
@@ -60,8 +66,6 @@ public class DspApp {
 		System.out.println(seq3.equals(seq1));
 
 		
-		BmeFile.setFileDirectory("/Users/bme/Documents/matlab");
-		
 		BmeFile file1 = BmeFile.openBmeFile("dfs1.bme");
 		int[] buf = file1.readData(new int[0]);
 		file1.close();
@@ -70,9 +74,9 @@ public class DspApp {
 		
 		BmeFile file2 = BmeFile.createNewBmeFile("dfs.bme", 
 				new BmeFileHead10(file1.getBmeFileHead()));
-		file2.writeData(buf);
+		file2.writeData(buf).writeData(10);
 		file2.close();
-		System.out.println(file2);
+		System.out.println(file2.getDataType());
 		
 		BmeFile file3 = BmeFile.openBmeFile("dfs.bme");
 		System.out.println(file3);
