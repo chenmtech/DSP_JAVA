@@ -6,20 +6,15 @@ import com.cmtech.dsp.seq.RealSeq;
 public class FIRFilter extends DigitalFilter{
 	
 	public FIRFilter(RealSeq hseq){
-		super(hseq, null);
+		super(hseq, new RealSeq(1.0));
 	}
 	
 	public FIRFilter(RealSeq hseq, double a){
-		super(hseq.multiple(1/a), null);
+		super(hseq.multiple(1/a), new RealSeq(1.0));
 	}
 
 	public RealSeq getHn() {
 		return getB();
-	}
-
-	@Override
-	public RealSeq getA() {
-		return new RealSeq(1.0);
 	}
 
 	@Override

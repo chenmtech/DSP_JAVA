@@ -54,5 +54,22 @@ public abstract class FilterPara {
 		this.fType = type;
 	}
 	
+	@Override
+	public String toString() {
+		StringBuilder strBuilder = new StringBuilder();
+		strBuilder.append(getClass().getSimpleName() + ':');
+		if(fType == FilterType.BANDPASS || fType == FilterType.BANDSTOP) {
+			strBuilder.append("wp=" + Arrays.toString(wp) + ',');
+			strBuilder.append("ws=" + Arrays.toString(ws) + ',');
+		} else {
+			strBuilder.append("wp=" + wp[0] + ',');
+			strBuilder.append("ws=" + ws[0] + ',');
+		}
+		strBuilder.append("Rp=" + Rp + ',');
+		strBuilder.append("As=" + As + ',');
+		strBuilder.append("FilterType=" + fType);
+		return strBuilder.toString();
+	}
+	
 	
 }

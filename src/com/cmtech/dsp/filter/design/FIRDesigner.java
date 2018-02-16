@@ -9,6 +9,7 @@ import java.util.Map;
 
 import com.cmtech.dsp.filter.FIRFilter;
 import com.cmtech.dsp.filter.para.FIRPara;
+import com.cmtech.dsp.filter.para.KaiserPara;
 import com.cmtech.dsp.seq.RealSeq;
 import com.cmtech.dsp.seq.SeqUtil;
 
@@ -18,11 +19,11 @@ public class FIRDesigner {
 		
 	}
 	
-	public static FIRFilter design(double[] wp, double[] ws, double Rp, double As, FilterType fType) {
+	public static synchronized FIRFilter design(double[] wp, double[] ws, double Rp, double As, FilterType fType) {
 		return design(wp,ws,Rp,As,fType,WinType.UNKNOWN);
 	}
 	
-	public static FIRFilter design(double[] wp, double[] ws, double Rp, double As, FilterType fType, WinType wType) {
+	public static synchronized FIRFilter design(double[] wp, double[] ws, double Rp, double As, FilterType fType, WinType wType) {
 		if(wType != WinType.KAISER)
 			return designFIRUsingWindow(wp, ws, Rp, As, fType);
 		else
@@ -144,7 +145,7 @@ public class FIRDesigner {
 	    outSeq = FIRUsingKaiser(N, beta, wc, fType);
 	    
 	    FIRFilter filter = new FIRFilter(outSeq);
-	    FIRPara para = new FIRPara(wp,ws,Rp,As,fType,N,wc,WinType.KAISER);
+	    KaiserPara para = new KaiserPara(wp,ws,Rp,As,fType,N,wc,beta);
 	    filter.setFilterPara(para);
 	    return filter;
 	}

@@ -51,6 +51,16 @@ public class FIRPara extends DFPara {
 		this.wc = wc;
 	}
 	
-	
+	@Override
+	public String toString() {
+		StringBuilder strBuilder = new StringBuilder(super.toString());
+		strBuilder.append(',' + "N=" + N);
+		if(getType() == FilterType.BANDPASS || getType() == FilterType.BANDSTOP) 
+			strBuilder.append(',' + "wc=" + Arrays.toString(wc));
+		else
+			strBuilder.append(',' + "wc=" + wc[0]);
+		strBuilder.append(',' + "WinType=" + wType);
+		return strBuilder.toString();
+	}
 
 }

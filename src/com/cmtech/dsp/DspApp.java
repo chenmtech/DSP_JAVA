@@ -13,6 +13,7 @@ import com.cmtech.dsp.filter.design.ALPDesigner;
 import com.cmtech.dsp.filter.design.FIRDesigner;
 import com.cmtech.dsp.filter.design.FilterType;
 import com.cmtech.dsp.filter.design.IIRDesigner;
+import com.cmtech.dsp.filter.design.WinType;
 import com.cmtech.dsp.filter.para.AFPara;
 import com.cmtech.dsp.filter.para.IIRPara;
 import com.cmtech.dsp.seq.ComplexSeq;
@@ -29,27 +30,24 @@ public class DspApp {
 		double Rp = 1;
 		double As = 20;
 		FilterType fType = FilterType.BANDPASS;
-		FIRFilter fir = FIRDesigner.design(wp,ws,Rp,As,fType);
-		System.out.println(fir.getHn());		
+		WinType wType = WinType.KAISER;
+		FIRFilter fir = FIRDesigner.design(wp,ws,Rp,As,fType,wType);
+		System.out.println(fir);
 		System.out.println(fir.freq(101).abs());
 
-		AnalogFilter afilter = ALPDesigner.design(10.0,20.0,1,30,AFType.CHEB2);
-		System.out.println(afilter.freq(30.0, 31).abs());
-		
-		BmeFile file = BmeFile.createBmeFile("affreq.bme");
-		file.writeData(afilter.freq(30.0, 31).abs().toArray()).close();
+		AnalogFilter alp = ALPDesigner.design(10.0,20.0,1,30,AFType.CHEB2);
+		System.out.println(alp);
+		RealSeq freq = alp.freq(30.0, 31).abs();
+		System.out.println(freq);		
+		BmeFile.createBmeFile("alp.bme").writeData(freq.toArray()).close();
 		
 		AFType afType = AFType.ELLIP;
 		IIRFilter iir = IIRDesigner.design(wp,ws,Rp,As,afType,fType);
-		System.out.println(iir.getB());
-		System.out.println(iir.getA());
-		System.out.println(iir.freq(101).abs());
-		System.out.println(iir.freq(101).dB());
-		file = BmeFile.createBmeFile("iir.bme");
-		file.writeData(iir.freq(101).abs().toArray()).close();
-		
-		file = BmeFile.createBmeFile("omega.bme");
-		file.writeData(SeqFactory.linSpace(0, 1, 101).toArray()).close();
+		System.out.println(iir);
+		freq = iir.freq(101).abs();
+		System.out.println(freq);
+		BmeFile.createBmeFile("iir.bme").writeData(freq.toArray()).close();
+		BmeFile.createBmeFile("omega.bme").writeData(SeqFactory.linSpace(0, 1, 101).toArray()).close();
 		
 		
 		

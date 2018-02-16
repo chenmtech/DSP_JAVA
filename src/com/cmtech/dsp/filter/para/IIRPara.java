@@ -18,4 +18,9 @@ public class IIRPara extends DFPara {
 	public AFType getAFType() {
 		return afType;
 	}
+	
+	@Override
+	public String toString() {
+		return super.toString() + ',' + "AFType=" + afType; 
+	}
 }

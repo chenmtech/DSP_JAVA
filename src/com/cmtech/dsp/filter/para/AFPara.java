@@ -19,5 +19,10 @@ public class AFPara extends FilterPara {
 		return afType;
 	}
 	
+	@Override
+	public String toString() {
+		return super.toString() + ',' + "AFType=" + afType; 
+	}
+	
 	
 }

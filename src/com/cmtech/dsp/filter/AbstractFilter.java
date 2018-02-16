@@ -1,5 +1,7 @@
 package com.cmtech.dsp.filter;
 
+import java.util.Arrays;
+
 import com.cmtech.dsp.filter.para.FilterPara;
 import com.cmtech.dsp.seq.RealSeq;
 
@@ -47,6 +49,14 @@ public abstract class AbstractFilter implements IFilter {
 		this.para = para;
 	}
 	
-	
+	@Override
+	public String toString() {
+		StringBuilder strBuilder = new StringBuilder();
+		String str = getClass().getSimpleName() + ": b=" + Arrays.toString(b) + ",a=" + Arrays.toString(a) + '\n';
+		strBuilder.append(str);
+		if(para != null) strBuilder.append(para.toString());
+		
+		return strBuilder.toString();
+	}
 	
 }
