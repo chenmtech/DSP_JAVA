@@ -127,15 +127,8 @@ public class BmeFile {
 			if(!Arrays.equals(bme, BME)) throw new FileException(file.toString(), "文件格式不对");
 			byte[] ver = new byte[2];
 			in.read(ver);
-			if(Arrays.equals(ver, BmeFileHead10.VER)) {
-				fileHead = new BmeFileHead10();
-				fileHead.readFromStream(in);
-			} else if(Arrays.equals(ver, BmeFileHead20.VER)) {
-				fileHead = new BmeFileHead20();
-				fileHead.readFromStream(in);
-			} else {
-				throw new FileException(file.toString(), "文件版本不支持");
-			}
+			fileHead = BmeFileHeadFactory.create(ver);
+			fileHead.readFromStream(in);
 		} catch (IOException e) {
 			throw new FileException(file.toString(), "文件打开错误");
 		}
