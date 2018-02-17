@@ -1,10 +1,24 @@
 package com.cmtech.dsp.filter;
 
+import com.cmtech.dsp.filter.structure.FIRDFStructure;
+import com.cmtech.dsp.filter.structure.FIRLPF1Structure;
+import com.cmtech.dsp.filter.structure.FIRLPF2Structure;
+import com.cmtech.dsp.filter.structure.FIRLPF3Structure;
+import com.cmtech.dsp.filter.structure.FIRLPF4Structure;
+import com.cmtech.dsp.filter.structure.FIRLPFStructure;
+import com.cmtech.dsp.filter.structure.FSType;
 import com.cmtech.dsp.seq.ComplexSeq;
 import com.cmtech.dsp.seq.RealSeq;
 
 public class FIRFilter extends DigitalFilter{
 	private static final double EPS = 2.220446049250313e-016;
+	
+	public static final int DF = 0;
+	public static final int LPF = 1;
+	 
+	public FIRFilter(double[] b) {
+		super(b, new double[]{1.0});
+	}
 	
 	public FIRFilter(RealSeq hseq){
 		super(hseq, new RealSeq(1.0));
@@ -74,9 +88,35 @@ public class FIRFilter extends DigitalFilter{
 				return LPFType.TYPE4; 	//奇对称，长度为偶数，类型4
 		}
 	}
-	
-	public static LPFType whichType(double[] hn) {
-		return new FIRFilter(new RealSeq(hn)).whichType();
+
+	@Override
+	public void createStructure(FSType sType) {
+		if(sType == FSType.FIR_DF) {
+			structure = new FIRDFStructure(b);
+		} else if(sType == FSType.FIR_LPF) {
+			structure = createLPFStructure();
+		} else
+			structure = null;
+		return;
 	}
+	
+	private FIRLPFStructure createLPFStructure() {
+		LPFType lpfType = whichType();
+		switch(lpfType) {
+		case TYPE1:
+			return new FIRLPF1Structure(b);
+		case TYPE2:
+			return new FIRLPF2Structure(b);
+		case TYPE3:
+			return new FIRLPF3Structure(b);
+		case TYPE4:
+			return new FIRLPF4Structure(b);	
+		case NOTLP:
+		default:
+			return null;
+		}
+	}
+	
+	
 
 }

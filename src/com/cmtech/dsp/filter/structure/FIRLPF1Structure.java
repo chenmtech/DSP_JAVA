@@ -8,8 +8,6 @@
  */
 package com.cmtech.dsp.filter.structure;
 
-import java.util.Arrays;
-
 import com.cmtech.dsp.filter.FIRFilter;
 
 /**

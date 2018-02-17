@@ -13,6 +13,11 @@ public abstract class AbstractFilter implements IFilter {
 	public AbstractFilter() {
 	}
 	
+	public AbstractFilter(double[] b, double[] a) {
+		this.b = Arrays.copyOf(b, b.length);
+		this.a = Arrays.copyOf(a, a.length);
+	}
+	
 	public AbstractFilter(RealSeq bseq, RealSeq aseq){
 		if(bseq != null) b = bseq.toArray();
 		if(aseq != null) a = aseq.toArray();

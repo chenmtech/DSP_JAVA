@@ -22,7 +22,7 @@ import com.cmtech.dsp.filter.FIRFilter;
  * @version 
  * @since JDK 1.6
  */
-public class FIRDFStructure implements IDFStructure {
+public class FIRDFStructure extends AbstractDFStructure {
 	private double[] h_n;
 	private double[] x_n;
 	private int N;
@@ -36,6 +36,7 @@ public class FIRDFStructure implements IDFStructure {
 	public FIRDFStructure(FIRFilter filter) {
 		this(filter.getB().toArray());
 	}
+	
 	/**
 	 * TODO 简单描述该方法的实现功能（可选）.
 	 * @see com.cmtech.dsp.filter.structure.IDFStructure#filter(java.lang.Object)

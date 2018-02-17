@@ -11,8 +11,6 @@ package com.cmtech.dsp.filter.structure;
 import java.util.Arrays;
 
 import com.cmtech.dsp.filter.FIRFilter;
-import com.cmtech.dsp.filter.LPFType;
-import com.cmtech.dsp.seq.RealSeq;
 
 /**
  * ClassName: FIRLPFStructure
@@ -24,7 +22,7 @@ import com.cmtech.dsp.seq.RealSeq;
  * @version 
  * @since JDK 1.6
  */
-public abstract class FIRLPFStructure implements IDFStructure {
+public abstract class FIRLPFStructure extends AbstractDFStructure {
 	protected double[] h_n;
 	protected double[] x_n;
 	protected int N;
@@ -41,21 +39,6 @@ public abstract class FIRLPFStructure implements IDFStructure {
 		this(filter.getB().toArray());
 	}
 	
-	public static FIRLPFStructure create(double[] h_n) {
-		LPFType type = new FIRFilter(new RealSeq(h_n)).whichType();
-		switch(type) {
-		case TYPE1:
-			return new FIRLPF1Structure(h_n);
-		case TYPE2:
-			return new FIRLPF2Structure(h_n);
-		case TYPE3:
-			return new FIRLPF3Structure(h_n);
-		case TYPE4:
-			return new FIRLPF4Structure(h_n);	
-		case NOTLP:
-		default:
-			return null;
-		}
-	}
+
 
 }

@@ -16,6 +16,7 @@ import com.cmtech.dsp.filter.design.WinType;
 import com.cmtech.dsp.filter.structure.FIRDFStructure;
 import com.cmtech.dsp.filter.structure.FIRLPF1Structure;
 import com.cmtech.dsp.filter.structure.FIRLPFStructure;
+import com.cmtech.dsp.filter.structure.FSType;
 import com.cmtech.dsp.seq.RealSeq;
 
 public class DspApp {
@@ -30,23 +31,19 @@ public class DspApp {
 		FilterType fType = FilterType.HIGHPASS;
 		WinType wType = WinType.KAISER;
 		FIRFilter fir = FIRDesigner.design(wp,ws,Rp,As,fType,wType);
+		fir.createStructure(FSType.FIR_DF);
 		System.out.println(fir);
-		System.out.println(fir.freq(101).abs());
-		System.out.println(fir.whichType());
-		FIRDFStructure s = new FIRDFStructure(fir);
 		double[] out = new double[1000];
 		for(int i =0 ; i < 1000; i++) {
-			out[i] = s.filter(1.0);
+			out[i] = fir.filter(1.0);
 		}
 		System.out.println(Arrays.toString(out));
 		
-		FIRLPF1Structure s1 = new FIRLPF1Structure(fir);
+		fir.createStructure(FSType.FIR_LPF);
 		for(int i =0 ; i < 1000; i++) {
-			out[i] = s1.filter(1.0);
+			out[i] = fir.filter(1.0);
 		}
 		System.out.println(Arrays.toString(out));
-		
-		//FIRLPFStructure.Factory fac = new FIRLPFStructure.Factory();
 		
 
 		AnalogFilter alp = ALPDesigner.design(10.0,20.0,1,30,AFType.CHEB2);
@@ -57,17 +54,13 @@ public class DspApp {
 		
 		AFType afType = AFType.ELLIP;
 		IIRFilter iir = IIRDesigner.design(wp,ws,Rp,As,afType,fType);
+		iir.createStructure(FSType.IIR_TDF2);
 		System.out.println(iir);
 		freq = iir.freq(101).abs();
 		System.out.println(freq);
 		//BmeFile.createBmeFile("iir.bme").writeData(freq.toArray()).close();
 		//BmeFile.createBmeFile("omega.bme").writeData(SeqFactory.linSpace(0, 1, 101).toArray()).close();
-		
 
-
-
-
-		
 	}
 	
 	private static double[] changeSize(double[] a) {
