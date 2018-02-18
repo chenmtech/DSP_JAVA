@@ -47,8 +47,8 @@ public class FIRDesigner {
 	    //步骤见幻灯45页 
 	    //第一步：修正设计规格 
 	    Map<String, Object> tmpMap = ReviseRpAsForWindow(Rp, As);
-	    Rp = (double)tmpMap.get("Rp");
-	    As = (double)tmpMap.get("As");
+	    Rp = (double)tmpMap.get("RP");
+	    As = (double)tmpMap.get("AS");
 	    
 	    //第二步：确定窗函数的参数
 	    //2.1：确定窗类型 
@@ -118,8 +118,8 @@ public class FIRDesigner {
 	    RealSeq outSeq = null;
 	    
 	    Map<String, Object> tmpMap = ReviseRpAsForWindow(Rp, As);
-	    Rp = (double)tmpMap.get("Rp");
-	    As = (double)tmpMap.get("As");
+	    Rp = (double)tmpMap.get("RP");
+	    As = (double)tmpMap.get("AS");
 	    
 	    double deltaw = 0.0;
 
@@ -138,7 +138,7 @@ public class FIRDesigner {
 	    
 	    tmpMap = CalcKaiserPara(As, deltaw, fType);
 	    int N = (int)tmpMap.get("N");
-	    double beta = (double)tmpMap.get("beta");	    
+	    double beta = (double)tmpMap.get("BETA");	    
 	    
 	    if(N <= 0) return null;
 	    
@@ -181,7 +181,7 @@ public class FIRDesigner {
 	    idealSeq = SeqUtil.multiple(idealSeq, winSeq);
 
 	    Map<String, Object> rtnMap = new HashMap<>();
-	    rtnMap.put("outSeq", idealSeq);
+	    rtnMap.put("OUTSEQ", idealSeq);
 	    rtnMap.put("N", N);
 	    return rtnMap;
 	}
@@ -202,7 +202,7 @@ public class FIRDesigner {
 	    idealSeq = SeqUtil.multiple(idealSeq, winSeq);
 
 	    Map<String, Object> rtnMap = new HashMap<>();
-	    rtnMap.put("outSeq", idealSeq);
+	    rtnMap.put("OUTSEQ", idealSeq);
 	    rtnMap.put("N", N);
 	    return rtnMap;
 	}
@@ -456,14 +456,14 @@ public class FIRDesigner {
 		double delta1 = 0.0;
 	    double delta2 = 0.0;
 	    Map<String, Object> tmpMap = FIRDb2Delta(Rp, As);//, &delta1, &delta2);
-	    delta1 = (double)tmpMap.get("delta1");
-	    delta2 = (double)tmpMap.get("delta2");
+	    delta1 = (double)tmpMap.get("DELTA1");
+	    delta2 = (double)tmpMap.get("DELTA2");
 	    
 	    Map<String, Object> rtnMap = new HashMap<>();
 	    //不用修改技术指标
 	    if(delta2 <= delta1) {
-	    		rtnMap.put("Rp", Rp);
-	    		rtnMap.put("As", As);
+	    		rtnMap.put("RP", Rp);
+	    		rtnMap.put("AS", As);
 	    		return rtnMap;
 	    }
 	     
@@ -547,7 +547,7 @@ public class FIRDesigner {
 	    
 	    Map<String, Object> rtnMap = new HashMap<>();
 	    rtnMap.put("N", N);
-	    rtnMap.put("beta", beta);
+	    rtnMap.put("BETA", beta);
 	    return rtnMap;
 	}
 
@@ -558,8 +558,8 @@ public class FIRDesigner {
 		double Rp = -20*Math.log10((1-delta1)/(1+delta1));
 	    double As = -20*Math.log10(delta2/(1+delta1));
 	    Map<String, Object> rtnMap = new HashMap<>();
-	    rtnMap.put("Rp", Rp);
-	    rtnMap.put("As", As);
+	    rtnMap.put("RP", Rp);
+	    rtnMap.put("AS", As);
 	    return rtnMap;
 	}
 
@@ -571,8 +571,8 @@ public class FIRDesigner {
 	    double delta2 = (1+delta1) * Math.pow(10, -As/20);
 	    
 	    Map<String, Object> rtnMap = new HashMap<>();
-	    rtnMap.put("delta1", delta1);
-	    rtnMap.put("delta2", delta2);
+	    rtnMap.put("DELTA1", delta1);
+	    rtnMap.put("DELTA2", delta2);
 	    return rtnMap;
 	}
 }

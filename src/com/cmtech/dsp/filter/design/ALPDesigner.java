@@ -14,10 +14,9 @@ import static java.lang.Math.sqrt;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.cmtech.dsp.filter.AnalogFilter;
-import com.cmtech.dsp.filter.para.AFPara;
 import com.cmtech.dsp.seq.RealSeq;
 import com.cmtech.dsp.seq.SeqUtil;
+import com.cmtech.dsp.util.TwoTuple;
 
 public class ALPDesigner {
 	//最小数值 
@@ -26,18 +25,18 @@ public class ALPDesigner {
 	private ALPDesigner() {			
 	}
 	
-	public static AnalogFilter design(double wp, double ws, double Rp, double As, AFType afType){
-		Map<String, Object> rtnMap = DesignAnalogLowPassFilter(wp, ws, Rp, As, afType);
+	/*public static AnalogFilter design(double Qp, double Qs, double Rp, double As, AFType afType){
+		Map<String, Object> rtnMap = DesignAnalogLowPassFilter(Qp, Qs, Rp, As, afType);
 		
-		RealSeq bs = (RealSeq)rtnMap.get("bs");
-		RealSeq as = (RealSeq)rtnMap.get("as");
+		RealSeq bs = (RealSeq)rtnMap.get("BS");
+		RealSeq as = (RealSeq)rtnMap.get("AS");
 		
 		AnalogFilter filter = new AnalogFilter(bs, as);
-		AFPara para = new AFPara(new double[] {wp,0.0}, new double[] {ws,0.0},
+		AFPara para = new AFPara(new double[] {Qp,0.0}, new double[] {Qs,0.0},
 						Rp, As, FilterType.LOWPASS, afType);
 		filter.setFilterPara(para);
 		return filter;
-	}
+	}*/
 	
 	//设计模拟低通滤波器
 	//Qp：通带截止频率
@@ -75,7 +74,7 @@ public class ALPDesigner {
 	{
 		Map<String, Object> tmpMap = GetButterMagHPara(Qp, Qs, Rp, As);
 	    int N = (int)tmpMap.get("N");
-	    double Qc = (double)tmpMap.get("Qc");
+	    double Qc = (double)tmpMap.get("QC");
 	    return DesignAnalogButterWithPara(N, Qc);
 	    //printf("Analog Butt: N = %d, Qc = %f\n", N, Qc);
 	}
@@ -111,7 +110,7 @@ public class ALPDesigner {
 	    
 	    Map<String, Object> rtnMap = new HashMap<>();
 	    rtnMap.put("N", N);
-	    rtnMap.put("Qc", Qc);
+	    rtnMap.put("QC", Qc);
 	    return rtnMap;
 	}
 
@@ -141,8 +140,8 @@ public class ALPDesigner {
 	    
 	    Map<String, Object> rtnMap = new HashMap<>();
 	    if( N == 1) {
-	    		rtnMap.put("bs", bs);
-	    		rtnMap.put("as", as);
+	    		rtnMap.put("BS", bs);
+	    		rtnMap.put("AS", as);
 	    		return rtnMap;     //一阶滤波器，直接返回
 	    }
 	    
@@ -158,8 +157,8 @@ public class ALPDesigner {
 	        biSeq.set(1, -2.0*Qc*cos( 0.5*PI*(1.0+(2.0*k-1.0)/N) ));
 	        as = SeqUtil.conv(as, biSeq);
 	    }
-		rtnMap.put("bs", bs);
-		rtnMap.put("as", as);
+		rtnMap.put("BS", bs);
+		rtnMap.put("AS", as);
 		return rtnMap;    
 	}
 
@@ -175,7 +174,7 @@ public class ALPDesigner {
 	{
 		Map<String, Object> tmpMap = GetCheby1MagHPara(Qp, Qs, Rp, As);
 	    int N = (int)tmpMap.get("N");
-	    double Qc = (double)tmpMap.get("Qc");
+	    double Qc = (double)tmpMap.get("QC");
 	    double E = (double)tmpMap.get("E");
 	    return DesignAnalogCheby1WithPara(N, Qc, E);
 	    //printf("Analog Cheb1: N = %d, Qc = %f, E = %f\n", N, Qc, E);   
@@ -214,7 +213,7 @@ public class ALPDesigner {
 	    
 	    Map<String, Object> rtnMap = new HashMap<>();
 	    rtnMap.put("N", N);
-	    rtnMap.put("Qc", Qc);
+	    rtnMap.put("QC", Qc);
 	    rtnMap.put("E", E);
 	    return rtnMap; 
 	}
@@ -251,8 +250,8 @@ public class ALPDesigner {
 	    
 	    Map<String, Object> rtnMap = new HashMap<>();
 	    if( N == 1) {
-	    		rtnMap.put("bs", bs);
-	    		rtnMap.put("as", as);
+	    		rtnMap.put("BS", bs);
+	    		rtnMap.put("AS", as);
 	    		return rtnMap;     //一阶滤波器，直接返回
 	    }
 	    
@@ -277,8 +276,8 @@ public class ALPDesigner {
 	        as = SeqUtil.conv(as, biSeq);
 	    }
 	     
-		rtnMap.put("bs", bs);
-		rtnMap.put("as", as);
+		rtnMap.put("BS", bs);
+		rtnMap.put("AS", as);
 		return rtnMap;     //一阶滤波器，直接返回   
 	}
 
@@ -293,7 +292,7 @@ public class ALPDesigner {
 	{
 		Map<String, Object> tmpMap = GetCheby2MagHPara(Qp, Qs, Rp, As);
 	    int N = (int)tmpMap.get("N");
-	    double Qc = (double)tmpMap.get("Qc");
+	    double Qc = (double)tmpMap.get("QC");
 	    double E = (double)tmpMap.get("E");
 	    return DesignAnalogCheby2WithPara(N, Qc, E);
 	    //printf("Analog Cheb2: N = %d, Qc = %f, E = %f\n", N, Qc, E);      
@@ -332,7 +331,7 @@ public class ALPDesigner {
 	    
 	    Map<String, Object> rtnMap = new HashMap<>();
 	    rtnMap.put("N", N);
-	    rtnMap.put("Qc", Qc);
+	    rtnMap.put("QC", Qc);
 	    rtnMap.put("E", E);
 	    return rtnMap;    
 	}
@@ -370,8 +369,8 @@ public class ALPDesigner {
 	    Map<String, Object> rtnMap = new HashMap<>();
 	    if( N == 1) {
 	    		bs.set(0, as.get(1));
-	    		rtnMap.put("bs", bs);
-	    		rtnMap.put("as", as);
+	    		rtnMap.put("BS", bs);
+	    		rtnMap.put("AS", as);
 	    		return rtnMap;
 	    	}     //一阶滤波器，直接返回
 	    
@@ -415,8 +414,8 @@ public class ALPDesigner {
 	    double factor = as.get(as.size()-1)/bs.get(bs.size()-1);
 	    bs = bs.multiple(factor);
 
-	    rtnMap.put("bs", bs);
-		rtnMap.put("as", as);
+	    rtnMap.put("BS", bs);
+		rtnMap.put("AS", as);
 		return rtnMap;      
 	}
 
@@ -425,7 +424,7 @@ public class ALPDesigner {
 	{
 		Map<String, Object> tmpMap = GetEllipOrder(Qp, Qs, Rp, As);
 		int N = (int)tmpMap.get("N");
-		double ActuralAs = (double)tmpMap.get("ActuralAs");
+		double ActuralAs = (double)tmpMap.get("ACTURALAS");
 		//printf("Analog Ellipti: N = %d, 实际达到的As = %lf\n", N, ActuralAs);
 		return DesignAnalogEllip2(N, Qp, Qs, Rp);
 	}
@@ -458,8 +457,8 @@ public class ALPDesigner {
 		
 		//计算Xi和Yi 
 		Map<String, Object> tmpMap = CalculateXandYForEllip(N, q, k);		//(5.15)和(5.16) 
-		RealSeq Xi = (RealSeq)tmpMap.get("Xi");
-		RealSeq Yi = (RealSeq)tmpMap.get("Yi");
+		RealSeq Xi = (RealSeq)tmpMap.get("XI");
+		RealSeq Yi = (RealSeq)tmpMap.get("YI");
 		
 		RealSeq ai = new RealSeq(r);
 		RealSeq bi = new RealSeq(r);
@@ -523,8 +522,8 @@ public class ALPDesigner {
 		}
 
 		Map<String, Object> rtnMap = new HashMap<>();
-		rtnMap.put("bs", bs);
-		rtnMap.put("as", as);
+		rtnMap.put("BS", bs);
+		rtnMap.put("AS", as);
 		return rtnMap;
 	}
 
@@ -553,7 +552,7 @@ public class ALPDesigner {
 		
 		Map<String, Object> rtnMap = new HashMap<>();
 		rtnMap.put("N", N);
-		rtnMap.put("ActuralAs", ActuralAs);
+		rtnMap.put("ACTURALAS", ActuralAs);
 		return rtnMap;
 	}
 
@@ -623,8 +622,8 @@ public class ALPDesigner {
 		}		
 		
 		Map<String, Object> rtnMap = new HashMap<>();
-		rtnMap.put("Xi", Xi);
-		rtnMap.put("Yi", Yi);
+		rtnMap.put("XI", Xi);
+		rtnMap.put("YI", Yi);
 		return rtnMap;
 	}
 

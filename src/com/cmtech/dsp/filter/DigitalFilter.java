@@ -21,10 +21,14 @@ public abstract class DigitalFilter extends AbstractFilter implements IDigitalFi
 	
 	public abstract void createStructure(FSType sType);
 	
+	public IDFStructure getStructure() {
+		return structure;
+	}
+	
 	@Override
 	public String toString() {
 		if(structure == null) 
-			return super.toString();
+			return super.toString() + '\n' + "No Structure";
 		else
 			return super.toString() + '\n' + structure.toString();
 	}

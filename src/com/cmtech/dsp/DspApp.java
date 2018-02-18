@@ -7,15 +7,12 @@ import com.cmtech.dsp.exception.DspException;
 import com.cmtech.dsp.filter.AnalogFilter;
 import com.cmtech.dsp.filter.FIRFilter;
 import com.cmtech.dsp.filter.IIRFilter;
+import com.cmtech.dsp.filter.design.AFDesigner;
 import com.cmtech.dsp.filter.design.AFType;
-import com.cmtech.dsp.filter.design.ALPDesigner;
 import com.cmtech.dsp.filter.design.FIRDesigner;
 import com.cmtech.dsp.filter.design.FilterType;
 import com.cmtech.dsp.filter.design.IIRDesigner;
 import com.cmtech.dsp.filter.design.WinType;
-import com.cmtech.dsp.filter.structure.FIRDFStructure;
-import com.cmtech.dsp.filter.structure.FIRLPF1Structure;
-import com.cmtech.dsp.filter.structure.FIRLPFStructure;
 import com.cmtech.dsp.filter.structure.FSType;
 import com.cmtech.dsp.seq.RealSeq;
 
@@ -45,16 +42,17 @@ public class DspApp {
 		}
 		System.out.println(Arrays.toString(out));
 		
-
-		AnalogFilter alp = ALPDesigner.design(10.0,20.0,1,30,AFType.CHEB2);
+		double[] wp1 = new double[] {2*Math.PI*30, 2*Math.PI*40};
+		double[] ws1 = new double[] {2*Math.PI*20, 2*Math.PI*50};
+		AnalogFilter alp = AFDesigner.design(wp1,ws1,0.5,40,AFType.ELLIP,FilterType.BANDPASS);
 		System.out.println(alp);
-		RealSeq freq = alp.freq(30.0, 31).abs();
+		RealSeq freq = alp.freq(2*Math.PI*70.0, 141).abs();
 		System.out.println(freq);		
-		//BmeFile.createBmeFile("alp.bme").writeData(freq.toArray()).close();
+		BmeFile.createBmeFile("alp.bme").writeData(freq.toArray()).close();
 		
 		AFType afType = AFType.ELLIP;
 		IIRFilter iir = IIRDesigner.design(wp,ws,Rp,As,afType,fType);
-		iir.createStructure(FSType.IIR_TDF2);
+		//iir.createStructure(FSType.IIR_TDF2);
 		System.out.println(iir);
 		freq = iir.freq(101).abs();
 		System.out.println(freq);

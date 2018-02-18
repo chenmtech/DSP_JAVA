@@ -51,8 +51,8 @@ public class IIRFilter extends DigitalFilter {
 	//	                D(z)
 	public IIRFilter FreqBandTransform(RealSeq Nz, RealSeq Dz) {
 		Map<String, Object> tmpMap = ZT.ZMapping(getB(), getA(), Nz, Dz);
-		RealSeq Bz = (RealSeq)tmpMap.get("Bz");
-		RealSeq Az = (RealSeq)tmpMap.get("Az");
+		RealSeq Bz = (RealSeq)tmpMap.get("BZ");
+		RealSeq Az = (RealSeq)tmpMap.get("AZ");
 	    return new IIRFilter(Bz, Az);
 	}
 

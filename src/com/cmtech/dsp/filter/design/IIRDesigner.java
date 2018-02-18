@@ -58,32 +58,32 @@ public class IIRDesigner {
 	    else
 	    {
 	        tmpMap = GetLPMappingPara(wp, ws, fType);
-	        thetap = (double)tmpMap.get("thetap");
-	        thetas = (double)tmpMap.get("thetas");
-	        Nz = (RealSeq)tmpMap.get("Nz");
-	        Dz = (RealSeq)tmpMap.get("Dz");
+	        thetap = (double)tmpMap.get("THETAP");
+	        thetas = (double)tmpMap.get("THETAS");
+	        Nz = (RealSeq)tmpMap.get("NZ");
+	        Dz = (RealSeq)tmpMap.get("DZ");
 	    }
 	     
 	    //第二步：获取相应的模拟低通滤波器的截止频率，因为A/D变换采用的是双线性变换，所以需要做频率预畸
 	    double Qp = 0.0;
 	    double Qs = 0.0;
 	    tmpMap = PreventDistortForBilinear(thetap, thetas, T);//, &Qp, &Qs);
-	    Qp = (double)tmpMap.get("Qp");
-	    Qs = (double)tmpMap.get("Qs");
+	    Qp = (double)tmpMap.get("QP");
+	    Qs = (double)tmpMap.get("QS");
 	    
 	    //第三步：利用设计指标设计模拟低通滤波器 
 	    RealSeq bs = null;
 	    RealSeq as = null;
 	    tmpMap = ALPDesigner.DesignAnalogLowPassFilter(Qp, Qs, Rp, As, afType);//, &bs, &as);
-	    bs = (RealSeq)tmpMap.get("bs");
-	    as = (RealSeq)tmpMap.get("as");
+	    bs = (RealSeq)tmpMap.get("BS");
+	    as = (RealSeq)tmpMap.get("AS");
 	    
 	    //第四步：做A/D滤波器变换,得到相应的数字低通滤波器 
 	    RealSeq bZ = null;
 	    RealSeq aZ = null;
 	    tmpMap = A2DTransformUsingBilinear(bs, as, T);//, &bZ, &aZ);
-	    bZ = (RealSeq)tmpMap.get("Bz");
-	    aZ = (RealSeq)tmpMap.get("Az");
+	    bZ = (RealSeq)tmpMap.get("BZ");
+	    aZ = (RealSeq)tmpMap.get("AZ");
 	    
 	    RealSeq Bz = null;
 	    RealSeq Az = null;
@@ -96,15 +96,15 @@ public class IIRDesigner {
 	    else
 	    {
 	        tmpMap = ZT.ZMapping(bZ, aZ, Nz, Dz);
-	        Bz = (RealSeq)tmpMap.get("Bz");
-	        Az = (RealSeq)tmpMap.get("Az");
+	        Bz = (RealSeq)tmpMap.get("BZ");
+	        Az = (RealSeq)tmpMap.get("AZ");
 	    }
 	    
 	    IIRFilter filter = new IIRFilter(Bz, Az);
 	    return filter;
 	    /*Map<String, Object> rtnMap = new HashMap<>();
-	    rtnMap.put("Bz", Bz);
-	    rtnMap.put("Az", Az);
+	    rtnMap.put("BZ", Bz);
+	    rtnMap.put("AZ", Az);
 	    return rtnMap;*/
 	}
 
@@ -149,8 +149,8 @@ public class IIRDesigner {
 	    double Qs = 2/T*tan(ws/2);
 	    
 	    Map<String, Object> rtnMap = new HashMap<>();
-	    rtnMap.put("Qp", Qp);
-	    rtnMap.put("Qs", Qs);
+	    rtnMap.put("QP", Qp);
+	    rtnMap.put("QS", Qs);
 	    return rtnMap;
 	}
 
@@ -200,10 +200,10 @@ public class IIRDesigner {
 	    double thetas = abs(phase.get(0));  
 	    
 	    Map<String, Object> rtnMap = new HashMap<>();
-	    rtnMap.put("thetap", thetap);
-	    rtnMap.put("thetas", thetas);
-	    rtnMap.put("Nz", Nz);
-	    rtnMap.put("Dz", Dz);
+	    rtnMap.put("THETAP", thetap);
+	    rtnMap.put("THETAP", thetas);
+	    rtnMap.put("NZ", Nz);
+	    rtnMap.put("DZ", Dz);
 	    return rtnMap;
 	}
 
@@ -234,10 +234,10 @@ public class IIRDesigner {
 	    double thetas = abs(phase.get(0));   
 	    
 	    Map<String, Object> rtnMap = new HashMap<>();
-	    rtnMap.put("thetap", thetap);
-	    rtnMap.put("thetas", thetas);
-	    rtnMap.put("Nz", Nz);
-	    rtnMap.put("Dz", Dz);
+	    rtnMap.put("THETAP", thetap);
+	    rtnMap.put("THETAS", thetas);
+	    rtnMap.put("NZ", Nz);
+	    rtnMap.put("DZ", Dz);
 	    return rtnMap;
 	}
 
@@ -272,10 +272,10 @@ public class IIRDesigner {
 	    double thetas = phase.abs().min();
 	    
 	    Map<String, Object> rtnMap = new HashMap<>();
-	    rtnMap.put("thetap", thetap);
-	    rtnMap.put("thetas", thetas);
-	    rtnMap.put("Nz", Nz);
-	    rtnMap.put("Dz", Dz);
+	    rtnMap.put("THETAP", thetap);
+	    rtnMap.put("THETAS", thetas);
+	    rtnMap.put("NZ", Nz);
+	    rtnMap.put("DZ", Dz);
 	    return rtnMap;
 	}
 
@@ -310,10 +310,10 @@ public class IIRDesigner {
 	    double thetas = phase.abs().min();
 	    
 	    Map<String, Object> rtnMap = new HashMap<>();
-	    rtnMap.put("thetap", thetap);
-	    rtnMap.put("thetas", thetas);
-	    rtnMap.put("Nz", Nz);
-	    rtnMap.put("Dz", Dz);
+	    rtnMap.put("THETAP", thetap);
+	    rtnMap.put("THETAS", thetas);
+	    rtnMap.put("NZ", Nz);
+	    rtnMap.put("DZ", Dz);
 	    return rtnMap;
 	}
 
@@ -324,8 +324,8 @@ public class IIRDesigner {
 	    double As = -20*log10(delta2);
 	    
 	    Map<String, Object> rtnMap = new HashMap<>();
-	    rtnMap.put("Rp", Rp);
-	    rtnMap.put("As", As);
+	    rtnMap.put("RP", Rp);
+	    rtnMap.put("AS", As);
 	    return rtnMap;
 	}
 
@@ -336,8 +336,8 @@ public class IIRDesigner {
 	    double delta2 = pow(10, -As/20);
 	    
 	    Map<String, Object> rtnMap = new HashMap<>();
-	    rtnMap.put("delta1", delta1);
-	    rtnMap.put("delta2", delta2);
+	    rtnMap.put("DELTA1", delta1);
+	    rtnMap.put("DELTA2", delta2);
 	    return rtnMap;
 	}
 

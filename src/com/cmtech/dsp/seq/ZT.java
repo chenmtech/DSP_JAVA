@@ -90,8 +90,8 @@ public class ZT {
 	    Az = Az.divide(norm);
 	    
 	    Map<String, Object> rtn = new HashMap<>();
-	    rtn.put("Bz", Bz);
-	    rtn.put("Az", Az);
+	    rtn.put("BZ", Bz);
+	    rtn.put("AZ", Az);
 	    
 	    return rtn;    
 	}
