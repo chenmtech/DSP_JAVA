@@ -26,7 +26,7 @@ public class ComplexSeq implements IComplexSeq {
 	}
 	
 	public ComplexSeq(int N) {
-		initToZeroSequence(N);
+		setToZero(N);
 	}
 	
 	public ComplexSeq(Complex... d) {
@@ -72,7 +72,7 @@ public class ComplexSeq implements IComplexSeq {
 	}
 	
 	@Override
-	public void initToZeroSequence(int N) {
+	public void setToZero(int N) {
 		data = new Complex[N];
 		for(int i = 0; i < N; i++) {
 			data[i] = new Complex();

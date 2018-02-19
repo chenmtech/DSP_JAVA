@@ -4,14 +4,13 @@ public class SeqFactory {
 	private SeqFactory() {
 	}
 	
-	public static RealSeq createZeroRealSeq(int N) {
-		RealSeq seq = new RealSeq(N);
-		return seq;
-	}
-	
-	public static ComplexSeq createZeroComplexSeq(int N) {
-		ComplexSeq seq = new ComplexSeq(N);
-		return seq;
+	public static <T> T createZeroSeq(int N, Class<T> cl) {
+		try {
+			return cl.getConstructor(int.class).newInstance(N);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}		
 	}
 	
 	public static RealSeq createSinSeq(double A, double w, double initphi, int N) {
@@ -49,7 +48,7 @@ public class SeqFactory {
 	    return out;
 	}
 	
-	public static RealSeq createRndSeq(int N)
+	public static RealSeq createRandomSeq(int N)
 	{
 	    RealSeq out = new RealSeq(N);
 

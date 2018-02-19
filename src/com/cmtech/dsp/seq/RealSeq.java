@@ -16,7 +16,7 @@ public class RealSeq implements IRealSeq {
 	}
 	
 	public RealSeq(int N) {
-		initToZeroSequence(N);
+		setToZero(N);
 	}
 	
 	public RealSeq(double...d) {
@@ -37,7 +37,7 @@ public class RealSeq implements IRealSeq {
 	}
 
 	@Override
-	public void initToZeroSequence(int N) {
+	public void setToZero(int N) {
 		data = new double[N];
 	}	
 

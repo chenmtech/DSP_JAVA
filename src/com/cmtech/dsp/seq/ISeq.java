@@ -21,7 +21,7 @@ import java.io.Serializable;
  * @since JDK 1.6
  */
 public interface ISeq extends Serializable{
-	void initToZeroSequence(int N);
+	void setToZero(int N);
 	void clear();
 	int size();
 	void changeSize(int N);

@@ -15,18 +15,15 @@ public class DspApp {
 	public static void main(String[] args) throws DspException{
 		BmeFile.setFileDirectory("/Users/bme/Documents/matlab");
 		
+		RealSeq realZero = SeqFactory.createZeroSeq(10, RealSeq.class);
+		ComplexSeq complexZero = SeqFactory.createZeroSeq(10, ComplexSeq.class);
+		System.out.println(realZero);
+		System.out.println(complexZero);
+		
+		RealSeq sinSeq = SeqFactory.createSinSeq(1.5, Math.PI/5, 0, 100);
+		BmeFile.createBmeFile("sinseq.bme").writeData(sinSeq.toArray()).close();
 
-		RealSeq re = SeqFactory.createRndSeq(4);
-		RealSeq im = SeqFactory.createRndSeq(4);
-		ComplexSeq cseq = new ComplexSeq(re, im);
-		Complex[] carr = cseq.toArray();
-		List<Complex> lst = Arrays.asList(carr);
-		System.out.println(lst);
-		ComplexSeq cseq1 = new ComplexSeq(lst);
-		System.out.println(cseq1);
-		cseq1.set(0, new Complex(1.0,1.0));		
-		System.out.println(cseq1);
-
+		
 	}
 	
 	private static double[] changeSize(double[] a) {
