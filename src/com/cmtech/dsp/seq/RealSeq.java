@@ -28,7 +28,7 @@ public class RealSeq implements IRealSeq {
 		data = new double[d.size()];
 		int i = 0;
 		for(Double ele : d) {
-			data[i] = ele;
+			data[i++] = ele;
 		}
 	}
 	

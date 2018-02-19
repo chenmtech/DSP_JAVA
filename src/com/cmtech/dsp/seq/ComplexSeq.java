@@ -34,7 +34,11 @@ public class ComplexSeq implements IComplexSeq {
 	}
 	
 	public ComplexSeq(Collection<Complex> d) {
-		data = (Complex[]) Arrays.copyOf(d.toArray(),d.size());
+		data = new Complex[d.size()];
+		int i = 0;
+		for(Complex ele : d) {
+			data[i++] = ele;
+		}
 	}
 	
 	public ComplexSeq(ComplexSeq seq) {
