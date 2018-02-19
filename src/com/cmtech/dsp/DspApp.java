@@ -23,7 +23,15 @@ public class DspApp {
 		RealSeq sinSeq = SeqFactory.createSinSeq(1.5, Math.PI/5, 0, 100);
 		BmeFile.createBmeFile("sinseq.bme").writeData(sinSeq.toArray()).close();
 
+		ComplexSeq ejw = SeqFactory.createEJWSeq(Math.PI/10, 0, 10);
+		System.out.println(ejw);
+		System.out.println(ejw.abs());
 		
+		RealSeq rnd = SeqFactory.createRandomSeq(10);
+		System.out.println(rnd);
+		
+		RealSeq lin = SeqFactory.linSpace(1.1, 9.9, 9);
+		System.out.println(lin);
 	}
 	
 	private static double[] changeSize(double[] a) {
