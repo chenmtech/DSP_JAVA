@@ -16,22 +16,18 @@ public class DspApp {
 	public static void main(String[] args) throws DspException{
 		BmeFile.setFileDirectory("/Users/bme/Documents/matlab");
 		
-		RealSeq re1 = SeqFactory.createRandomSeq(4);
-		RealSeq im1 = SeqFactory.createRandomSeq(4);
-		ComplexSeq seq1 = new ComplexSeq(re1, im1);
-		//System.out.println(seq1);
-		RealSeq re2 = SeqFactory.createRandomSeq(6);
-		RealSeq im2 = SeqFactory.createRandomSeq(6);
-		ComplexSeq seq2 = new ComplexSeq(re2, im2);
-		ComplexSeq seq3 = SeqUtil.add(seq1, seq2);
-		//seq3.set(1, new Complex(1.0,1.0));
-		ComplexSeq seq4 = SeqUtil.multiple(seq1, seq2);
+		RealSeq seq1 = SeqFactory.createRandomSeq(4);
+		RealSeq seq2 = SeqFactory.createRandomSeq(2);
+		RealSeq seq3 = SeqUtil.conv(seq1, seq2);
+		RealSeq seq4 = SeqUtil.convUsingDFT(seq1, seq2);
 		System.out.println(seq1);
 		System.out.println(seq2);
 		System.out.println(seq3);
 		System.out.println(seq4);
 		
-		
+		double[] arr1 = seq1.toArray();
+		arr1 = Arrays.copyOf(arr1, 5);
+		System.out.println(Arrays.toString(arr1));
 	}
 	
 	private static double[] changeSize(double[] a) {

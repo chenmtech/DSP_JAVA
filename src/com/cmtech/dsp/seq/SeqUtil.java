@@ -1,5 +1,18 @@
 package com.cmtech.dsp.seq;
 
+import java.util.Arrays;
+
+/**
+ * 
+ * ClassName: SeqUtil
+ * Function: 序列工具类，主要用于实现两个序列之间的算术运算，比如加减乘除，以及卷积和 
+ * Reason: TODO ADD REASON(可选). 
+ * date: 2018年2月20日 上午11:31:37 
+ *
+ * @author bme
+ * @version 
+ * @since JDK 1.6
+ */
 public class SeqUtil {
 	private SeqUtil() {
 	}
@@ -129,9 +142,9 @@ public class SeqUtil {
 	        {
 	            n_m = n - m;
 	            if( (n_m >= 0) && (n_m < N2) )
-	            		tmp += seq1.get(m)*seq2.get(n_m);
+	            		tmp += seq1.data[m]*seq2.data[n_m];
 	        }
-	        out.set(n, tmp);
+	        out.data[n] = tmp;
 	    }
 	    return out;
 	}
@@ -154,10 +167,39 @@ public class SeqUtil {
 	        {
 	            n_m = n - m;
 	            if( (n_m >= 0) && (n_m < N2) )
-	            		tmp.add(Complex.multiple(seq1.get(m), seq2.get(n_m)));
+	            		tmp.add(Complex.multiple(seq1.data[m], seq2.data[n_m]));
 	        }
-	        out.set(n, tmp);
+	        out.data[n] = tmp;
 	    }
 	    return out;
+	}
+	
+	//用FFT求两个复序列的N点圆周卷积 
+	//seq1：复序列1
+	//seq2：复序列2
+	//N：圆周卷积的点数 
+	public static ComplexSeq cirConvUsingDFT(ISeq seq1, ISeq seq2, int N)
+	{
+	    ComplexSeq seq1DFT = seq1.fft(N);
+	    ComplexSeq seq2DFT = seq2.fft(N);
+	    ComplexSeq dft = SeqUtil.multiple(seq1DFT, seq2DFT);
+	    return dft.ifft();
+	}
+
+	//用FFT求两个复序列的线性卷积 
+	//seq1：复序列1
+	//seq2：复序列2
+	public static ComplexSeq convUsingDFT(ComplexSeq seq1, ComplexSeq seq2)
+	{
+	    return cirConvUsingDFT(seq1, seq2, seq1.size()+seq2.size()-1);
+	}
+	
+	public static RealSeq convUsingDFT(RealSeq seq1, RealSeq seq2)
+	{
+		double[] data = cirConvUsingDFT(seq1, seq2, seq1.size()+seq2.size()-1).realToArray();
+	    data = Arrays.copyOf(data, seq1.size()+seq2.size()-1);
+		RealSeq seq = new RealSeq();
+	    seq.data = data;
+		return seq;
 	}
 }

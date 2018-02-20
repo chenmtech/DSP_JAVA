@@ -306,11 +306,6 @@ public final class ComplexSeq implements IComplexSeq {
 
 	@Override
 	public ComplexSeq fft() {
-		/*int N = SeqUtil.findPowerOfTwo(data.length);
-		double[][] buf = {realToArray(N), imagToArray(N)};
-		FastFourierTransformer.transformInPlace(buf, DftNormalization.STANDARD, TransformType.FORWARD);
-		ComplexSeq rtn = new ComplexSeq(new RealSeq(buf[0]), new RealSeq(buf[1]));
-		return rtn;*/
 		return FFT.fft(this);
 	}
 	
