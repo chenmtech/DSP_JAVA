@@ -172,6 +172,25 @@ public class Complex implements Serializable{
 		return out;
 	}
 	
+	/**
+	 * subtract:(这里用一句话描述这个方法的作用)
+	 * TODO(这里描述这个方法适用条件 – 可选)
+	 * TODO(这里描述这个方法的执行流程 – 可选)
+	 * TODO(这里描述这个方法的使用方法 – 可选)
+	 * TODO(这里描述这个方法的注意事项 – 可选)
+	 *
+	 * @author bme
+	 * @param op1
+	 * @param op2
+	 * @return
+	 * @since JDK 1.6
+	 */
+	public static Complex subtract(Complex c1, Complex c2) {
+		Complex out = new Complex(c1);
+		out.subtract(c2);
+		return out;
+	}
+	
 	public static Complex multiple(Complex c, double a) {
 		Complex out = new Complex(c);
 		out.multiple(a);
@@ -189,6 +208,8 @@ public class Complex implements Serializable{
 		out.divide(c2);
 		return out;
 	}
+
+
 	
 	
 

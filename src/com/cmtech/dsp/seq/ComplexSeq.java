@@ -13,13 +13,13 @@ import java.util.Collection;
  * @version 
  * @since JDK 1.6
  */
-public class ComplexSeq implements IComplexSeq {
+public final class ComplexSeq implements IComplexSeq {
 	/**
 	 * serialVersionUID:TODO(用一句话描述这个变量表示什么).
 	 * @since JDK 1.6
 	 */
 	private static final long serialVersionUID = 1L;
-	private Complex[] data;
+	Complex[] data;
 	
 	public ComplexSeq() {
 		data = new Complex[0];
@@ -179,7 +179,11 @@ public class ComplexSeq implements IComplexSeq {
 	 */
 	@Override
 	public Complex[] toArray() {
-		return Arrays.copyOf(data, data.length);
+		Complex[] rtn = new Complex[data.length];
+		for(int i = 0; i < data.length; i++) {
+			rtn[i] = new Complex(data[i]);
+		}
+		return rtn;
 	}
 	
 	@Override

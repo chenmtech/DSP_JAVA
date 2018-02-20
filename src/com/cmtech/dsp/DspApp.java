@@ -9,29 +9,29 @@ import com.cmtech.dsp.seq.Complex;
 import com.cmtech.dsp.seq.ComplexSeq;
 import com.cmtech.dsp.seq.RealSeq;
 import com.cmtech.dsp.seq.SeqFactory;
+import com.cmtech.dsp.seq.SeqUtil;
 
 public class DspApp {
 
 	public static void main(String[] args) throws DspException{
 		BmeFile.setFileDirectory("/Users/bme/Documents/matlab");
 		
-		RealSeq realZero = SeqFactory.createZeroSeq(10, RealSeq.class);
-		ComplexSeq complexZero = SeqFactory.createZeroSeq(10, ComplexSeq.class);
-		System.out.println(realZero);
-		System.out.println(complexZero);
+		RealSeq re1 = SeqFactory.createRandomSeq(4);
+		RealSeq im1 = SeqFactory.createRandomSeq(4);
+		ComplexSeq seq1 = new ComplexSeq(re1, im1);
+		//System.out.println(seq1);
+		RealSeq re2 = SeqFactory.createRandomSeq(6);
+		RealSeq im2 = SeqFactory.createRandomSeq(6);
+		ComplexSeq seq2 = new ComplexSeq(re2, im2);
+		ComplexSeq seq3 = SeqUtil.add(seq1, seq2);
+		//seq3.set(1, new Complex(1.0,1.0));
+		ComplexSeq seq4 = SeqUtil.multiple(seq1, seq2);
+		System.out.println(seq1);
+		System.out.println(seq2);
+		System.out.println(seq3);
+		System.out.println(seq4);
 		
-		RealSeq sinSeq = SeqFactory.createSinSeq(1.5, Math.PI/5, 0, 100);
-		BmeFile.createBmeFile("sinseq.bme").writeData(sinSeq.toArray()).close();
-
-		ComplexSeq ejw = SeqFactory.createEJWSeq(Math.PI/10, 0, 10);
-		System.out.println(ejw);
-		System.out.println(ejw.abs());
 		
-		RealSeq rnd = SeqFactory.createRandomSeq(10);
-		System.out.println(rnd);
-		
-		RealSeq lin = SeqFactory.linSpace(1.1, 9.9, 9);
-		System.out.println(lin);
 	}
 	
 	private static double[] changeSize(double[] a) {

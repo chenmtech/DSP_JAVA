@@ -4,83 +4,112 @@ public class SeqUtil {
 	private SeqUtil() {
 	}
 	
+	interface IRealOperator {
+		double operator(double op1, double op2);
+	}
+	
+	interface IComplexOperator {
+		Complex operator(Complex op1, Complex op2);
+	}
+	
 	public static RealSeq add(RealSeq seq1, RealSeq seq2) {
-		int N = Math.max(seq1.size(), seq2.size());
-		RealSeq out = new RealSeq(N);
-		double tmp1 = 0.0;
-		double tmp2 = 0.0;
-		for(int i = 0; i < N; i++) {
-			tmp1 = (i < seq1.size()) ? seq1.get(i) : 0.0;
-			tmp2 = (i < seq2.size()) ? seq2.get(i) : 0.0;
-			out.set(i, tmp1+tmp2);
-		}
-		return out;	
+		return process(seq1, seq2, new IRealOperator() {
+			@Override
+			public double operator(double op1, double op2) {
+				return op1+op2;
+			}
+		});
 	}
 	
 	public static RealSeq subtract(RealSeq seq1, RealSeq seq2) {
-		int N = Math.max(seq1.size(), seq2.size());
-		RealSeq out = new RealSeq(N);
-		double tmp1 = 0.0;
-		double tmp2 = 0.0;
-		for(int i = 0; i < N; i++) {
-			tmp1 = (i < seq1.size()) ? seq1.get(i) : 0.0;
-			tmp2 = (i < seq2.size()) ? seq2.get(i) : 0.0;
-			out.set(i, tmp1-tmp2);
-		}
-		return out;	
-	}
-	
-	public static ComplexSeq add(ComplexSeq seq1, ComplexSeq seq2) {
-		int N = Math.max(seq1.size(), seq2.size());
-		ComplexSeq out = new ComplexSeq(N);
-		Complex tmp1 = new Complex();
-		Complex tmp2 = new Complex();
-		for(int i = 0; i < N; i++) {
-			tmp1 = (i < seq1.size()) ? seq1.get(i) : new Complex();
-			tmp2 = (i < seq2.size()) ? seq2.get(i) : new Complex();
-			out.set(i, Complex.add(tmp1, tmp2));
-		}
-		return out;	
+		return process(seq1, seq2, new IRealOperator() {
+			@Override
+			public double operator(double op1, double op2) {
+				return op1-op2;
+			}
+		});
 	}
 	
 	public static RealSeq multiple(RealSeq seq1, RealSeq seq2) {
+		return process(seq1, seq2, new IRealOperator() {
+			@Override
+			public double operator(double op1, double op2) {
+				return op1*op2;
+			}
+		});
+	}
+	
+	public static RealSeq divide(RealSeq seq1, RealSeq seq2) {
+		return process(seq1, seq2, new IRealOperator() {
+			@Override
+			public double operator(double op1, double op2) {
+				return op1/op2;
+			}
+		});
+	}
+	
+	private static RealSeq process(RealSeq seq1, RealSeq seq2, IRealOperator op) {
 		int N = Math.max(seq1.size(), seq2.size());
-		RealSeq out = new RealSeq(N);
-		double tmp1 = 0.0;
-		double tmp2 = 0.0;
+		double[] data1 = seq1.toArray(N);
+		double[] data2 = seq2.toArray(N);
 		for(int i = 0; i < N; i++) {
-			tmp1 = (i < seq1.size()) ? seq1.get(i) : 0.0;
-			tmp2 = (i < seq2.size()) ? seq2.get(i) : 0.0;
-			out.set(i, tmp1*tmp2);
+			data1[i] = op.operator(data1[i], data2[i]);
 		}
+		RealSeq out = new RealSeq();
+		out.data = data1;
 		return out;	
+	}
+
+	
+	public static ComplexSeq add(ComplexSeq seq1, ComplexSeq seq2) {
+		return process(seq1, seq2, new IComplexOperator() {
+			@Override
+			public Complex operator(Complex op1, Complex op2) {
+				return Complex.add(op1, op2);
+			}
+		});	
+	}
+	
+	public static ComplexSeq subtract(ComplexSeq seq1, ComplexSeq seq2) {
+		return process(seq1, seq2, new IComplexOperator() {
+			@Override
+			public Complex operator(Complex op1, Complex op2) {
+				return Complex.subtract(op1, op2);
+			}
+		});	
 	}
 	
 	public static ComplexSeq multiple(ComplexSeq seq1, ComplexSeq seq2) {
-		int N = Math.max(seq1.size(), seq2.size());
-		ComplexSeq out = new ComplexSeq(N);
-		Complex tmp1 = new Complex();
-		Complex tmp2 = new Complex();
-		for(int i = 0; i < N; i++) {
-			tmp1 = (i < seq1.size()) ? seq1.get(i) : new Complex();
-			tmp2 = (i < seq2.size()) ? seq2.get(i) : new Complex();
-			out.set(i, Complex.multiple(tmp1, tmp2));
-		}
-		return out;	
+		return process(seq1, seq2, new IComplexOperator() {
+			@Override
+			public Complex operator(Complex op1, Complex op2) {
+				return Complex.multiple(op1, op2);
+			}
+		});
 	}	
 	
 	public static ComplexSeq divide(ComplexSeq seq1, ComplexSeq seq2) {
+		return process(seq1, seq2, new IComplexOperator() {
+			@Override
+			public Complex operator(Complex op1, Complex op2) {
+				return Complex.divide(op1, op2);
+			}
+		});
+	}
+	
+	public static ComplexSeq process(ComplexSeq seq1, ComplexSeq seq2, IComplexOperator op) {
 		int N = Math.max(seq1.size(), seq2.size());
-		ComplexSeq out = new ComplexSeq(N);
-		Complex tmp1 = new Complex();
-		Complex tmp2 = new Complex();
+		Complex[] data1 = seq1.toArray(N);
+		Complex[] data2 = seq2.toArray(N);
 		for(int i = 0; i < N; i++) {
-			tmp1 = (i < seq1.size()) ? seq1.get(i) : new Complex();
-			tmp2 = (i < seq2.size()) ? seq2.get(i) : new Complex();
-			out.set(i, Complex.divide(tmp1, tmp2));
+			data1[i] = op.operator(data1[i], data2[i]);
 		}
+		ComplexSeq out = new ComplexSeq();
+		out.data = data1;
 		return out;	
-	}	
+	}
+
+	
 	
 	public static RealSeq conv(RealSeq seq1, RealSeq seq2) {
 	    int N1 = seq1.size();
@@ -130,12 +159,5 @@ public class SeqUtil {
 	        out.set(n, tmp);
 	    }
 	    return out;
-	}
-	
-	public static int findPowerOfTwo(int N) {
-		if(N <= 0) return 0;
-		int rtn = 1;
-		while((rtn *= 2) < N);
-		return rtn;
 	}
 }
