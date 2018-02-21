@@ -42,6 +42,7 @@ import com.cmtech.dsp.util.FormatTransfer;
 public class BmeFile {
 	private static Set<String> fileInOperation = new HashSet<>();
 	private static Path rootPath = Paths.get(System.getProperty("user.dir"));
+	private static final BmeFileHead DEFAULT_FILE_HEAD = new BmeFileHead10();
 	
 	public static final byte[] BME = {'B', 'M', 'E'};
 	
@@ -59,7 +60,7 @@ public class BmeFile {
 	
 	private BmeFile(String fileName, BmeFileHead head) throws FileException{
 		checkFile(fileName);
-		if(head == null) head = new BmeFileHead10();
+		if(head == null) head = DEFAULT_FILE_HEAD;
 		fileHead = create(head);
 	}
 	
