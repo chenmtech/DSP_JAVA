@@ -21,10 +21,10 @@ import java.io.Serializable;
  * @since JDK 1.6
  */
 public interface ISeq extends Serializable{
-	void setToZero(int N);
-	void clear();
 	int size();
-	void changeSize(int N);
+	ISeq setToZero(int N);
+	ISeq clear();
+	ISeq changeSize(int N);
 	RealSeq abs();
 	RealSeq angle();
 	ComplexSeq dtft(RealSeq omega);

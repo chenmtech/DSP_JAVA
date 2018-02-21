@@ -37,8 +37,9 @@ public final class RealSeq implements IRealSeq {
 	}
 
 	@Override
-	public void setToZero(int N) {
+	public RealSeq setToZero(int N) {
 		data = new double[N];
+		return this;
 	}	
 
 	/**
@@ -46,8 +47,9 @@ public final class RealSeq implements IRealSeq {
 	 * @see com.cmtech.dsp.seq.ISeq#clear()
 	 */
 	@Override
-	public void clear() {
+	public RealSeq clear() {
 		data = new double[0];
+		return this;
 	}
 	
 	/**
@@ -60,8 +62,8 @@ public final class RealSeq implements IRealSeq {
 	}
 
 	@Override
-	public void changeSize(int N) {
-		if(size() == N) return;
+	public RealSeq changeSize(int N) {
+		if(size() == N) return this;
 		
 		double[] buf = new double[N];
 		for(int i = 0; i < N; i++) {
@@ -69,6 +71,7 @@ public final class RealSeq implements IRealSeq {
 			else buf[i] = 0.0;
 		}
 		data = buf;
+		return this;
 	}
 	
 	

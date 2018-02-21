@@ -1,7 +1,5 @@
 package com.cmtech.dsp.seq;
 
-import java.util.Arrays;
-
 /**
  * 
  * ClassName: SeqUtil
@@ -17,14 +15,28 @@ public class SeqUtil {
 	private SeqUtil() {
 	}
 	
-	interface IRealOperator {
+	private interface IRealOperator {
 		double operator(double op1, double op2);
 	}
 	
-	interface IComplexOperator {
+	private interface IComplexOperator {
 		Complex operator(Complex op1, Complex op2);
 	}
 	
+	/**
+	 * 
+	 * add: 两个实序列相加
+	 * TODO(这里描述这个方法适用条件 – 可选)
+	 * TODO(这里描述这个方法的执行流程 – 可选)
+	 * TODO(这里描述这个方法的使用方法 – 可选)
+	 * TODO(这里描述这个方法的注意事项 – 可选)
+	 *
+	 * @author bme
+	 * @param seq1
+	 * @param seq2
+	 * @return 和
+	 * @since JDK 1.6
+	 */
 	public static RealSeq add(RealSeq seq1, RealSeq seq2) {
 		return process(seq1, seq2, new IRealOperator() {
 			@Override
@@ -34,6 +46,20 @@ public class SeqUtil {
 		});
 	}
 	
+	/**
+	 * 
+	 * subtract: 两个实序列相减
+	 * TODO(这里描述这个方法适用条件 – 可选)
+	 * TODO(这里描述这个方法的执行流程 – 可选)
+	 * TODO(这里描述这个方法的使用方法 – 可选)
+	 * TODO(这里描述这个方法的注意事项 – 可选)
+	 *
+	 * @author bme
+	 * @param seq1
+	 * @param seq2
+	 * @return 差
+	 * @since JDK 1.6
+	 */
 	public static RealSeq subtract(RealSeq seq1, RealSeq seq2) {
 		return process(seq1, seq2, new IRealOperator() {
 			@Override
@@ -43,6 +69,20 @@ public class SeqUtil {
 		});
 	}
 	
+	/**
+	 * 
+	 * multiple: 两个实序列相乘
+	 * TODO(这里描述这个方法适用条件 – 可选)
+	 * TODO(这里描述这个方法的执行流程 – 可选)
+	 * TODO(这里描述这个方法的使用方法 – 可选)
+	 * TODO(这里描述这个方法的注意事项 – 可选)
+	 *
+	 * @author bme
+	 * @param seq1
+	 * @param seq2
+	 * @return 积
+	 * @since JDK 1.6
+	 */
 	public static RealSeq multiple(RealSeq seq1, RealSeq seq2) {
 		return process(seq1, seq2, new IRealOperator() {
 			@Override
@@ -52,6 +92,20 @@ public class SeqUtil {
 		});
 	}
 	
+	/**
+	 * 
+	 * divide: 两个实序列相除
+	 * TODO(这里描述这个方法适用条件 – 可选)
+	 * TODO(这里描述这个方法的执行流程 – 可选)
+	 * TODO(这里描述这个方法的使用方法 – 可选)
+	 * TODO(这里描述这个方法的注意事项 – 可选)
+	 *
+	 * @author bme
+	 * @param seq1
+	 * @param seq2
+	 * @return 商
+	 * @since JDK 1.6
+	 */
 	public static RealSeq divide(RealSeq seq1, RealSeq seq2) {
 		return process(seq1, seq2, new IRealOperator() {
 			@Override
@@ -73,7 +127,20 @@ public class SeqUtil {
 		return out;	
 	}
 
-	
+	/**
+	 * 
+	 * add: 两个复序列相加
+	 * TODO(这里描述这个方法适用条件 – 可选)
+	 * TODO(这里描述这个方法的执行流程 – 可选)
+	 * TODO(这里描述这个方法的使用方法 – 可选)
+	 * TODO(这里描述这个方法的注意事项 – 可选)
+	 *
+	 * @author bme
+	 * @param seq1
+	 * @param seq2
+	 * @return 和
+	 * @since JDK 1.6
+	 */
 	public static ComplexSeq add(ComplexSeq seq1, ComplexSeq seq2) {
 		return process(seq1, seq2, new IComplexOperator() {
 			@Override
@@ -83,6 +150,20 @@ public class SeqUtil {
 		});	
 	}
 	
+	/**
+	 * 
+	 * subtract: 两个复序列相减
+	 * TODO(这里描述这个方法适用条件 – 可选)
+	 * TODO(这里描述这个方法的执行流程 – 可选)
+	 * TODO(这里描述这个方法的使用方法 – 可选)
+	 * TODO(这里描述这个方法的注意事项 – 可选)
+	 *
+	 * @author bme
+	 * @param seq1
+	 * @param seq2
+	 * @return 差
+	 * @since JDK 1.6
+	 */
 	public static ComplexSeq subtract(ComplexSeq seq1, ComplexSeq seq2) {
 		return process(seq1, seq2, new IComplexOperator() {
 			@Override
@@ -92,6 +173,20 @@ public class SeqUtil {
 		});	
 	}
 	
+	/**
+	 * 
+	 * multiple: 两个复序列相相乘
+	 * TODO(这里描述这个方法适用条件 – 可选)
+	 * TODO(这里描述这个方法的执行流程 – 可选)
+	 * TODO(这里描述这个方法的使用方法 – 可选)
+	 * TODO(这里描述这个方法的注意事项 – 可选)
+	 *
+	 * @author bme
+	 * @param seq1
+	 * @param seq2
+	 * @return 积
+	 * @since JDK 1.6
+	 */
 	public static ComplexSeq multiple(ComplexSeq seq1, ComplexSeq seq2) {
 		return process(seq1, seq2, new IComplexOperator() {
 			@Override
@@ -101,6 +196,20 @@ public class SeqUtil {
 		});
 	}	
 	
+	/**
+	 * 
+	 * divide: 两个复序列相除
+	 * TODO(这里描述这个方法适用条件 – 可选)
+	 * TODO(这里描述这个方法的执行流程 – 可选)
+	 * TODO(这里描述这个方法的使用方法 – 可选)
+	 * TODO(这里描述这个方法的注意事项 – 可选)
+	 *
+	 * @author bme
+	 * @param seq1
+	 * @param seq2
+	 * @return 商
+	 * @since JDK 1.6
+	 */
 	public static ComplexSeq divide(ComplexSeq seq1, ComplexSeq seq2) {
 		return process(seq1, seq2, new IComplexOperator() {
 			@Override
@@ -110,7 +219,7 @@ public class SeqUtil {
 		});
 	}
 	
-	public static ComplexSeq process(ComplexSeq seq1, ComplexSeq seq2, IComplexOperator op) {
+	private static ComplexSeq process(ComplexSeq seq1, ComplexSeq seq2, IComplexOperator op) {
 		int N = Math.max(seq1.size(), seq2.size());
 		Complex[] data1 = seq1.toArray(N);
 		Complex[] data2 = seq2.toArray(N);
@@ -123,7 +232,20 @@ public class SeqUtil {
 	}
 
 	
-	
+	/**
+	 * 
+	 * conv: 求两个实序列的线性卷积和
+	 * TODO(这里描述这个方法适用条件 – 可选)
+	 * TODO(这里描述这个方法的执行流程 – 可选)
+	 * TODO(这里描述这个方法的使用方法 – 可选)
+	 * TODO(这里描述这个方法的注意事项 – 可选)
+	 *
+	 * @author bme
+	 * @param seq1
+	 * @param seq2
+	 * @return 线性卷积和
+	 * @since JDK 1.6
+	 */
 	public static RealSeq conv(RealSeq seq1, RealSeq seq2) {
 	    int N1 = seq1.size();
 	    int N2 = seq2.size();
@@ -149,6 +271,20 @@ public class SeqUtil {
 	    return out;
 	}
 	
+	/**
+	 * 
+	 * conv:求两个复序列的线性卷积和
+	 * TODO(这里描述这个方法适用条件 – 可选)
+	 * TODO(这里描述这个方法的执行流程 – 可选)
+	 * TODO(这里描述这个方法的使用方法 – 可选)
+	 * TODO(这里描述这个方法的注意事项 – 可选)
+	 *
+	 * @author bme
+	 * @param seq1
+	 * @param seq2
+	 * @return 线性卷积和
+	 * @since JDK 1.6
+	 */
 	public static ComplexSeq conv(ComplexSeq seq1, ComplexSeq seq2) {
 	    int N1 = seq1.size();
 	    int N2 = seq2.size();
@@ -174,10 +310,21 @@ public class SeqUtil {
 	    return out;
 	}
 	
-	//用FFT求两个复序列的N点圆周卷积 
-	//seq1：复序列1
-	//seq2：复序列2
-	//N：圆周卷积的点数 
+	/**
+	 * 
+	 * cirConvUsingDFT: 用FFT求两个序列的N点圆周卷积
+	 * 但是由于FFT只能求2的整数幂长度，所以实际返回的序列长度可能比N要长
+	 * TODO(这里描述这个方法的执行流程 – 可选)
+	 * TODO(这里描述这个方法的使用方法 – 可选)
+	 * TODO(这里描述这个方法的注意事项 – 可选)
+	 *
+	 * @author bme
+	 * @param seq1
+	 * @param seq2
+	 * @param N 圆周卷积点数
+	 * @return 圆周卷积
+	 * @since JDK 1.6
+	 */
 	public static ComplexSeq cirConvUsingDFT(ISeq seq1, ISeq seq2, int N)
 	{
 	    ComplexSeq seq1DFT = seq1.fft(N);
@@ -186,18 +333,45 @@ public class SeqUtil {
 	    return dft.ifft();
 	}
 
-	//用FFT求两个复序列的线性卷积 
-	//seq1：复序列1
-	//seq2：复序列2
+	/**
+	 * 
+	 * convUsingDFT: 用FFT求两个复序列的线性卷积和（实际上求得是圆周卷积）
+	 * TODO(这里描述这个方法适用条件 – 可选)
+	 * TODO(这里描述这个方法的执行流程 – 可选)
+	 * TODO(这里描述这个方法的使用方法 – 可选)
+	 * TODO(这里描述这个方法的注意事项 – 可选)
+	 *
+	 * @author bme
+	 * @param seq1
+	 * @param seq2
+	 * @return 线性卷积和
+	 * @since JDK 1.6
+	 */
 	public static ComplexSeq convUsingDFT(ComplexSeq seq1, ComplexSeq seq2)
 	{
-	    return cirConvUsingDFT(seq1, seq2, seq1.size()+seq2.size()-1);
+		int N = seq1.size()+seq2.size()-1;
+	    return cirConvUsingDFT(seq1, seq2, N).changeSize(N);
 	}
 	
+
+	/**
+	 * 
+	 * convUsingDFT: 用FFT求两个实序列的线性卷积和（实际上求得是圆周卷积）
+	 * TODO(这里描述这个方法适用条件 – 可选)
+	 * TODO(这里描述这个方法的执行流程 – 可选)
+	 * TODO(这里描述这个方法的使用方法 – 可选)
+	 * TODO(这里描述这个方法的注意事项 – 可选)
+	 *
+	 * @author bme
+	 * @param seq1
+	 * @param seq2
+	 * @return 线性卷积和
+	 * @since JDK 1.6
+	 */
 	public static RealSeq convUsingDFT(RealSeq seq1, RealSeq seq2)
 	{
-		double[] data = cirConvUsingDFT(seq1, seq2, seq1.size()+seq2.size()-1).realToArray();
-	    data = Arrays.copyOf(data, seq1.size()+seq2.size()-1);
+		int N = seq1.size()+seq2.size()-1;
+		double[] data = cirConvUsingDFT(seq1, seq2, N).changeSize(N).realToArray();
 		RealSeq seq = new RealSeq();
 	    seq.data = data;
 		return seq;

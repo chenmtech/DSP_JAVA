@@ -72,11 +72,12 @@ public final class ComplexSeq implements IComplexSeq {
 	}
 	
 	@Override
-	public void setToZero(int N) {
+	public ComplexSeq setToZero(int N) {
 		data = new Complex[N];
 		for(int i = 0; i < N; i++) {
 			data[i] = new Complex();
 		}
+		return this;
 	}
 
 	/**
@@ -84,8 +85,9 @@ public final class ComplexSeq implements IComplexSeq {
 	 * @see com.cmtech.dsp.seq.ISeq#clear()
 	 */
 	@Override
-	public void clear() {
+	public ComplexSeq clear() {
 		data = new Complex[0];
+		return this;
 	}
 	
 	/**
@@ -99,8 +101,8 @@ public final class ComplexSeq implements IComplexSeq {
 	}
 	
 	@Override
-	public void changeSize(int N) {
-		if(size() == N) return;
+	public ComplexSeq changeSize(int N) {
+		if(size() == N) return this;
 		
 		Complex[] buf = new Complex[N];
 		for(int i = 0; i < N; i++) {
@@ -108,6 +110,7 @@ public final class ComplexSeq implements IComplexSeq {
 			else buf[i] = new Complex();
 		}
 		data = buf;
+		return this;
 	}
 	
 	@Override
