@@ -13,7 +13,7 @@ import static java.lang.Math.*;
 
 /**
  * ClassName: FFT
- * Function: TODO ADD FUNCTION. 
+ * Function: 快速傅里叶变换
  * Reason: TODO ADD REASON(可选). 
  * date: 2018年2月7日 上午9:29:17 
  *
@@ -21,7 +21,7 @@ import static java.lang.Math.*;
  * @version 
  * @since JDK 1.6
  */
-public class FFT {
+public final class FFT {
 	private static int N = 0;				// FFT的点数，必须为2的幂
 	private static int L = 0;				// N = 2^L
 	private static double[] re = null;
@@ -30,27 +30,93 @@ public class FFT {
 	private FFT() {
 	}
 	
-	public static ComplexSeq fft(RealSeq seq) {
+	/**
+	 * 
+	 * fft: 实序列FFT. FFT的点数为大于等于序列长度的最小2的整数次幂
+	 * TODO(这里描述这个方法适用条件 – 可选)
+	 * TODO(这里描述这个方法的执行流程 – 可选)
+	 * TODO(这里描述这个方法的使用方法 – 可选)
+	 * TODO(这里描述这个方法的注意事项 – 可选)
+	 *
+	 * @author bme
+	 * @param seq 实序列
+	 * @return FFT
+	 * @since JDK 1.6
+	 */
+	public synchronized static ComplexSeq fft(RealSeq seq) {
 		return fft(seq, seq.size());
 	}
 	
-	public static ComplexSeq fft(RealSeq seq, int wishN) {
-		if(seq == null || wishN <= 0) return null;
-		if(!initFFT(seq, new RealSeq(seq.size()), wishN)) return null;
+	/**
+	 * 
+	 * fft: 实序列指定点数的FFT. FFT的点数为大于等于wishN的最小2的整数次幂
+	 * TODO(这里描述这个方法适用条件 – 可选)
+	 * TODO(这里描述这个方法的执行流程 – 可选)
+	 * TODO(这里描述这个方法的使用方法 – 可选)
+	 * TODO(这里描述这个方法的注意事项 – 可选)
+	 *
+	 * @author bme
+	 * @param seq 实序列
+	 * @param wishN 指定的点数
+	 * @return FFT
+	 * @since JDK 1.6
+	 */
+	public synchronized static ComplexSeq fft(RealSeq seq, int wishN) {
+		if(wishN <= 0) return null;
+		if(!initFFT(seq, wishN)) return null;
 		bitReverse();
 		doFFT();
 		return new ComplexSeq(re, im);
 	}
 	
-	public static ComplexSeq ifft(RealSeq seq) {
+	/**
+	 * 
+	 * fft: 复序列FFT. FFT的点数为大于等于序列长度的最小2的整数次幂
+	 * TODO(这里描述这个方法适用条件 – 可选)
+	 * TODO(这里描述这个方法的执行流程 – 可选)
+	 * TODO(这里描述这个方法的使用方法 – 可选)
+	 * TODO(这里描述这个方法的注意事项 – 可选)
+	 *
+	 * @author bme
+	 * @param seq 复序列
+	 * @return FFT
+	 * @since JDK 1.6
+	 */
+	public synchronized static ComplexSeq fft(ComplexSeq seq) {
+		return fft(seq, seq.size());
+	}
+	
+	/**
+	 * 
+	 * fft: 复序列指定点数的FFT. FFT的点数为大于等于wishN的最小2的整数次幂
+	 * TODO(这里描述这个方法适用条件 – 可选)
+	 * TODO(这里描述这个方法的执行流程 – 可选)
+	 * TODO(这里描述这个方法的使用方法 – 可选)
+	 * TODO(这里描述这个方法的注意事项 – 可选)
+	 *
+	 * @author bme
+	 * @param seq 复序列
+	 * @param wishN 指定的点数
+	 * @return FFT
+	 * @since JDK 1.6
+	 */
+	public synchronized static ComplexSeq fft(ComplexSeq seq, int wishN) {
+		if(wishN <= 0) return null;
+		if(!initFFT(seq, wishN)) return null;
+		bitReverse();
+		doFFT();
+		return new ComplexSeq(re, im);
+	}
+	
+	public synchronized static ComplexSeq ifft(RealSeq seq) {
 		return ifft(seq, seq.size());
 	}
 	
 	//FFT反变换 
-	public static ComplexSeq ifft(RealSeq seq, int wishN)
+	public synchronized static ComplexSeq ifft(RealSeq seq, int wishN)
 	{
-		if(seq == null || wishN <= 0) return null;
-	    if(!initFFT(seq, new RealSeq(seq.size()), wishN)) return null;
+		if(wishN <= 0) return null;
+	    if(!initFFT(seq, wishN)) return null;
 	    
 	    //取共轭 
 	    int i = 0;
@@ -68,27 +134,16 @@ public class FFT {
 	    
 	    return new ComplexSeq(re, im);
 	}
+
 	
-	public static ComplexSeq fft(ComplexSeq seq) {
-		return fft(seq, seq.size());
-	}
-	
-	public static ComplexSeq fft(ComplexSeq seq, int wishN) {
-		if(seq == null || wishN <= 0) return null;
-		if(!initFFT(seq, wishN)) return null;
-		bitReverse();
-		doFFT();
-		return new ComplexSeq(re, im);
-	}
-	
-	public static ComplexSeq ifft(ComplexSeq seq) {
+	public synchronized static ComplexSeq ifft(ComplexSeq seq) {
 		return ifft(seq, seq.size());
 	}
 	
 	//FFT反变换 
-	public static ComplexSeq ifft(ComplexSeq seq, int wishN)
+	public synchronized static ComplexSeq ifft(ComplexSeq seq, int wishN)
 	{
-		if(seq == null || wishN <= 0) return null;
+		if(wishN <= 0) return null;
 	    if(!initFFT(seq, wishN)) return null;
 	    
 	    //取共轭 
@@ -128,8 +183,8 @@ public class FFT {
 	    return true;
 	}
 	
-	private static boolean initFFT(RealSeq reSeq, RealSeq imSeq, int wishN) {
-		if(reSeq == null || imSeq == null || reSeq.size() == 0 || imSeq.size() == 0) return false;
+	private static boolean initFFT(RealSeq reSeq, int wishN) {
+		if(reSeq == null || reSeq.size() == 0 ) return false;
 		
 	    N = 1;
 	    L = 0;
@@ -141,7 +196,7 @@ public class FFT {
 	    }
 	    
 	    re = reSeq.toArray(N);
-	    im = imSeq.toArray(N);
+	    im = new double[N];
 	    
 	    return true;
 	}
