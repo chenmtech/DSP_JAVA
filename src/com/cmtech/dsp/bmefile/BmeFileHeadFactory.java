@@ -32,5 +32,9 @@ public class BmeFileHeadFactory {
 			throw new FileException(Arrays.toString(ver), "不支持此文件版本");
 		}
 	}
+	
+	public static BmeFileHead createDefault() {
+		return new BmeFileHead10();
+	}
 
 }
