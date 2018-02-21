@@ -38,11 +38,6 @@ public class FIRFilter extends DigitalFilter{
 	}
 
 	@Override
-	public ComplexSeq freq(int N) {
-		return new RealSeq(b).dtft(N);
-	}
-
-	@Override
 	public ComplexSeq freq(RealSeq omega) {
 		return new RealSeq(b).dtft(omega);
 	}

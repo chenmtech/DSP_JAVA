@@ -9,4 +9,6 @@ public interface IFilter {
 	void setB(RealSeq b);
 	void setA(RealSeq a);
 	ComplexSeq freq(RealSeq omega);
+	RealSeq mag(RealSeq omega);
+	RealSeq pha(RealSeq omega);
 }

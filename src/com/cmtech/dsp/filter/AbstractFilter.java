@@ -64,4 +64,14 @@ public abstract class AbstractFilter implements IFilter {
 		return strBuilder.toString();
 	}
 	
+	@Override
+	public RealSeq mag(RealSeq omega) {
+		return freq(omega).abs();
+	}
+	
+	@Override
+	public RealSeq pha(RealSeq omega) {
+		return freq(omega).angle();
+	}
+	
 }

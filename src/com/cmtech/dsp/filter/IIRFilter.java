@@ -25,15 +25,6 @@ public class IIRFilter extends DigitalFilter {
 		super(bseq, aseq);
 	}
 
-
-	@Override
-	public ComplexSeq freq(int N) {
-		ComplexSeq fenzi = new RealSeq(b).dtft(N);
-		ComplexSeq fenmu = new RealSeq(a).dtft(N);
-		
-		return SeqUtil.divide(fenzi, fenmu);
-	}
-
 	@Override
 	public ComplexSeq freq(RealSeq omega) {
 		ComplexSeq fenzi = new RealSeq(b).dtft(omega);

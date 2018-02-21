@@ -22,6 +22,16 @@ public class AnalogFilter extends AbstractFilter implements IAnalogFilter {
 	    RealSeq QSeq = SeqFactory.linSpace(0, Qmax, Num);
 	    return freq(QSeq);
 	}
+	
+	@Override
+	public RealSeq mag(double Qmax, int Num) {
+	    return freq(Qmax, Num).abs();
+	}
+	
+	@Override
+	public RealSeq pha(double Qmax, int Num) {
+	    return freq(Qmax, Num).abs();
+	}
 
 	@Override
 	public ComplexSeq freq(RealSeq QSeq) {
