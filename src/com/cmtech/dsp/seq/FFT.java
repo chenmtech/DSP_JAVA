@@ -32,36 +32,36 @@ public final class FFT {
 	
 	/**
 	 * 
-	 * fft: 实序列FFT. FFT的点数为大于等于序列长度的最小2的整数次幂
+	 * fft: 序列FFT. FFT的点数为大于等于序列长度的最小2的整数次幂
 	 * TODO(这里描述这个方法适用条件 – 可选)
 	 * TODO(这里描述这个方法的执行流程 – 可选)
 	 * TODO(这里描述这个方法的使用方法 – 可选)
 	 * TODO(这里描述这个方法的注意事项 – 可选)
 	 *
 	 * @author bme
-	 * @param seq 实序列
+	 * @param seq 序列
 	 * @return FFT
 	 * @since JDK 1.6
 	 */
-	public synchronized static ComplexSeq fft(RealSeq seq) {
+	public synchronized static ComplexSeq fft(ISeq seq) {
 		return fft(seq, seq.size());
 	}
 	
 	/**
 	 * 
-	 * fft: 实序列指定点数的FFT. FFT的点数为大于等于wishN的最小2的整数次幂
+	 * fft: 序列指定点数的FFT. FFT的点数为大于等于wishN的最小2的整数次幂
 	 * TODO(这里描述这个方法适用条件 – 可选)
 	 * TODO(这里描述这个方法的执行流程 – 可选)
 	 * TODO(这里描述这个方法的使用方法 – 可选)
 	 * TODO(这里描述这个方法的注意事项 – 可选)
 	 *
 	 * @author bme
-	 * @param seq 实序列
+	 * @param seq 序列
 	 * @param wishN 指定的点数
 	 * @return FFT
 	 * @since JDK 1.6
 	 */
-	public synchronized static ComplexSeq fft(RealSeq seq, int wishN) {
+	public synchronized static ComplexSeq fft(ISeq seq, int wishN) {
 		if(wishN <= 0) return null;
 		if(!initFFT(seq, wishN)) return null;
 		bitReverse();
@@ -71,77 +71,36 @@ public final class FFT {
 	
 	/**
 	 * 
-	 * fft: 复序列FFT. FFT的点数为大于等于序列长度的最小2的整数次幂
+	 * ifft: 序列IFFT. IFFT的点数为大于等于序列长度的最小2的整数次幂
 	 * TODO(这里描述这个方法适用条件 – 可选)
 	 * TODO(这里描述这个方法的执行流程 – 可选)
 	 * TODO(这里描述这个方法的使用方法 – 可选)
 	 * TODO(这里描述这个方法的注意事项 – 可选)
 	 *
 	 * @author bme
-	 * @param seq 复序列
-	 * @return FFT
+	 * @param seq 序列
+	 * @return IFFT
 	 * @since JDK 1.6
 	 */
-	public synchronized static ComplexSeq fft(ComplexSeq seq) {
-		return fft(seq, seq.size());
+	public synchronized static ComplexSeq ifft(ISeq seq) {
+		return ifft(seq, seq.size());
 	}
 	
 	/**
 	 * 
-	 * fft: 复序列指定点数的FFT. FFT的点数为大于等于wishN的最小2的整数次幂
+	 * ifft: 序列指定点数的IFFT. IFFT的点数为大于等于wishN的最小2的整数次幂
 	 * TODO(这里描述这个方法适用条件 – 可选)
 	 * TODO(这里描述这个方法的执行流程 – 可选)
 	 * TODO(这里描述这个方法的使用方法 – 可选)
 	 * TODO(这里描述这个方法的注意事项 – 可选)
 	 *
 	 * @author bme
-	 * @param seq 复序列
+	 * @param seq 序列
 	 * @param wishN 指定的点数
-	 * @return FFT
+	 * @return IFFT
 	 * @since JDK 1.6
-	 */
-	public synchronized static ComplexSeq fft(ComplexSeq seq, int wishN) {
-		if(wishN <= 0) return null;
-		if(!initFFT(seq, wishN)) return null;
-		bitReverse();
-		doFFT();
-		return new ComplexSeq(re, im);
-	}
-	
-	public synchronized static ComplexSeq ifft(RealSeq seq) {
-		return ifft(seq, seq.size());
-	}
-	
-	//FFT反变换 
-	public synchronized static ComplexSeq ifft(RealSeq seq, int wishN)
-	{
-		if(wishN <= 0) return null;
-	    if(!initFFT(seq, wishN)) return null;
-	    
-	    //取共轭 
-	    int i = 0;
-	    for(i = 0; i < N; i++)
-	         im[i] = -im[i];
-	    
-	    bitReverse();
-	    doFFT();   
-	    
-	    for(i = 0; i < N; i++)
-	    {
-	         re[i] /= N;
-	         im[i] /= -N;
-	    } 
-	    
-	    return new ComplexSeq(re, im);
-	}
-
-	
-	public synchronized static ComplexSeq ifft(ComplexSeq seq) {
-		return ifft(seq, seq.size());
-	}
-	
-	//FFT反变换 
-	public synchronized static ComplexSeq ifft(ComplexSeq seq, int wishN)
+	 */ 
+	public synchronized static ComplexSeq ifft(ISeq seq, int wishN)
 	{
 		if(wishN <= 0) return null;
 	    if(!initFFT(seq, wishN)) return null;
@@ -163,9 +122,7 @@ public final class FFT {
 	    return new ComplexSeq(re, im);
 	}
 	
-	
-	
-	private static boolean initFFT(ComplexSeq seq, int wishN) {
+	private static boolean initFFT(ISeq seq, int wishN) {
 		if(seq == null || seq.size() == 0) return false;
 		
 	    N = 1;
@@ -177,26 +134,15 @@ public final class FFT {
 	        L++;
 	    }
 	    
-	    re = seq.realToArray(N);
-	    im = seq.imagToArray(N);
-	    
-	    return true;
-	}
-	
-	private static boolean initFFT(RealSeq reSeq, int wishN) {
-		if(reSeq == null || reSeq.size() == 0 ) return false;
-		
-	    N = 1;
-	    L = 0;
-	    
-	    while(N < wishN) 
-	    {
-	        N *= 2;
-	        L++;
+	    if(seq.getClass() == ComplexSeq.class) {
+	    		re = ((ComplexSeq)seq).realToArray(N);
+	    		im = ((ComplexSeq)seq).imagToArray(N);
+	    } else if(seq.getClass() == RealSeq.class) {
+	    		re = ((RealSeq)seq).toArray(N);
+		    im = new double[N];
+	    } else {
+	    		return false;
 	    }
-	    
-	    re = reSeq.toArray(N);
-	    im = new double[N];
 	    
 	    return true;
 	}
