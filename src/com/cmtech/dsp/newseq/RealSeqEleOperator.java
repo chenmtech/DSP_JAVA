@@ -53,8 +53,22 @@ public class RealSeqEleOperator implements ISeqEleOperator<Double>{
 	 */
 	@Override
 	public Double add(Double d1, Double d2) {
-		// TODO Auto-generated method stub
 		return d1+d2;
+	}
+
+	@Override
+	public Double subtract(Double d1, Double d2) {
+		return d1-d2;
+	}
+	
+	@Override
+	public Double multiple(Double d1, Double d2) {
+		return d1*d2;
+	}
+	
+	@Override
+	public Double divide(Double d1, Double d2) {
+		return d1/d2;
 	}
 
 	@Override

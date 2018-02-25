@@ -11,6 +11,7 @@ package com.cmtech.dsp.newseq;
 import java.util.Collection;
 
 import com.cmtech.dsp.seq.Complex;
+import com.cmtech.dsp.seq.RealSeq;
 
 /**
  * ClassName: ComplexSeq1
@@ -71,4 +72,12 @@ public class ComplexSeq1 extends AbstractSeq<Complex> {
 		this(re, new RealSeq1(re.size()));
 	}
 
+	public RealSeq1 dB() {
+		RealSeq1 out = abs();
+		double max = out.max();
+		for(int i = 0; i < out.size(); i++) {			
+			out.set(i, 20*Math.log10(out.get(i)/max));
+		}
+		return out;	
+	}
 }

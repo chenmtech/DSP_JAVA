@@ -9,10 +9,11 @@
 package com.cmtech.dsp.newseq;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import com.cmtech.dsp.seq.ComplexSeq;
+import com.cmtech.dsp.seq.RealSeq;
 
 /**
  * ClassName: AbstractSeq
@@ -45,6 +46,7 @@ public abstract class AbstractSeq<T> implements ISeq1<T> {
 		setToZero(N);
 	}
 	
+	@SafeVarargs
 	public AbstractSeq(T...d) {
 		this();
 		for(T ele : d) {
@@ -157,10 +159,72 @@ public abstract class AbstractSeq<T> implements ISeq1<T> {
 		AbstractSeq<T> out = eOp.newInstance();
 		for(int i = 0; i < data.size(); i++)
 	    {
-	        out.data.add(data.get(data.size()-1-i));
+	        out.data.add(eOp.newElement(data.get(data.size()-1-i)));
+	    }
+		return out;
+	}
+
+	@Override
+	public ISeq1<T> plus(T a) {
+		AbstractSeq<T> out = eOp.newInstance();
+		for(int i = 0; i < data.size(); i++)
+	    {
+	        out.data.add(eOp.add(data.get(i), a));
 	    }
 		return out;
 	}
 	
-	
+	@Override
+	public ISeq1<T> minus(T a) {
+		AbstractSeq<T> out = eOp.newInstance();
+		for(int i = 0; i < data.size(); i++)
+	    {
+	        out.data.add(eOp.subtract(data.get(i), a));
+	    }
+		return out;
+	}
+
+	@Override
+	public ISeq1<T> multiple(T a) {
+		AbstractSeq<T> out = eOp.newInstance();
+		for(int i = 0; i < data.size(); i++)
+	    {
+	        out.data.add(eOp.multiple(data.get(i), a));
+	    }
+		return out;
+	}
+
+	@Override
+	public ISeq1<T> divide(T a) {
+		AbstractSeq<T> out = eOp.newInstance();
+		for(int i = 0; i < data.size(); i++)
+	    {
+	        out.data.add(eOp.divide(data.get(i), a));
+	    }
+		return out;
+	}
+
+	@Override
+	public T sum() {
+		T sum = eOp.zeroElement();
+		for(T ele : data) {
+			sum = eOp.add(sum, ele);
+		}
+		
+		return sum;
+	}
+
+	@Override
+	public boolean equals(Object otherObject) {
+		if(this == otherObject) return true;
+		if(otherObject == null) return false;
+		if(getClass() != otherObject.getClass()) return false;
+		AbstractSeq<T> other = (AbstractSeq<T>)otherObject;
+		return  data.equals(other.data);
+	}
+
+	@Override
+	public int hashCode() {
+		return data.hashCode();
+	}
 }

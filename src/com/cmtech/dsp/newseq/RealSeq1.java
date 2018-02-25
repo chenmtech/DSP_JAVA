@@ -10,6 +10,7 @@ package com.cmtech.dsp.newseq;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 
 import com.cmtech.dsp.seq.RealSeq;
 
@@ -55,5 +56,13 @@ public class RealSeq1 extends AbstractSeq<Double> {
 	
 	public RealSeq1(RealSeq1 seq) {
 		super(seq);
+	}
+
+	public Double max() {
+		return Collections.max(data);
+	}
+
+	public Double min() {
+		return Collections.min(data);
 	}
 }

@@ -26,10 +26,12 @@ public class DspApp {
 		lst.add(c2);
 		lst.add(c3);
 		ComplexSeq1 seq = new ComplexSeq1(lst);
+		ComplexSeq1 seq1 = (ComplexSeq1)seq.reverse();
 		System.out.println(seq);
-		lst.get(0).set(1.0, 1.0);
+		System.out.println(seq1);
+		seq.get(0).set(2.0, 2.0);
 		System.out.println(seq);
-		System.out.println(lst);
+		System.out.println(seq1);
 		
 		Double[] d = new RealSeqEleOperator().newArray(10);
 		System.out.println(Arrays.toString(d));

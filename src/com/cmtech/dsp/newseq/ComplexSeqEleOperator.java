@@ -31,6 +31,11 @@ public class ComplexSeqEleOperator implements ISeqEleOperator<Complex>{
 		return new Complex();
 	}
 	
+	@Override
+	public Complex newElement(Complex ele) {
+		return new Complex(ele);
+	}
+	
 	/**
 	 * TODO 简单描述该方法的实现功能（可选）.
 	 * @see com.cmtech.dsp.seq.newseq.ISeqEleOperator#newArray(int)
@@ -44,10 +49,6 @@ public class ComplexSeqEleOperator implements ISeqEleOperator<Complex>{
 		return out;
 	}
 
-	@Override
-	public Complex newElement(Complex ele) {
-		return new Complex(ele);
-	}
 
 	/**
 	 * TODO 简单描述该方法的实现功能（可选）.
@@ -56,6 +57,21 @@ public class ComplexSeqEleOperator implements ISeqEleOperator<Complex>{
 	@Override
 	public Complex add(Complex d1, Complex d2) {
 		return Complex.add(d1, d2);
+	}
+	
+	@Override
+	public Complex subtract(Complex d1, Complex d2) {
+		return Complex.subtract(d1, d2);
+	}
+	
+	@Override
+	public Complex multiple(Complex d1, Complex d2) {
+		return Complex.multiple(d1, d2);
+	}
+	
+	@Override
+	public Complex divide(Complex d1, Complex d2) {
+		return Complex.divide(d1, d2);
 	}
 
 	@Override

@@ -36,6 +36,7 @@ public interface ISeq1<T> extends Serializable{
 	ISeq1<T> minus(T a);
 	ISeq1<T> multiple(T a);
 	ISeq1<T> divide(T a);
+	T sum();
 	
 	
 	
@@ -46,7 +47,5 @@ public interface ISeq1<T> extends Serializable{
 	ComplexSeq ifft();
 	ComplexSeq ifft(int N);
 
-	T sum();
-	T max();
-	T min();*/
+	*/
 }
