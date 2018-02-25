@@ -6,9 +6,9 @@ import java.util.List;
 
 import com.cmtech.dsp.bmefile.BmeFile;
 import com.cmtech.dsp.exception.DspException;
-import com.cmtech.dsp.newseq.ComplexSeq1;
-import com.cmtech.dsp.newseq.RealSeqEleOperator;
 import com.cmtech.dsp.seq.Complex;
+import com.cmtech.dsp.seq.ComplexSeq;
+import com.cmtech.dsp.seq.RealSeqEleOperator;
 
 public class DspApp {
 
@@ -25,8 +25,8 @@ public class DspApp {
 		lst.add(c1);
 		lst.add(c2);
 		lst.add(c3);
-		ComplexSeq1 seq = new ComplexSeq1(lst);
-		ComplexSeq1 seq1 = (ComplexSeq1)seq.reverse();
+		ComplexSeq seq = new ComplexSeq(lst);
+		ComplexSeq seq1 = (ComplexSeq)seq.reverse();
 		System.out.println(seq);
 		System.out.println(seq1);
 		seq.get(0).set(2.0, 2.0);

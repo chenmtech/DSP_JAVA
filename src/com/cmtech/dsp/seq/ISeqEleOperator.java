@@ -6,7 +6,7 @@
  * Copyright (c) 2018, e_yujunquan@163.com All Rights Reserved.
  *
  */
-package com.cmtech.dsp.newseq;
+package com.cmtech.dsp.seq;
 
 /**
  * ClassName: SeqEleOperator

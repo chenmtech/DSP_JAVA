@@ -43,7 +43,7 @@ public final class FFT {
 	 * @return FFT
 	 * @since JDK 1.6
 	 */
-	public synchronized static ComplexSeq fft(ISeq seq) {
+	public synchronized static <T> ComplexSeq fft(ISeq<T> seq) {
 		return fft(seq, seq.size());
 	}
 	
@@ -61,7 +61,7 @@ public final class FFT {
 	 * @return FFT
 	 * @since JDK 1.6
 	 */
-	public synchronized static ComplexSeq fft(ISeq seq, int wishN) {
+	public synchronized static <T> ComplexSeq fft(ISeq<T> seq, int wishN) {
 		if(wishN <= 0) return null;
 		if(!initFFT(seq, wishN)) return null;
 		bitReverse();
@@ -82,7 +82,7 @@ public final class FFT {
 	 * @return IFFT
 	 * @since JDK 1.6
 	 */
-	public synchronized static ComplexSeq ifft(ISeq seq) {
+	public synchronized static <T> ComplexSeq ifft(ISeq<T> seq) {
 		return ifft(seq, seq.size());
 	}
 	
@@ -100,7 +100,7 @@ public final class FFT {
 	 * @return IFFT
 	 * @since JDK 1.6
 	 */ 
-	public synchronized static ComplexSeq ifft(ISeq seq, int wishN)
+	public synchronized static <T> ComplexSeq ifft(ISeq<T> seq, int wishN)
 	{
 		if(wishN <= 0) return null;
 	    if(!initFFT(seq, wishN)) return null;
@@ -122,7 +122,7 @@ public final class FFT {
 	    return new ComplexSeq(re, im);
 	}
 	
-	private static boolean initFFT(ISeq seq, int wishN) {
+	private static <T extends ISeq<?> > boolean initFFT(T seq, int wishN) {
 		if(seq == null || seq.size() == 0) return false;
 		
 	    N = 1;
@@ -134,14 +134,22 @@ public final class FFT {
 	        L++;
 	    }
 	    
+	    Double[] re1;
+	    Double[] im1;
 	    if(seq.getClass() == ComplexSeq.class) {
-	    		re = ((ComplexSeq)seq).realToArray(N);
-	    		im = ((ComplexSeq)seq).imagToArray(N);
+	    		re1 = ((ComplexSeq)seq).realToArray(N);
+	    		im1 = ((ComplexSeq)seq).imagToArray(N);
 	    } else if(seq.getClass() == RealSeq.class) {
-	    		re = ((RealSeq)seq).toArray(N);
-		    im = new double[N];
+	    		re1 = (Double[])seq.toArray(N);
+		    im1 = new Double[N];
 	    } else {
 	    		return false;
+	    }
+	    re = new double[N];
+	    im = new double[N];
+	    for(int i = 0; i < N; i++) {
+	    		re[i] = re1[i];
+	    		im[i] = im1[i];
 	    }
 	    
 	    return true;

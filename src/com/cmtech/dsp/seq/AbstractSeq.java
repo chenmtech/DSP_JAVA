@@ -6,13 +6,14 @@
  * Copyright (c) 2018, e_yujunquan@163.com All Rights Reserved.
  *
  */
-package com.cmtech.dsp.newseq;
+package com.cmtech.dsp.seq;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import com.cmtech.dsp.seq.FFT;
 import com.cmtech.dsp.seq.RealSeq;
 
 /**
@@ -26,7 +27,7 @@ import com.cmtech.dsp.seq.RealSeq;
  * @param <T>
  * @since JDK 1.6
  */
-public abstract class AbstractSeq<T> implements ISeq1<T> {
+public abstract class AbstractSeq<T> implements ISeq<T> {
 	/**
 	 * serialVersionUID:TODO(用一句话描述这个变量表示什么).
 	 * @since JDK 1.6
@@ -73,7 +74,7 @@ public abstract class AbstractSeq<T> implements ISeq1<T> {
 	}
 	
 	@Override
-	public ISeq1<T> setToZero(int N) {
+	public ISeq<T> setToZero(int N) {
 		data = new ArrayList<T>();
 		for(int i = 0; i < N; i++) {
 			data.add(eOp.zeroElement());
@@ -98,13 +99,13 @@ public abstract class AbstractSeq<T> implements ISeq1<T> {
 	}
 	
 	@Override
-	public ISeq1<T> clear() {
+	public ISeq<T> clear() {
 		data = new ArrayList<>();
 		return this;
 	}
 	
 	@Override
-	public ISeq1<T> changeSize(int N) {
+	public ISeq<T> changeSize(int N) {
 		if(size() == N) return this;
 		
 		List<T> buf = new ArrayList<>();
@@ -117,8 +118,8 @@ public abstract class AbstractSeq<T> implements ISeq1<T> {
 	}
 	
 	@Override
-	public RealSeq1 abs() {
-		RealSeq1 out = new RealSeq1();
+	public RealSeq abs() {
+		RealSeq out = new RealSeq();
 		for(T ele : data) {
 			out.data.add(eOp.abs(ele));
 		}
@@ -126,8 +127,8 @@ public abstract class AbstractSeq<T> implements ISeq1<T> {
 	}
 	
 	@Override
-	public RealSeq1 angle() {
-		RealSeq1 out = new RealSeq1();
+	public RealSeq angle() {
+		RealSeq out = new RealSeq();
 		for(T ele : data) {
 			out.data.add(eOp.angle(ele));
 		}
@@ -155,7 +156,7 @@ public abstract class AbstractSeq<T> implements ISeq1<T> {
 	}
 
 	@Override
-	public ISeq1<T> reverse() {
+	public ISeq<T> reverse() {
 		AbstractSeq<T> out = eOp.newInstance();
 		for(int i = 0; i < data.size(); i++)
 	    {
@@ -165,7 +166,7 @@ public abstract class AbstractSeq<T> implements ISeq1<T> {
 	}
 
 	@Override
-	public ISeq1<T> plus(T a) {
+	public ISeq<T> plus(T a) {
 		AbstractSeq<T> out = eOp.newInstance();
 		for(int i = 0; i < data.size(); i++)
 	    {
@@ -175,7 +176,7 @@ public abstract class AbstractSeq<T> implements ISeq1<T> {
 	}
 	
 	@Override
-	public ISeq1<T> minus(T a) {
+	public ISeq<T> minus(T a) {
 		AbstractSeq<T> out = eOp.newInstance();
 		for(int i = 0; i < data.size(); i++)
 	    {
@@ -185,7 +186,7 @@ public abstract class AbstractSeq<T> implements ISeq1<T> {
 	}
 
 	@Override
-	public ISeq1<T> multiple(T a) {
+	public ISeq<T> multiple(T a) {
 		AbstractSeq<T> out = eOp.newInstance();
 		for(int i = 0; i < data.size(); i++)
 	    {
@@ -195,7 +196,7 @@ public abstract class AbstractSeq<T> implements ISeq1<T> {
 	}
 
 	@Override
-	public ISeq1<T> divide(T a) {
+	public ISeq<T> divide(T a) {
 		AbstractSeq<T> out = eOp.newInstance();
 		for(int i = 0; i < data.size(); i++)
 	    {
@@ -227,4 +228,32 @@ public abstract class AbstractSeq<T> implements ISeq1<T> {
 	public int hashCode() {
 		return data.hashCode();
 	}
+
+	@Override
+	public ISeq<T> append(T ele) {
+		data.add(ele);
+		return this;
+	}
+
+	@Override
+	public ComplexSeq fft() {
+		return FFT.fft(this);
+	}
+
+	@Override
+	public ComplexSeq fft(int N) {
+		return FFT.fft(this, N);
+	}
+
+	@Override
+	public ComplexSeq ifft() {
+		return FFT.ifft(this);
+	}
+
+	@Override
+	public ComplexSeq ifft(int N) {
+		return FFT.ifft(this, N);
+	}
+	
+	
 }

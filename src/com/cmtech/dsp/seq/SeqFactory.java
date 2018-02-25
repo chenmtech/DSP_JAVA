@@ -1,5 +1,7 @@
 package com.cmtech.dsp.seq;
 
+import com.cmtech.dsp.seq.Complex;
+
 /**
  * 
  * ClassName: SeqFactory
@@ -34,7 +36,7 @@ public class SeqFactory {
 	 * @return 序列
 	 * @since JDK 1.6
 	 */
-	public static <T extends ISeq> T createZeroSeq(int N, Class<T> cl) {
+	public static <T extends ISeq<T>> T createZeroSeq(int N, Class<T> cl) {
 		try {
 			return cl.getConstructor(int.class).newInstance(N);
 		} catch (Exception e) {
