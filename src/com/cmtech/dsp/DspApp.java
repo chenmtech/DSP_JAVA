@@ -1,47 +1,41 @@
 package com.cmtech.dsp;
 
-import static java.lang.Math.PI;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import com.cmtech.dsp.bmefile.BmeFile;
 import com.cmtech.dsp.exception.DspException;
-import com.cmtech.dsp.filter.IIRFilter;
-import com.cmtech.dsp.filter.design.AFType;
-import com.cmtech.dsp.filter.design.FilterType;
-import com.cmtech.dsp.filter.design.IIRDesigner;
-import com.cmtech.dsp.seq.ComplexSeq;
-import com.cmtech.dsp.seq.FFT;
-import com.cmtech.dsp.seq.RealSeq;
-import com.cmtech.dsp.seq.SeqFactory;
+import com.cmtech.dsp.newseq.ComplexSeq1;
+import com.cmtech.dsp.newseq.RealSeqEleOperator;
+import com.cmtech.dsp.seq.Complex;
 
 public class DspApp {
 
 	public static void main(String[] args) throws DspException{
 		BmeFile.setFileDirectory("/Users/bme/Documents/matlab");
 		
-		double[] wp = {0.4*PI, 0.5*PI};
-		double[] ws = {0.3*PI, 0.6*PI};
-		double Rp = 0.3;
-		double As = 40;
-		FilterType fType = FilterType.BANDPASS;
-		AFType afType = AFType.ELLIP;
-		IIRFilter filter = IIRDesigner.design(wp, ws, Rp, As, afType, fType);
-		RealSeq mag = filter.mag(1001);
-		RealSeq pha = filter.pha(1001);
-		RealSeq omega = SeqFactory.linSpace(0, PI, 1001);
-		BmeFile.createBmeFile("mag.bme").writeData(mag.toArray()).close();
-		BmeFile.createBmeFile("pha.bme").writeData(pha.toArray()).close();
-		BmeFile.createBmeFile("omega.bme").writeData(omega.toArray()).close();
+		//ComplexSeq1 seq = new ComplexSeq1(10);
+		//System.out.println(seq);
 		
-		RealSeq re = SeqFactory.createRandomSeq(5);
-		RealSeq im = SeqFactory.createRandomSeq(5);
-		ComplexSeq seq = new ComplexSeq(re,im);
-		ComplexSeq fft = FFT.fft(seq);
-		ComplexSeq ifft = FFT.ifft(fft);
+		Complex c1 = new Complex(1.1,1.1);
+		Complex c2 = new Complex(2.2,2.2);
+		Complex c3 = new Complex(3.3,3.3);
+		List<Complex> lst = new ArrayList<>();
+		lst.add(c1);
+		lst.add(c2);
+		lst.add(c3);
+		ComplexSeq1 seq = new ComplexSeq1(lst);
 		System.out.println(seq);
-		System.out.println(ifft);
+		lst.get(0).set(1.0, 1.0);
+		System.out.println(seq);
+		System.out.println(lst);
+		
+		Double[] d = new RealSeqEleOperator().newArray(10);
+		System.out.println(Arrays.toString(d));
 	}
 	
-	private static double[] changeSize(double[] a) {
+	private static Double newElement(Double a) {
 		return a;
 	}
 
