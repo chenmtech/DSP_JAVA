@@ -30,8 +30,8 @@ public class DspApp {
 		FilterType fType = FilterType.HIGHPASS;
 		IDigitalFilter filter = IIRDesigner.design(wp, ws, Rp, As, afType, fType);
 		RealSeq after = filter.filter(before);
-		BmeFile.createBmeFile("before.bme").writeData(before.toArray()).close();
-		BmeFile.createBmeFile("after.bme").writeData(after.toArray()).close();
+		before.saveAsBmeFile("before1.bme");
+		after.saveAsBmeFile("after1.bme");
 		
 		ComplexSeq fft = seq1.fft();
 		System.out.println(fft.abs());

@@ -11,6 +11,8 @@ package com.cmtech.dsp.seq;
 import java.util.Collection;
 import java.util.Collections;
 
+import com.cmtech.dsp.bmefile.BmeFile;
+import com.cmtech.dsp.exception.FileException;
 import com.cmtech.dsp.util.SeqUtil;
 
 /**
@@ -90,5 +92,9 @@ public class RealSeq extends Seq<Double>{
 			rtn[i] = data.get(i);
 		}
 		return rtn;
+	}
+	
+	public void saveAsBmeFile(String fileName) throws FileException {
+		BmeFile.createBmeFile(fileName).writeData(toArray()).close();
 	}
 }
