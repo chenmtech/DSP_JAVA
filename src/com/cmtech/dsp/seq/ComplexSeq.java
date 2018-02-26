@@ -10,11 +10,8 @@ package com.cmtech.dsp.seq;
 
 import java.util.Collection;
 
-import com.cmtech.dsp.seq.Complex;
-import com.cmtech.dsp.seq.ComplexSeq;
-import com.cmtech.dsp.seq.RealSeq;
-import com.cmtech.dsp.seq.SeqFactory;
-import com.cmtech.dsp.seq.SeqUtil;
+import com.cmtech.dsp.util.Complex;
+import com.cmtech.dsp.util.SeqUtil;
 
 /**
  * ClassName: ComplexSeq1
@@ -26,7 +23,7 @@ import com.cmtech.dsp.seq.SeqUtil;
  * @version 
  * @since JDK 1.6
  */
-public class ComplexSeq extends AbstractSeq<Complex> {
+public class ComplexSeq extends Seq<Complex> {
 
 	/**
 	 * serialVersionUID:TODO(用一句话描述这个变量表示什么).
@@ -50,7 +47,10 @@ public class ComplexSeq extends AbstractSeq<Complex> {
 	}
 	
 	public ComplexSeq(Complex...d) {
-		super(d);
+		super();
+		for(Complex ele : d) {
+			data.add(eOp.newElement(ele));
+		}
 	}
 	
 	public ComplexSeq(Collection<Complex> d) {
@@ -102,7 +102,7 @@ public class ComplexSeq extends AbstractSeq<Complex> {
 		int N = size();
 		ComplexSeq ejwn, tmpseq;
 		for(int i = 0; i < Nw; i++) {
-			ejwn = SeqFactory.createEJWSeq(-omega.get(i), 0, N);
+			ejwn = SeqUtil.createEJWSeq(-omega.get(i), 0, N);
 			tmpseq = (ComplexSeq)SeqUtil.multiple(this, ejwn);
 			out.set(i, tmpseq.sum());
 		}
@@ -112,7 +112,7 @@ public class ComplexSeq extends AbstractSeq<Complex> {
 	@Override
 	public ComplexSeq dtft(int N) {
 		//复序列的DTFT没有对称性，所以需要求0~2*PI整个周期的频谱
-		return dtft(SeqFactory.linSpace(0, 2*Math.PI, N));	
+		return dtft(SeqUtil.linSpace(0, 2*Math.PI, N));	
 	}
 	
 	public RealSeq getReal() {
@@ -129,6 +129,19 @@ public class ComplexSeq extends AbstractSeq<Complex> {
 			out.append(data.get(i).getImag());
 		}
 		return out;
+	}
+
+	public Complex[] toArray() {
+		return toArray(size());
+	}
+
+	public Complex[] toArray(int N) {
+		Complex[] rtn = eOp.newArray(N);
+		int min = Math.min(N, size());
+		for(int i = 0; i < min; i++) {
+			rtn[i] = eOp.newElement(data.get(i));
+		}
+		return rtn;
 	}
 
 }

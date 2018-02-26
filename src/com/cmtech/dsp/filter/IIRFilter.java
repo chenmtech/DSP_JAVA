@@ -2,14 +2,14 @@ package com.cmtech.dsp.filter;
 
 import java.util.Map;
 
-import com.cmtech.dsp.filter.structure.FSType;
+import com.cmtech.dsp.filter.structure.StructType;
 import com.cmtech.dsp.filter.structure.IIRDF1Structure;
 import com.cmtech.dsp.filter.structure.IIRDF2Structure;
 import com.cmtech.dsp.filter.structure.IIRTDF2Structure;
 import com.cmtech.dsp.seq.ComplexSeq;
 import com.cmtech.dsp.seq.RealSeq;
-import com.cmtech.dsp.seq.SeqUtil;
-import com.cmtech.dsp.seq.ZT;
+import com.cmtech.dsp.util.SeqUtil;
+import com.cmtech.dsp.util.ZT;
 
 public class IIRFilter extends DigitalFilter {
 	
@@ -17,7 +17,7 @@ public class IIRFilter extends DigitalFilter {
 	public static final int DF2 = 1;
 	public static final int TDF2 = 2;
 	
-	public IIRFilter(Double[] b, Double[] a) {
+	public IIRFilter(double[] b, double[] a) {
 		super(b, a);
 	}
 	
@@ -49,16 +49,16 @@ public class IIRFilter extends DigitalFilter {
 
 
 	@Override
-	public void createStructure(FSType sType) {
-		if(sType == FSType.IIR_DF1) {
+	public IIRFilter createStructure(StructType sType) {
+		if(sType == StructType.IIR_DF1) {
 			structure = new IIRDF1Structure(b, a);
-		} else if(sType == FSType.IIR_DF2) {
+		} else if(sType == StructType.IIR_DF2) {
 			structure = new IIRDF2Structure(b, a);
-		} else if(sType == FSType.IIR_TDF2) {
+		} else if(sType == StructType.IIR_TDF2) {
 			structure = new IIRTDF2Structure(b, a);
 		} else
 			structure = null;
-		return;
+		return this;
 	}
 
 

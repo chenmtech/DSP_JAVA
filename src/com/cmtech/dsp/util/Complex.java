@@ -1,4 +1,4 @@
-																					package com.cmtech.dsp.seq;
+																					package com.cmtech.dsp.util;
 
 import java.io.Serializable;
 

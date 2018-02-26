@@ -13,8 +13,9 @@ import java.util.Map;
 
 import com.cmtech.dsp.filter.IIRFilter;
 import com.cmtech.dsp.filter.para.IIRPara;
+import com.cmtech.dsp.filter.structure.StructType;
 import com.cmtech.dsp.seq.RealSeq;
-import com.cmtech.dsp.seq.ZT;
+import com.cmtech.dsp.util.ZT;
 
 public class IIRDesigner {
 	private IIRDesigner() {
@@ -25,6 +26,7 @@ public class IIRDesigner {
 		IIRFilter filter = designIIRFilter(wp, ws, Rp, As, afType, fType);
 		IIRPara para = new IIRPara(wp,ws,Rp,As,afType,fType);
 		filter.setFilterPara(para);
+		filter.createStructure(StructType.IIR_DF2);
 		return filter;
 	}
 	
@@ -163,8 +165,8 @@ public class IIRDesigner {
 	//pAz：变换后的数字滤波器分母多项式系数数组 
 	private static Map<String, Object> A2DTransformUsingBilinear(RealSeq bs, RealSeq as, double T) //, RealSeq * pBz, RealSeq * pAz)
 	{
-		RealSeq bs1 = bs.reverse();
-		RealSeq as1 = as.reverse();
+		RealSeq bs1 = (RealSeq) bs.reverse();
+		RealSeq as1 = (RealSeq) as.reverse();
 
 	    RealSeq Nz = new RealSeq(2/T, -2/T);
 	    RealSeq Dz = new RealSeq(1.0, 1.0);

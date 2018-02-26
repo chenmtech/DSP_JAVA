@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.cmtech.dsp.seq.RealSeq;
-import com.cmtech.dsp.seq.SeqUtil;
+import com.cmtech.dsp.util.SeqUtil;
 import com.cmtech.dsp.util.TwoTuple;
 
 public class ALPDesigner {
@@ -155,7 +155,7 @@ public class ALPDesigner {
 	    for(k = 1; k <= biN; k++)
 	    {
 	        biSeq.set(1, -2.0*Qc*cos( 0.5*PI*(1.0+(2.0*k-1.0)/N) ));
-	        as = SeqUtil.conv(as, biSeq);
+	        as = (RealSeq) SeqUtil.conv(as, biSeq);
 	    }
 		rtnMap.put("BS", bs);
 		rtnMap.put("AS", as);
@@ -273,7 +273,7 @@ public class ALPDesigner {
 	        biSeq.set(1, -2.0*re);
 	        biSeq.set(2, re*re+im*im);
 	        
-	        as = SeqUtil.conv(as, biSeq);
+	        as = (RealSeq) SeqUtil.conv(as, biSeq);
 	    }
 	     
 		rtnMap.put("BS", bs);
@@ -406,13 +406,13 @@ public class ALPDesigner {
 	        biDenSeq.set(1, -2.0*re);
 	        biDenSeq.set(2, re*re+im*im);
 	        
-	        bs = SeqUtil.conv(bs, biNomSeq);
-	        as = SeqUtil.conv(as, biDenSeq);
+	        bs = (RealSeq) SeqUtil.conv(bs, biNomSeq);
+	        as = (RealSeq) SeqUtil.conv(as, biDenSeq);
 	    }
 	    
 	    //下面归一化，保证|H(j0)|=1
 	    double factor = as.get(as.size()-1)/bs.get(bs.size()-1);
-	    bs = bs.multiple(factor);
+	    bs = (RealSeq) bs.multiple(factor);
 
 	    rtnMap.put("BS", bs);
 		rtnMap.put("AS", as);
@@ -486,13 +486,13 @@ public class ALPDesigner {
 		double alpha = sqrt(Qp*Qs);
 		 
 		//第一项 	
-		ai = ai.multiple(alpha*alpha);
+		ai = (RealSeq) ai.multiple(alpha*alpha);
 		
 		//第二项 
-		ci = ci.multiple(alpha*alpha);
+		ci = (RealSeq) ci.multiple(alpha*alpha);
 		
 		//第三项 
-		bi = bi.multiple(alpha);
+		bi = (RealSeq) bi.multiple(alpha);
 
 		RealSeq bs = new RealSeq(1);
 		RealSeq as = null;
@@ -514,11 +514,11 @@ public class ALPDesigner {
 		for(i = 0; i < r; i++)
 		{
 			NomSeq.set(2, ai.get(i));
-			bs = SeqUtil.conv(bs, NomSeq);
+			bs = (RealSeq) SeqUtil.conv(bs, NomSeq);
 			
 			DenSeq.set(1, bi.get(i));
 			DenSeq.set(2, ci.get(i));
-			as = SeqUtil.conv(as, DenSeq);
+			as = (RealSeq) SeqUtil.conv(as, DenSeq);
 		}
 
 		Map<String, Object> rtnMap = new HashMap<>();

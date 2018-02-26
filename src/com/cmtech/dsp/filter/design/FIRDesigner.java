@@ -10,8 +10,9 @@ import java.util.Map;
 import com.cmtech.dsp.filter.FIRFilter;
 import com.cmtech.dsp.filter.para.FIRPara;
 import com.cmtech.dsp.filter.para.KaiserPara;
+import com.cmtech.dsp.filter.structure.StructType;
 import com.cmtech.dsp.seq.RealSeq;
-import com.cmtech.dsp.seq.SeqUtil;
+import com.cmtech.dsp.util.SeqUtil;
 
 
 public class FIRDesigner {
@@ -20,14 +21,14 @@ public class FIRDesigner {
 	}
 	
 	public static synchronized FIRFilter design(double[] wp, double[] ws, double Rp, double As, FilterType fType) {
-		return design(wp,ws,Rp,As,fType,WinType.UNKNOWN);
+		return design(wp,ws,Rp,As,fType,WinType.UNKNOWN).createStructure(StructType.FIR_DF);
 	}
 	
 	public static synchronized FIRFilter design(double[] wp, double[] ws, double Rp, double As, FilterType fType, WinType wType) {
 		if(wType != WinType.KAISER)
-			return designFIRUsingWindow(wp, ws, Rp, As, fType);
+			return designFIRUsingWindow(wp, ws, Rp, As, fType).createStructure(StructType.FIR_DF);
 		else
-			return designFIRUsingKaiser(wp, ws, Rp, As, fType);
+			return designFIRUsingKaiser(wp, ws, Rp, As, fType).createStructure(StructType.FIR_DF);
 	}
 	
 	//根据相对设计规格，用窗函数法设计FIR滤波器。注：这里的窗不包括凯泽窗
@@ -98,7 +99,7 @@ public class FIRDesigner {
 	    RealSeq winSeq = Window(N, wType);
 	    
 	    //3.3：求h(n) = hd(n)w(n) 
-	    idealSeq = SeqUtil.multiple(idealSeq, winSeq);
+	    idealSeq = (RealSeq) SeqUtil.multiple(idealSeq, winSeq);
 
 	    return idealSeq;
 	}
@@ -160,7 +161,7 @@ public class FIRDesigner {
 	    RealSeq idealSeq = IdealFilter(N, wc, fType);
 	    RealSeq winSeq = Kaiser(N, beta);
 	    
-	    idealSeq = SeqUtil.multiple(idealSeq, winSeq);
+	    idealSeq = (RealSeq) SeqUtil.multiple(idealSeq, winSeq);
 
 	    return idealSeq;
 	}
@@ -178,7 +179,7 @@ public class FIRDesigner {
 	    if(wType == WinType.KAISER)  winSeq = Kaiser(N, beta);
 	    else winSeq = Window(N, wType);
 
-	    idealSeq = SeqUtil.multiple(idealSeq, winSeq);
+	    idealSeq = (RealSeq) SeqUtil.multiple(idealSeq, winSeq);
 
 	    Map<String, Object> rtnMap = new HashMap<>();
 	    rtnMap.put("OUTSEQ", idealSeq);
@@ -199,7 +200,7 @@ public class FIRDesigner {
 	    if(wType == WinType.KAISER)  winSeq = Kaiser(N, beta);
 	    else winSeq = Window(N, wType);
 
-	    idealSeq = SeqUtil.multiple(idealSeq, winSeq);
+	    idealSeq = (RealSeq) SeqUtil.multiple(idealSeq, winSeq);
 
 	    Map<String, Object> rtnMap = new HashMap<>();
 	    rtnMap.put("OUTSEQ", idealSeq);
@@ -303,7 +304,7 @@ public class FIRDesigner {
 	{
 	    RealSeq allSeq = IdealLowpassFilter(N, PI);
 	    RealSeq lowSeq = IdealLowpassFilter(N, wc);
-	    return SeqUtil.subtract(allSeq, lowSeq);
+	    return (RealSeq) SeqUtil.subtract(allSeq, lowSeq);
 	}
 
 	//获取线性相位的理想带通滤波器的hd(n) 
@@ -311,7 +312,7 @@ public class FIRDesigner {
 	{
 	    RealSeq seq1 = IdealLowpassFilter(N, wc[1]);
 	    RealSeq seq2 = IdealLowpassFilter(N, wc[0]);
-	    return SeqUtil.subtract(seq1, seq2);  
+	    return (RealSeq) SeqUtil.subtract(seq1, seq2);  
 	}
 
 	//获取线性相位的理想带阻滤波器的hd(n) 
@@ -319,7 +320,7 @@ public class FIRDesigner {
 	{
 	    RealSeq allSeq = IdealLowpassFilter(N, PI);
 	    RealSeq bpSeq = IdealBandpassFilter(N, wc);
-	    return SeqUtil.subtract(allSeq, bpSeq);  
+	    return (RealSeq) SeqUtil.subtract(allSeq, bpSeq);  
 	}
 
 	//获取线性相位的理想微分器的hd(n) 

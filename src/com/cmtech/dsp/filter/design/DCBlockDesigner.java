@@ -9,6 +9,7 @@
 package com.cmtech.dsp.filter.design;
 
 import com.cmtech.dsp.filter.IIRFilter;
+import com.cmtech.dsp.filter.structure.StructType;
 
 /**
  * ClassName: DCBlockDesigner
@@ -33,7 +34,7 @@ public class DCBlockDesigner {
 		b[1] = -b[0];
 		a[0] = 1;
 		a[1] = -r;
-		return new IIRFilter(b,a);
+		return new IIRFilter(b,a).createStructure(StructType.IIR_DF2);
 	}
 	
 	public static synchronized IIRFilter design(double deltaf, double fs) {

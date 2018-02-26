@@ -30,8 +30,6 @@ public interface ISeq<T> extends Serializable{
 	ISeq<T> changeSize(int N);
 	RealSeq abs();
 	RealSeq angle();
-	T[] toArray();
-	T[] toArray(int N);
 	ISeq<T> reverse();
 	ISeq<T> plus(T a);
 	ISeq<T> minus(T a);

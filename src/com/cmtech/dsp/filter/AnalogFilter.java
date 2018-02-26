@@ -1,14 +1,13 @@
 package com.cmtech.dsp.filter;
 
-import com.cmtech.dsp.seq.Complex;
 import com.cmtech.dsp.seq.ComplexSeq;
 import com.cmtech.dsp.seq.RealSeq;
-import com.cmtech.dsp.seq.SeqFactory;
-import com.cmtech.dsp.seq.SeqUtil;
+import com.cmtech.dsp.util.Complex;
+import com.cmtech.dsp.util.SeqUtil;
 
 public class AnalogFilter extends AbstractFilter implements IAnalogFilter {
 	
-	public AnalogFilter(Double[] b, Double[] a) {
+	public AnalogFilter(double[] b, double[] a) {
 		super(b, a);
 	}
 	
@@ -19,7 +18,7 @@ public class AnalogFilter extends AbstractFilter implements IAnalogFilter {
 
 	@Override
 	public ComplexSeq freq(double Qmax, int Num) {
-	    RealSeq QSeq = SeqFactory.linSpace(0, Qmax, Num);
+	    RealSeq QSeq = SeqUtil.linSpace(0, Qmax, Num);
 	    return freq(QSeq);
 	}
 	

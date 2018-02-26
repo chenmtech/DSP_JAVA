@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.cmtech.dsp.util.FFT;
+
 /**
  * ClassName: AbstractSeq
  * Function: TODO ADD FUNCTION. 
@@ -23,7 +25,7 @@ import java.util.List;
  * @param <T>
  * @since JDK 1.6
  */
-public abstract class AbstractSeq<T> implements ISeq<T> {
+public abstract class Seq<T> implements ISeq<T> {
 	/**
 	 * serialVersionUID:TODO(用一句话描述这个变量表示什么).
 	 * @since JDK 1.6
@@ -34,31 +36,23 @@ public abstract class AbstractSeq<T> implements ISeq<T> {
 	
 	List<T> data = new ArrayList<T>();
 	
-	public AbstractSeq() {
+	public Seq() {
 		eOp = getSeqBaseOperator();
 	}
 	
-	public AbstractSeq(int N) {
+	public Seq(int N) {
 		this();
 		setToZero(N);
 	}
 	
-	@SafeVarargs
-	public AbstractSeq(T...d) {
+	public Seq(Collection<T> d) {
 		this();
 		for(T ele : d) {
 			data.add(eOp.newElement(ele));
 		}
 	}
 	
-	public AbstractSeq(Collection<T> d) {
-		this();
-		for(T ele : d) {
-			data.add(eOp.newElement(ele));
-		}
-	}
-	
-	public AbstractSeq(AbstractSeq<T> seq) {
+	public Seq(Seq<T> seq) {
 		this(seq.data);
 	}
 	
@@ -130,28 +124,8 @@ public abstract class AbstractSeq<T> implements ISeq<T> {
 	}
 
 	@Override
-	public T[] toArray() {
-		T[] rtn = eOp.newArray(size());
-		int i = 0;
-		for(T ele : data) {
-			rtn[i++] = eOp.newElement(ele);
-		}
-		return rtn;
-	}
-
-	@Override
-	public T[] toArray(int N) {
-		T[] rtn = eOp.newArray(N);
-		int min = Math.min(N, size());
-		for(int i = 0; i < min; i++) {
-			rtn[i] = eOp.newElement(data.get(i));
-		}
-		return rtn;
-	}
-
-	@Override
 	public ISeq<T> reverse() {
-		AbstractSeq<T> out = eOp.newInstance();
+		Seq<T> out = eOp.newInstance();
 		for(int i = 0; i < data.size(); i++)
 	    {
 	        out.data.add(eOp.newElement(data.get(data.size()-1-i)));
@@ -161,7 +135,7 @@ public abstract class AbstractSeq<T> implements ISeq<T> {
 
 	@Override
 	public ISeq<T> plus(T a) {
-		AbstractSeq<T> out = eOp.newInstance();
+		Seq<T> out = eOp.newInstance();
 		for(int i = 0; i < data.size(); i++)
 	    {
 	        out.data.add(eOp.add(data.get(i), a));
@@ -171,7 +145,7 @@ public abstract class AbstractSeq<T> implements ISeq<T> {
 	
 	@Override
 	public ISeq<T> minus(T a) {
-		AbstractSeq<T> out = eOp.newInstance();
+		Seq<T> out = eOp.newInstance();
 		for(int i = 0; i < data.size(); i++)
 	    {
 	        out.data.add(eOp.subtract(data.get(i), a));
@@ -181,7 +155,7 @@ public abstract class AbstractSeq<T> implements ISeq<T> {
 
 	@Override
 	public ISeq<T> multiple(T a) {
-		AbstractSeq<T> out = eOp.newInstance();
+		Seq<T> out = eOp.newInstance();
 		for(int i = 0; i < data.size(); i++)
 	    {
 	        out.data.add(eOp.multiple(data.get(i), a));
@@ -191,7 +165,7 @@ public abstract class AbstractSeq<T> implements ISeq<T> {
 
 	@Override
 	public ISeq<T> divide(T a) {
-		AbstractSeq<T> out = eOp.newInstance();
+		Seq<T> out = eOp.newInstance();
 		for(int i = 0; i < data.size(); i++)
 	    {
 	        out.data.add(eOp.divide(data.get(i), a));
@@ -215,7 +189,7 @@ public abstract class AbstractSeq<T> implements ISeq<T> {
 		if(otherObject == null) return false;
 		if(getClass() != otherObject.getClass()) return false;
 		@SuppressWarnings("unchecked")
-		AbstractSeq<T> other = (AbstractSeq<T>)otherObject;
+		Seq<T> other = (Seq<T>)otherObject;
 		return  data.equals(other.data);
 	}
 

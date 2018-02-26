@@ -19,12 +19,7 @@ package com.cmtech.dsp.seq;
  * @since JDK 1.6
  */
 public class RealSeqBaseOperator implements ISeqBaseOperator<Double>{
-	
-	
-	@Override
-	public Class getSeqClass() {
-		return RealSeq.class;
-	}
+
 
 	/**
 	 * TODO 简单描述该方法的实现功能（可选）.
@@ -88,7 +83,7 @@ public class RealSeqBaseOperator implements ISeqBaseOperator<Double>{
 	}
 
 	@Override
-	public AbstractSeq<Double> newInstance() {
+	public Seq<Double> newInstance() {
 		return new RealSeq();
 	}
 

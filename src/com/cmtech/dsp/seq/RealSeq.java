@@ -11,6 +11,8 @@ package com.cmtech.dsp.seq;
 import java.util.Collection;
 import java.util.Collections;
 
+import com.cmtech.dsp.util.SeqUtil;
+
 /**
  * ClassName: RealSeq1
  * Function: TODO ADD FUNCTION. 
@@ -21,7 +23,7 @@ import java.util.Collections;
  * @version 
  * @since JDK 1.6
  */
-public class RealSeq extends AbstractSeq<Double>{
+public class RealSeq extends Seq<Double>{
 	/**
 	 * serialVersionUID:TODO(用一句话描述这个变量表示什么).
 	 * @since JDK 1.6
@@ -43,8 +45,11 @@ public class RealSeq extends AbstractSeq<Double>{
 		super(N);
 	}
 	
-	public RealSeq(Double...d) {
-		super(d);
+	public RealSeq(double...d) {
+		super();
+		for(double ele : d) {
+			data.add(ele);
+		}
 	}
 	
 	public RealSeq(Collection<Double> d) {
@@ -71,7 +76,19 @@ public class RealSeq extends AbstractSeq<Double>{
 
 	@Override
 	public ComplexSeq dtft(int N) {
-		return dtft(SeqFactory.linSpace(0, Math.PI, N));
+		return dtft(SeqUtil.linSpace(0, Math.PI, N));
 	}
 
+	public double[] toArray() {
+		return toArray(size());
+	}
+
+	public double[] toArray(int N) {
+		double[] rtn = new double[N];
+		int min = Math.min(N, size());
+		for(int i = 0; i < min; i++) {
+			rtn[i] = data.get(i);
+		}
+		return rtn;
+	}
 }

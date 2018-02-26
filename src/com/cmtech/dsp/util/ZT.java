@@ -6,10 +6,12 @@
  * Copyright (c) 2018, e_yujunquan@163.com All Rights Reserved.
  *
  */
-package com.cmtech.dsp.seq;
+package com.cmtech.dsp.util;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import com.cmtech.dsp.seq.RealSeq;
 
 /**
  * ClassName: ZT

@@ -8,7 +8,6 @@
  */
 package com.cmtech.dsp.filter.design;
 
-import static java.lang.Math.PI;
 import static java.lang.Math.abs;
 
 import java.util.HashMap;
@@ -17,7 +16,7 @@ import java.util.Map;
 import com.cmtech.dsp.filter.AnalogFilter;
 import com.cmtech.dsp.filter.para.AFPara;
 import com.cmtech.dsp.seq.RealSeq;
-import com.cmtech.dsp.seq.ZT;
+import com.cmtech.dsp.util.ZT;
 
 /**
  * ClassName: AFDesigner
@@ -232,21 +231,21 @@ public class AFDesigner {
 //	                  D(s) 
 	private static Map<String, Object> AnalogFreqBandTransform(RealSeq bS, RealSeq aS, RealSeq Ns, RealSeq Ds)
 	{
-	    bS = bS.reverse();
-	    aS = aS.reverse();
-	    Ns = Ns.reverse();
-	    Ds = Ds.reverse();
+	    bS = (RealSeq) bS.reverse();
+	    aS = (RealSeq) aS.reverse();
+	    Ns = (RealSeq) Ns.reverse();
+	    Ds = (RealSeq) Ds.reverse();
 
 	    Map<String, Object> tmpMap = ZT.ZMapping(bS, aS, Ns, Ds);
 	    RealSeq Bs = (RealSeq)tmpMap.get("BZ");
 	    RealSeq As = (RealSeq)tmpMap.get("AZ");
-	    Bs = Bs.reverse();
-	    As = As.reverse(); 
+	    Bs = (RealSeq) Bs.reverse();
+	    As = (RealSeq) As.reverse(); 
 	    
 	    //归一化，让As[0] = 1.0 
 	    double norm = As.get(0);
-	    Bs = Bs.divide(norm);
-	    As = As.divide(norm);
+	    Bs = (RealSeq) Bs.divide(norm);
+	    As = (RealSeq) As.divide(norm);
            
 	    Map<String, Object> rtnMap = new HashMap<>();
 	    rtnMap.put("BS", Bs);

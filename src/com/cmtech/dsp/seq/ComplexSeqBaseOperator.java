@@ -8,7 +8,7 @@
  */
 package com.cmtech.dsp.seq;
 
-import com.cmtech.dsp.seq.Complex;
+import com.cmtech.dsp.util.Complex;
 
 /**
  * ClassName: ComplexSeqEleOperator
@@ -22,11 +22,6 @@ import com.cmtech.dsp.seq.Complex;
  */
 public class ComplexSeqBaseOperator implements ISeqBaseOperator<Complex>{
 
-	@Override
-	public Class getSeqClass() {
-		return ComplexSeq.class;
-	}
-	
 	/**
 	 * TODO 简单描述该方法的实现功能（可选）.
 	 * @see com.cmtech.dsp.seq.newseq.ISeqBaseOperator#zeroElement()
@@ -90,7 +85,7 @@ public class ComplexSeqBaseOperator implements ISeqBaseOperator<Complex>{
 	}
 
 	@Override
-	public AbstractSeq<Complex> newInstance() {
+	public Seq<Complex> newInstance() {
 		return new ComplexSeq();
 	}
 }

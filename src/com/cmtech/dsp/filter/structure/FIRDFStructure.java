@@ -34,7 +34,7 @@ public class FIRDFStructure extends AbstractDFStructure {
 	}
 	
 	public FIRDFStructure(FIRFilter filter) {
-		this(filter.getB().toArray());
+		this(filter.getB().toArray()); 
 	}
 	
 	/**

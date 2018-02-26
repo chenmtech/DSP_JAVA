@@ -6,14 +6,14 @@ import com.cmtech.dsp.filter.para.FilterPara;
 import com.cmtech.dsp.seq.RealSeq;
 
 public abstract class AbstractFilter implements IFilter {
-	protected Double[] b;
-	protected Double[] a;
+	protected double[] b;
+	protected double[] a;
 	protected FilterPara para;
 	
 	public AbstractFilter() {
 	}
 	
-	public AbstractFilter(Double[] b, Double[] a) {
+	public AbstractFilter(double[] b, double[] a) {
 		this.b = Arrays.copyOf(b, b.length);
 		this.a = Arrays.copyOf(a, a.length);
 	}
@@ -50,8 +50,9 @@ public abstract class AbstractFilter implements IFilter {
 		return para;
 	}
 
-	public void setFilterPara(FilterPara para) {
+	public AbstractFilter setFilterPara(FilterPara para) {
 		this.para = para;
+		return this;
 	}
 	
 	@Override

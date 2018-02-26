@@ -9,6 +9,7 @@
 package com.cmtech.dsp.filter.design;
 
 import com.cmtech.dsp.filter.IIRFilter;
+import com.cmtech.dsp.filter.structure.StructType;
 
 /**
  * ClassName: NotchDesigner
@@ -36,7 +37,7 @@ public class NotchDesigner {
 		a[0] = 1;
 		a[1] = -2*r*cosw0;
 		a[2] = r*r;
-		return new IIRFilter(b,a);
+		return new IIRFilter(b,a).createStructure(StructType.IIR_DF2);
 	}
 	
 	public static synchronized IIRFilter design(double f0, double deltaf, double fs) {

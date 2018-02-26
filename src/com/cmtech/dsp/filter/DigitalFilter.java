@@ -1,15 +1,14 @@
 package com.cmtech.dsp.filter;
 
-import com.cmtech.dsp.filter.structure.FSType;
 import com.cmtech.dsp.filter.structure.IDFStructure;
 import com.cmtech.dsp.seq.ComplexSeq;
 import com.cmtech.dsp.seq.RealSeq;
-import com.cmtech.dsp.seq.SeqFactory;
+import com.cmtech.dsp.util.SeqUtil;
 
 public abstract class DigitalFilter extends AbstractFilter implements IDigitalFilter{
 	protected IDFStructure structure;
 	
-	public DigitalFilter(Double[] b, Double[] a) {
+	public DigitalFilter(double[] b, double[] a) {
 		super(b, a);
 	}
 
@@ -17,12 +16,21 @@ public abstract class DigitalFilter extends AbstractFilter implements IDigitalFi
 		super(bseq, aseq);
 	}
 
+	@Override
 	public double filter(double x) {
 		return structure.filter(x);
 	}
 	
-	public abstract void createStructure(FSType sType);
+	@Override
+	public RealSeq filter(RealSeq seq) {
+		RealSeq out = new RealSeq();
+		for(int i = 0; i < seq.size(); i++) {
+			out.append(filter(seq.get(i)));
+		}
+		return out;
+	}
 	
+
 	public IDFStructure getStructure() {
 		return structure;
 	}
@@ -37,16 +45,16 @@ public abstract class DigitalFilter extends AbstractFilter implements IDigitalFi
 	
 	@Override
 	public ComplexSeq freq(int N) {
-		return freq(SeqFactory.linSpace(0, Math.PI, N));
+		return freq(SeqUtil.linSpace(0, Math.PI, N));
 	}
 	
 	@Override
 	public RealSeq mag(int N) {
-		return mag(SeqFactory.linSpace(0, Math.PI, N));
+		return mag(SeqUtil.linSpace(0, Math.PI, N));
 	}
 	
 	@Override
 	public RealSeq pha(int N) {
-		return pha(SeqFactory.linSpace(0, Math.PI, N));
+		return pha(SeqUtil.linSpace(0, Math.PI, N));
 	}
 }

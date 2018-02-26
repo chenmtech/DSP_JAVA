@@ -19,7 +19,6 @@ package com.cmtech.dsp.seq;
  * @since JDK 1.6
  */
 public interface ISeqBaseOperator<T> {
-	Class getSeqClass();
 	T zeroElement();
 	T newElement(T ele);
 	T[] newArray(int N);
@@ -29,5 +28,5 @@ public interface ISeqBaseOperator<T> {
 	T divide(T d1, T d2);
 	double abs(T ele);
 	double angle(T ele);
-	AbstractSeq<T> newInstance();
+	Seq<T> newInstance();
 }

@@ -6,9 +6,17 @@
  * Copyright (c) 2018, e_yujunquan@163.com All Rights Reserved.
  *
  */
-package com.cmtech.dsp.seq;
+package com.cmtech.dsp.util;
 
-import static java.lang.Math.*;
+import static java.lang.Math.PI;
+import static java.lang.Math.cos;
+import static java.lang.Math.pow;
+import static java.lang.Math.sin;
+
+import com.cmtech.dsp.seq.Seq;
+import com.cmtech.dsp.seq.ComplexSeq;
+import com.cmtech.dsp.seq.ISeq;
+import com.cmtech.dsp.seq.RealSeq;
 
 
 /**
@@ -137,7 +145,8 @@ public final class FFT {
 	    re = new double[N];
 	    im = new double[N];
 	    int S = Math.min(N, seq.size());
-	    Class<?> cl = seq.getSeqBaseOperator().getSeqClass();
+
+	    Class<?> cl = ((Seq<T>)seq).getClass();
 	    if(cl == ComplexSeq.class) {
 		    	for(int i = 0; i < S; i++) {
 		    		re[i] = ((ComplexSeq)seq).get(i).getReal();

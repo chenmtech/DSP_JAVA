@@ -8,8 +8,6 @@
  */
 package com.cmtech.dsp.filter.para;
 
-import java.util.Arrays;
-
 import com.cmtech.dsp.filter.design.FilterType;
 import com.cmtech.dsp.filter.design.WinType;
 

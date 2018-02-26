@@ -18,7 +18,7 @@ package com.cmtech.dsp.filter.structure;
  * @version 
  * @since JDK 1.6
  */
-public enum FSType {
+public enum StructType {
 	FIR_DF,
 	FIR_LPF,
 	IIR_DF1,
