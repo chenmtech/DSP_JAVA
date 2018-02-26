@@ -115,30 +115,20 @@ public class ComplexSeq extends AbstractSeq<Complex> {
 		return dtft(SeqFactory.linSpace(0, 2*Math.PI, N));	
 	}
 	
-	public Double[] realToArray(int N) {
-		Double[] out = new Double[N];
-		for(int i = 0; i < N; i++) {
-			if(i < size()) out[i] = data.get(i).getReal();
-			else out[i] = 0.0;
+	public RealSeq getReal() {
+		RealSeq out = new RealSeq();
+		for(int i = 0; i < size(); i++) {
+			out.append(data.get(i).getReal());
 		}
 		return out;
 	}
 	
-	public Double[] realToArray() {
-		return realToArray(size());
-	}
-	
-	public Double[] imagToArray(int N) {
-		Double[] out = new Double[N];
-		for(int i = 0; i < N; i++) {
-			if(i < size()) out[i] = data.get(i).getImag();
-			else out[i] = 0.0;
+	public RealSeq getImag() {
+		RealSeq out = new RealSeq();
+		for(int i = 0; i < size(); i++) {
+			out.append(data.get(i).getImag());
 		}
 		return out;
-	}
-	
-	public Double[] imagToArray() {
-		return imagToArray(size());
 	}
 
 }

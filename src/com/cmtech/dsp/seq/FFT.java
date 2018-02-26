@@ -136,16 +136,17 @@ public final class FFT {
 	    
 	    re = new double[N];
 	    im = new double[N];
+	    int S = Math.min(N, seq.size());
 	    Class<?> cl = seq.getSeqBaseOperator().getSeqClass();
 	    if(cl == ComplexSeq.class) {
-		    	for(int i = 0; i < N; i++) {
+		    	for(int i = 0; i < S; i++) {
 		    		re[i] = ((ComplexSeq)seq).get(i).getReal();
 		    		im[i] = ((ComplexSeq)seq).get(i).getImag();
 		    }
 	    } else if(cl == RealSeq.class) {
-		    	for(int i = 0; i < N; i++) {
-		    		re[i] = ((ComplexSeq)seq).get(i).getReal();
-		    		im[i] = ((ComplexSeq)seq).get(i).getImag();
+		    	for(int i = 0; i < S; i++) {
+		    		re[i] = ((RealSeq)seq).get(i);
+		    		im[i] = 0.0;
 		    }
 	    } else {
 	    		return false;

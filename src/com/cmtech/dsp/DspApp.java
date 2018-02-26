@@ -48,11 +48,11 @@ public class DspApp {
 		ComplexSeq seq2 = new ComplexSeq(re2, im2);
 		System.out.println(seq1);
 		System.out.println(seq2);
-		ISeq result = SeqUtil.conv(seq1, seq2);
+		ISeq result = SeqUtil.conv(re1, re2);
 		System.out.println(result);
-		//ComplexSeq fft = seq1.fft();
-		//System.out.println(fft);
-		ISeq result1 = SeqUtil.convUsingDFT(seq1, seq2);
+		ComplexSeq fft = re1.dtft(11);
+		System.out.println(fft);
+		ISeq result1 = SeqUtil.convUsingDFT(re1, re2).getReal();
 		System.out.println(result1);
 	}
 	

@@ -8,7 +8,7 @@ import com.cmtech.dsp.seq.SeqUtil;
 
 public class AnalogFilter extends AbstractFilter implements IAnalogFilter {
 	
-	public AnalogFilter(double[] b, double[] a) {
+	public AnalogFilter(Double[] b, Double[] a) {
 		super(b, a);
 	}
 	
@@ -96,7 +96,7 @@ public class AnalogFilter extends AbstractFilter implements IAnalogFilter {
 	        }
 	        fenmu.set(i, new Complex(re, im));
 	    }
-	    return SeqUtil.divide(fenzi, fenmu);
+	    return (ComplexSeq) SeqUtil.divide(fenzi, fenmu);
 	}
 
 }
