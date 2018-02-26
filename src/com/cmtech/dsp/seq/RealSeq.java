@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 import com.cmtech.dsp.bmefile.BmeFile;
+import com.cmtech.dsp.bmefile.BmeFileHead;
 import com.cmtech.dsp.exception.FileException;
 import com.cmtech.dsp.util.SeqUtil;
 
@@ -96,5 +97,9 @@ public class RealSeq extends Seq<Double>{
 	
 	public void saveAsBmeFile(String fileName) throws FileException {
 		BmeFile.createBmeFile(fileName).writeData(toArray()).close();
+	}
+	
+	public void saveAsBmeFile(String fileName, BmeFileHead head) throws FileException {
+		BmeFile.createBmeFile(fileName, head).writeData(toArray()).close();
 	}
 }
