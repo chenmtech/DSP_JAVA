@@ -18,7 +18,8 @@ package com.cmtech.dsp.seq;
  * @version 
  * @since JDK 1.6
  */
-public interface ISeqEleOperator<T> {
+public interface ISeqBaseOperator<T> {
+	Class getSeqClass();
 	T zeroElement();
 	T newElement(T ele);
 	T[] newArray(int N);

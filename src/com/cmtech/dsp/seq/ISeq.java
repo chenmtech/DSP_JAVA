@@ -21,6 +21,7 @@ import java.io.Serializable;
  * @since JDK 1.6
  */
 public interface ISeq<T> extends Serializable{
+	ISeqBaseOperator<T> getSeqBaseOperator();
 	int size();
 	ISeq<T> setToZero(int N);
 	T get(int i);

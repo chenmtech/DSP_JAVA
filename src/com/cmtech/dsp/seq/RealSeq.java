@@ -8,14 +8,8 @@
  */
 package com.cmtech.dsp.seq;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-
-import com.cmtech.dsp.seq.ComplexSeq;
-import com.cmtech.dsp.seq.FFT;
-import com.cmtech.dsp.seq.RealSeq;
-import com.cmtech.dsp.seq.SeqFactory;
 
 /**
  * ClassName: RealSeq1
@@ -27,17 +21,17 @@ import com.cmtech.dsp.seq.SeqFactory;
  * @version 
  * @since JDK 1.6
  */
-public class RealSeq extends AbstractSeq<Double> {
+public class RealSeq extends AbstractSeq<Double>{
 	/**
 	 * serialVersionUID:TODO(用一句话描述这个变量表示什么).
 	 * @since JDK 1.6
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private static final ISeqEleOperator<Double> EOP = new RealSeqEleOperator();
+	private static final ISeqBaseOperator<Double> EOP = new RealSeqBaseOperator();
 	
 	@Override
-	public ISeqEleOperator<Double> getSeqEleOperator() {
+	public ISeqBaseOperator<Double> getSeqBaseOperator() {
 		return EOP;
 	}
 	
@@ -79,6 +73,5 @@ public class RealSeq extends AbstractSeq<Double> {
 	public ComplexSeq dtft(int N) {
 		return dtft(SeqFactory.linSpace(0, Math.PI, N));
 	}
-	
-	
+
 }

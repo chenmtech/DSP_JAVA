@@ -9,12 +9,8 @@
 package com.cmtech.dsp.seq;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-
-import com.cmtech.dsp.seq.FFT;
-import com.cmtech.dsp.seq.RealSeq;
 
 /**
  * ClassName: AbstractSeq
@@ -34,12 +30,12 @@ public abstract class AbstractSeq<T> implements ISeq<T> {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	ISeqEleOperator<T> eOp = null;
+	ISeqBaseOperator<T> eOp = null;
 	
 	List<T> data = new ArrayList<T>();
 	
 	public AbstractSeq() {
-		eOp = getSeqEleOperator();
+		eOp = getSeqBaseOperator();
 	}
 	
 	public AbstractSeq(int N) {
@@ -65,8 +61,6 @@ public abstract class AbstractSeq<T> implements ISeq<T> {
 	public AbstractSeq(AbstractSeq<T> seq) {
 		this(seq.data);
 	}
-	
-	public abstract ISeqEleOperator<T> getSeqEleOperator();
 	
 	@Override
 	public int size() {		
@@ -220,6 +214,7 @@ public abstract class AbstractSeq<T> implements ISeq<T> {
 		if(this == otherObject) return true;
 		if(otherObject == null) return false;
 		if(getClass() != otherObject.getClass()) return false;
+		@SuppressWarnings("unchecked")
 		AbstractSeq<T> other = (AbstractSeq<T>)otherObject;
 		return  data.equals(other.data);
 	}
@@ -235,6 +230,7 @@ public abstract class AbstractSeq<T> implements ISeq<T> {
 		return this;
 	}
 
+	
 	@Override
 	public ComplexSeq fft() {
 		return FFT.fft(this);

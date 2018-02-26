@@ -20,11 +20,16 @@ import com.cmtech.dsp.seq.Complex;
  * @version 
  * @since JDK 1.6
  */
-public class ComplexSeqEleOperator implements ISeqEleOperator<Complex>{
+public class ComplexSeqBaseOperator implements ISeqBaseOperator<Complex>{
 
+	@Override
+	public Class getSeqClass() {
+		return ComplexSeq.class;
+	}
+	
 	/**
 	 * TODO 简单描述该方法的实现功能（可选）.
-	 * @see com.cmtech.dsp.seq.newseq.ISeqEleOperator#zeroElement()
+	 * @see com.cmtech.dsp.seq.newseq.ISeqBaseOperator#zeroElement()
 	 */
 	@Override
 	public Complex zeroElement() {
@@ -38,7 +43,7 @@ public class ComplexSeqEleOperator implements ISeqEleOperator<Complex>{
 	
 	/**
 	 * TODO 简单描述该方法的实现功能（可选）.
-	 * @see com.cmtech.dsp.seq.newseq.ISeqEleOperator#newArray(int)
+	 * @see com.cmtech.dsp.seq.newseq.ISeqBaseOperator#newArray(int)
 	 */
 	@Override
 	public Complex[] newArray(int N) {
@@ -52,7 +57,7 @@ public class ComplexSeqEleOperator implements ISeqEleOperator<Complex>{
 
 	/**
 	 * TODO 简单描述该方法的实现功能（可选）.
-	 * @see com.cmtech.dsp.seq.newseq.ISeqEleOperator#add(java.lang.Object, java.lang.Object)
+	 * @see com.cmtech.dsp.seq.newseq.ISeqBaseOperator#add(java.lang.Object, java.lang.Object)
 	 */
 	@Override
 	public Complex add(Complex d1, Complex d2) {

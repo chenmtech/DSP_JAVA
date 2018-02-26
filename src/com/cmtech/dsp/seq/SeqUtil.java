@@ -15,7 +15,7 @@ public class SeqUtil {
 	private SeqUtil() {
 	}
 	
-	private interface ITwoOperator<T> {
+	private interface IBiOperator<T> {
 		T operator(T op1, T op2);
 	}
 	
@@ -34,10 +34,10 @@ public class SeqUtil {
 	 * @since JDK 1.6
 	 */
 	public static <T> ISeq<T> add(ISeq<T> seq1, ISeq<T> seq2) {
-		return process(seq1, seq2, new ITwoOperator<T>() {
+		return process(seq1, seq2, new IBiOperator<T>() {
 			@Override
 			public T operator(T op1, T op2) {
-				return ((AbstractSeq<T>)seq1).getSeqEleOperator().add(op1, op2);
+				return seq1.getSeqBaseOperator().add(op1, op2);
 			}
 		});
 	}
@@ -57,10 +57,10 @@ public class SeqUtil {
 	 * @since JDK 1.6
 	 */
 	public static <T> ISeq<T> subtract(ISeq<T> seq1, ISeq<T> seq2) {
-		return process(seq1, seq2, new ITwoOperator<T>() {
+		return process(seq1, seq2, new IBiOperator<T>() {
 			@Override
 			public T operator(T op1, T op2) {
-				return ((AbstractSeq<T>)seq1).getSeqEleOperator().subtract(op1, op2);
+				return seq1.getSeqBaseOperator().subtract(op1, op2);
 			}
 		});
 	}
@@ -80,10 +80,10 @@ public class SeqUtil {
 	 * @since JDK 1.6
 	 */
 	public static <T> ISeq<T> multiple(ISeq<T> seq1, ISeq<T> seq2) {
-		return process(seq1, seq2, new ITwoOperator<T>() {
+		return process(seq1, seq2, new IBiOperator<T>() {
 			@Override
 			public T operator(T op1, T op2) {
-				return ((AbstractSeq<T>)seq1).getSeqEleOperator().multiple(op1, op2);
+				return seq1.getSeqBaseOperator().multiple(op1, op2);
 			}
 		});
 	}
@@ -103,19 +103,19 @@ public class SeqUtil {
 	 * @since JDK 1.6
 	 */
 	public static <T> ISeq<T> divide(ISeq<T> seq1, ISeq<T> seq2) {
-		return process(seq1, seq2, new ITwoOperator<T>() {
+		return process(seq1, seq2, new IBiOperator<T>() {
 			@Override
 			public T operator(T op1, T op2) {
-				return ((AbstractSeq<T>)seq1).getSeqEleOperator().divide(op1, op2);
+				return seq1.getSeqBaseOperator().divide(op1, op2);
 			}
 		});
 	}
 	
-	private static <T> ISeq<T> process(ISeq<T> seq1, ISeq<T> seq2, ITwoOperator<T> op) {
+	private static <T> ISeq<T> process(ISeq<T> seq1, ISeq<T> seq2, IBiOperator<T> op) {
 		int N = Math.max(seq1.size(), seq2.size());
 		seq1.changeSize(N);
 		seq2.changeSize(N);
-		AbstractSeq<T> out = ((AbstractSeq<T>)seq1).getSeqEleOperator().newInstance();
+		AbstractSeq<T> out = seq1.getSeqBaseOperator().newInstance();
 		
 		for(int i = 0; i < N; i++) {
 			out.append(op.operator(seq1.get(i), seq2.get(i)));
@@ -141,8 +141,8 @@ public class SeqUtil {
 	    int N1 = seq1.size();
 	    int N2 = seq2.size();
 	    int N = N1+N2-1;
-	    ISeqEleOperator<T> op = ((AbstractSeq<T>)seq1).getSeqEleOperator();
 	    
+	    ISeqBaseOperator<T> op = seq1.getSeqBaseOperator();
 	    ISeq<T> out = op.newInstance();
 	    
 	    int n = 0;
@@ -178,13 +178,13 @@ public class SeqUtil {
 	 * @return 圆周卷积
 	 * @since JDK 1.6
 	 */
-	/*public static ComplexSeq cirConvUsingDFT(ISeq seq1, ISeq seq2, int N)
+	public static <T> ComplexSeq cirConvUsingDFT(ISeq<T> seq1, ISeq<T> seq2, int N)
 	{
 	    ComplexSeq seq1DFT = seq1.fft(N);
 	    ComplexSeq seq2DFT = seq2.fft(N);
-	    ComplexSeq dft = SeqUtil1.multiple(seq1DFT, seq2DFT);
+	    ComplexSeq dft = (ComplexSeq) SeqUtil.multiple(seq1DFT, seq2DFT);
 	    return dft.ifft();
-	}*/
+	}
 
 	/**
 	 * 
@@ -200,33 +200,10 @@ public class SeqUtil {
 	 * @return 线性卷积和
 	 * @since JDK 1.6
 	 */
-	/*public static ComplexSeq convUsingDFT(ComplexSeq seq1, ComplexSeq seq2)
+	public static <T> ComplexSeq convUsingDFT(ISeq<T> seq1, ISeq<T> seq2)
 	{
 		int N = seq1.size()+seq2.size()-1;
-	    return cirConvUsingDFT(seq1, seq2, N).changeSize(N);
-	}*/
-	
+	    return (ComplexSeq) cirConvUsingDFT(seq1, seq2, N).changeSize(N);
+	}
 
-	/**
-	 * 
-	 * convUsingDFT: 用FFT求两个实序列的线性卷积和（实际上求得是圆周卷积）
-	 * TODO(这里描述这个方法适用条件 – 可选)
-	 * TODO(这里描述这个方法的执行流程 – 可选)
-	 * TODO(这里描述这个方法的使用方法 – 可选)
-	 * TODO(这里描述这个方法的注意事项 – 可选)
-	 *
-	 * @author bme
-	 * @param seq1
-	 * @param seq2
-	 * @return 线性卷积和
-	 * @since JDK 1.6
-	 */
-	/*public static RealSeq convUsingDFT(RealSeq seq1, RealSeq seq2)
-	{
-		int N = seq1.size()+seq2.size()-1;
-		double[] data = cirConvUsingDFT(seq1, seq2, N).changeSize(N).realToArray();
-		RealSeq seq = new RealSeq();
-	    seq.data = data;
-		return seq;
-	}*/
 }

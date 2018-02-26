@@ -24,8 +24,8 @@ import static java.lang.Math.*;
 public final class FFT {
 	private static int N = 0;				// FFT的点数，必须为2的幂
 	private static int L = 0;				// N = 2^L
-	private static double[] re = null;
-	private static double[] im = null;
+	private static double[] re = new double[0];
+	private static double[] im = new double[0];
 	
 	private FFT() {
 	}
@@ -122,7 +122,7 @@ public final class FFT {
 	    return new ComplexSeq(re, im);
 	}
 	
-	private static <T extends ISeq<?> > boolean initFFT(T seq, int wishN) {
+	private static <T> boolean initFFT(ISeq<T> seq, int wishN) {
 		if(seq == null || seq.size() == 0) return false;
 		
 	    N = 1;
@@ -134,22 +134,21 @@ public final class FFT {
 	        L++;
 	    }
 	    
-	    Double[] re1;
-	    Double[] im1;
-	    if(seq.getClass() == ComplexSeq.class) {
-	    		re1 = ((ComplexSeq)seq).realToArray(N);
-	    		im1 = ((ComplexSeq)seq).imagToArray(N);
-	    } else if(seq.getClass() == RealSeq.class) {
-	    		re1 = (Double[])seq.toArray(N);
-		    im1 = new Double[N];
-	    } else {
-	    		return false;
-	    }
 	    re = new double[N];
 	    im = new double[N];
-	    for(int i = 0; i < N; i++) {
-	    		re[i] = re1[i];
-	    		im[i] = im1[i];
+	    Class<?> cl = seq.getSeqBaseOperator().getSeqClass();
+	    if(cl == ComplexSeq.class) {
+		    	for(int i = 0; i < N; i++) {
+		    		re[i] = ((ComplexSeq)seq).get(i).getReal();
+		    		im[i] = ((ComplexSeq)seq).get(i).getImag();
+		    }
+	    } else if(cl == RealSeq.class) {
+		    	for(int i = 0; i < N; i++) {
+		    		re[i] = ((ComplexSeq)seq).get(i).getReal();
+		    		im[i] = ((ComplexSeq)seq).get(i).getImag();
+		    }
+	    } else {
+	    		return false;
 	    }
 	    
 	    return true;

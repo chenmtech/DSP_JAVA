@@ -18,11 +18,17 @@ package com.cmtech.dsp.seq;
  * @version 
  * @since JDK 1.6
  */
-public class RealSeqEleOperator implements ISeqEleOperator<Double>{
+public class RealSeqBaseOperator implements ISeqBaseOperator<Double>{
 	
+	
+	@Override
+	public Class getSeqClass() {
+		return RealSeq.class;
+	}
+
 	/**
 	 * TODO 简单描述该方法的实现功能（可选）.
-	 * @see com.cmtech.dsp.seq.newseq.ISeqEleOperator#zeroElement()
+	 * @see com.cmtech.dsp.seq.newseq.ISeqBaseOperator#zeroElement()
 	 */
 	@Override
 	public Double zeroElement() {
@@ -36,7 +42,7 @@ public class RealSeqEleOperator implements ISeqEleOperator<Double>{
 
 	/**
 	 * TODO 简单描述该方法的实现功能（可选）.
-	 * @see com.cmtech.dsp.seq.newseq.ISeqEleOperator#newArray(int)
+	 * @see com.cmtech.dsp.seq.newseq.ISeqBaseOperator#newArray(int)
 	 */
 	@Override
 	public Double[] newArray(int N) {
@@ -49,7 +55,7 @@ public class RealSeqEleOperator implements ISeqEleOperator<Double>{
 
 	/**
 	 * TODO 简单描述该方法的实现功能（可选）.
-	 * @see com.cmtech.dsp.seq.newseq.ISeqEleOperator#add(java.lang.Object, java.lang.Object)
+	 * @see com.cmtech.dsp.seq.newseq.ISeqBaseOperator#add(java.lang.Object, java.lang.Object)
 	 */
 	@Override
 	public Double add(Double d1, Double d2) {

@@ -34,10 +34,10 @@ public class ComplexSeq extends AbstractSeq<Complex> {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private static final ISeqEleOperator<Complex> EOP = new ComplexSeqEleOperator();
+	private static final ISeqBaseOperator<Complex> EOP = new ComplexSeqBaseOperator();
 	
 	@Override
-	public ISeqEleOperator<Complex> getSeqEleOperator() {
+	public ISeqBaseOperator<Complex> getSeqBaseOperator() {
 		return EOP;
 	}
 	
@@ -140,5 +140,5 @@ public class ComplexSeq extends AbstractSeq<Complex> {
 	public Double[] imagToArray() {
 		return imagToArray(size());
 	}
-	
+
 }

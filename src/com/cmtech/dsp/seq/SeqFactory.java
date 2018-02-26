@@ -36,13 +36,12 @@ public class SeqFactory {
 	 * @return 序列
 	 * @since JDK 1.6
 	 */
-	public static <T extends ISeq<T>> T createZeroSeq(int N, Class<T> cl) {
-		try {
-			return cl.getConstructor(int.class).newInstance(N);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}		
+	public static RealSeq createZeroRealSeq(int N) {
+		return new RealSeq(N);		
+	}
+	
+	public static ComplexSeq createZeroComplexSeq(int N) {
+		return new ComplexSeq(N);		
 	}
 	
 	/**
