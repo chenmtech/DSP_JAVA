@@ -17,3 +17,4 @@ gen/
 .classpath  
 .project  
 .DS_Store
+/bin/
