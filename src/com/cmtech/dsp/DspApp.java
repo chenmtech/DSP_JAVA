@@ -2,6 +2,10 @@ package com.cmtech.dsp;
 
 import static java.lang.Math.PI;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.util.Arrays;
+
 import com.cmtech.dsp.bmefile.BmeFile;
 import com.cmtech.dsp.exception.DspException;
 import com.cmtech.dsp.filter.IDigitalFilter;
@@ -17,8 +21,8 @@ import com.cmtech.dsp.util.SeqUtil;
 public class DspApp {
 
 	public static void main(String[] args) throws DspException{
-		//BmeFile.setFileDirectory("/Users/bme/Documents/matlab");
-		BmeFile.setFileDirectory("e://matlabcode");
+		BmeFile.setFileDirectory("/Users/bme/Documents/matlab");
+		//BmeFile.setFileDirectory("e://matlabcode");
 		
 		RealSeq seq1 = SeqUtil.createSinSeq(1.0, 0.2*PI, 0, 101);
 		RealSeq seq2 = SeqUtil.createSinSeq(1.0, 0.7*PI, 0, 101);
