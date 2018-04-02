@@ -5,6 +5,7 @@ import java.util.Map;
 import com.cmtech.dsp.filter.structure.IIRDCBlockStructure;
 import com.cmtech.dsp.filter.structure.IIRDF1Structure;
 import com.cmtech.dsp.filter.structure.IIRDF2Structure;
+import com.cmtech.dsp.filter.structure.IIRNotchStructure;
 import com.cmtech.dsp.filter.structure.IIRTDF2Structure;
 import com.cmtech.dsp.filter.structure.StructType;
 import com.cmtech.dsp.seq.ComplexSeq;
@@ -59,6 +60,8 @@ public class IIRFilter extends DigitalFilter {
 			structure = new IIRTDF2Structure(b, a);
 		} else if(sType == StructType.IIR_DCBLOCK) {
 			structure = new IIRDCBlockStructure(b, a);
+		} else if(sType == StructType.IIR_NOTCH) {
+			structure = new IIRNotchStructure(b, a);
 		} else
 			structure = null;
 		return this;

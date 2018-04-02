@@ -14,6 +14,7 @@ import com.cmtech.dsp.filter.design.AFType;
 import com.cmtech.dsp.filter.design.DCBlockDesigner;
 import com.cmtech.dsp.filter.design.FilterType;
 import com.cmtech.dsp.filter.design.IIRDesigner;
+import com.cmtech.dsp.filter.design.NotchDesigner;
 import com.cmtech.dsp.filter.structure.IIRDCBlockStructure;
 import com.cmtech.dsp.filter.structure.StructType;
 import com.cmtech.dsp.seq.ComplexSeq;
@@ -47,18 +48,25 @@ public class DspApp {
 		System.out.println(fft1);
 		//BmeFile.createBmeFile("fft.bme").writeData(fft.abs().toArray()).close();
 		
-		IIRFilter dcFilter = DCBlockDesigner.design(1, 200);
-		System.out.println(dcFilter);
+		RealSeq sinSeq1 = SeqUtil.createSinSeq(1, 0.2*PI, 0, 500);
+		RealSeq sinSeq2 = SeqUtil.createSinSeq(1, 0.3*PI, 0, 500);
+		RealSeq sinSeq3 = SeqUtil.createSinSeq(1, 0.4*PI, 0, 500);
+		before = (RealSeq) SeqUtil.add(sinSeq1, sinSeq2);
+		before = (RealSeq) SeqUtil.add(before, sinSeq3);
+		System.out.println(before);
 		
-		dcFilter.createStructure(StructType.IIR_DCBLOCK);
-		RealSeq sinSeq = SeqUtil.createSinSeq(1, 0.1*PI, 0, 200);
-		sinSeq = (RealSeq) sinSeq.plus(1.0);
-		System.out.println(sinSeq);
+		IIRFilter notch = NotchDesigner.design(0.3*PI, 0.01*PI);
+		RealSeq after1 = notch.filter(before);
 		
-		RealSeq outSeq = dcFilter.filter(sinSeq);
-		System.out.println(outSeq);
-		sinSeq.saveAsBmeFile("before.bme");
-		outSeq.saveAsBmeFile("after.bme");
+		notch.createStructure(StructType.IIR_NOTCH);
+		
+		after = notch.filter(before);
+		System.out.println(after1);
+		System.out.println(after);
+		
+		//before.saveAsBmeFile("before.bme");
+		//after.saveAsBmeFile("after.bme");
+
 		
 	}
 	

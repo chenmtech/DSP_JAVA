@@ -25,4 +25,5 @@ public enum StructType {
 	IIR_DF2,
 	IIR_TDF2,
 	IIR_DCBLOCK,
+	IIR_NOTCH,
 }
