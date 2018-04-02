@@ -34,6 +34,7 @@ public abstract class DigitalFilter extends AbstractFilter implements IDigitalFi
 	public IDFStructure getStructure() {
 		return structure;
 	}
+
 	
 	@Override
 	public String toString() {

@@ -23,5 +23,6 @@ public enum StructType {
 	FIR_LPF,
 	IIR_DF1,
 	IIR_DF2,
-	IIR_TDF2
+	IIR_TDF2,
+	IIR_DCBLOCK,
 }

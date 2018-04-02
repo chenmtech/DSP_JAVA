@@ -2,10 +2,11 @@ package com.cmtech.dsp.filter;
 
 import java.util.Map;
 
-import com.cmtech.dsp.filter.structure.StructType;
+import com.cmtech.dsp.filter.structure.IIRDCBlockStructure;
 import com.cmtech.dsp.filter.structure.IIRDF1Structure;
 import com.cmtech.dsp.filter.structure.IIRDF2Structure;
 import com.cmtech.dsp.filter.structure.IIRTDF2Structure;
+import com.cmtech.dsp.filter.structure.StructType;
 import com.cmtech.dsp.seq.ComplexSeq;
 import com.cmtech.dsp.seq.RealSeq;
 import com.cmtech.dsp.util.SeqUtil;
@@ -56,6 +57,8 @@ public class IIRFilter extends DigitalFilter {
 			structure = new IIRDF2Structure(b, a);
 		} else if(sType == StructType.IIR_TDF2) {
 			structure = new IIRTDF2Structure(b, a);
+		} else if(sType == StructType.IIR_DCBLOCK) {
+			structure = new IIRDCBlockStructure(b, a);
 		} else
 			structure = null;
 		return this;

@@ -9,9 +9,12 @@ import java.util.Arrays;
 import com.cmtech.dsp.bmefile.BmeFile;
 import com.cmtech.dsp.exception.DspException;
 import com.cmtech.dsp.filter.IDigitalFilter;
+import com.cmtech.dsp.filter.IIRFilter;
 import com.cmtech.dsp.filter.design.AFType;
+import com.cmtech.dsp.filter.design.DCBlockDesigner;
 import com.cmtech.dsp.filter.design.FilterType;
 import com.cmtech.dsp.filter.design.IIRDesigner;
+import com.cmtech.dsp.filter.structure.IIRDCBlockStructure;
 import com.cmtech.dsp.filter.structure.StructType;
 import com.cmtech.dsp.seq.ComplexSeq;
 import com.cmtech.dsp.seq.RealSeq;
@@ -43,6 +46,19 @@ public class DspApp {
 		ComplexSeq fft1 = new ComplexSeq(seq1,seq2).fft();
 		System.out.println(fft1);
 		//BmeFile.createBmeFile("fft.bme").writeData(fft.abs().toArray()).close();
+		
+		IIRFilter dcFilter = DCBlockDesigner.design(1, 200);
+		System.out.println(dcFilter);
+		
+		dcFilter.createStructure(StructType.IIR_DCBLOCK);
+		RealSeq sinSeq = SeqUtil.createSinSeq(1, 0.1*PI, 0, 200);
+		sinSeq = (RealSeq) sinSeq.plus(1.0);
+		System.out.println(sinSeq);
+		
+		RealSeq outSeq = dcFilter.filter(sinSeq);
+		System.out.println(outSeq);
+		sinSeq.saveAsBmeFile("before.bme");
+		outSeq.saveAsBmeFile("after.bme");
 		
 	}
 	
