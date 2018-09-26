@@ -2,24 +2,17 @@ package com.cmtech.dsp;
 
 import static java.lang.Math.PI;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.util.Arrays;
-
 import com.cmtech.dsp.bmefile.BmeFile;
 import com.cmtech.dsp.exception.DspException;
 import com.cmtech.dsp.filter.IDigitalFilter;
 import com.cmtech.dsp.filter.IIRFilter;
 import com.cmtech.dsp.filter.design.AFType;
-import com.cmtech.dsp.filter.design.DCBlockDesigner;
 import com.cmtech.dsp.filter.design.FilterType;
 import com.cmtech.dsp.filter.design.IIRDesigner;
 import com.cmtech.dsp.filter.design.NotchDesigner;
-import com.cmtech.dsp.filter.structure.IIRDCBlockStructure;
 import com.cmtech.dsp.filter.structure.StructType;
 import com.cmtech.dsp.seq.ComplexSeq;
 import com.cmtech.dsp.seq.RealSeq;
-import com.cmtech.dsp.seq.Seq;
 import com.cmtech.dsp.util.SeqUtil;
 
 public class DspApp {
