@@ -1,26 +1,64 @@
 package com.cmtech.dsp;
 
-import static java.lang.Math.PI;
-
 import com.cmtech.dsp.bmefile.BmeFile;
+import com.cmtech.dsp.bmefile.BmeFileDataType;
+import com.cmtech.dsp.bmefile.BmeFileHead;
+import com.cmtech.dsp.bmefile.BmeFileHeadFactory;
 import com.cmtech.dsp.exception.DspException;
-import com.cmtech.dsp.filter.IDigitalFilter;
-import com.cmtech.dsp.filter.IIRFilter;
-import com.cmtech.dsp.filter.design.AFType;
-import com.cmtech.dsp.filter.design.FilterType;
-import com.cmtech.dsp.filter.design.IIRDesigner;
-import com.cmtech.dsp.filter.design.NotchDesigner;
-import com.cmtech.dsp.filter.structure.StructType;
-import com.cmtech.dsp.seq.ComplexSeq;
-import com.cmtech.dsp.seq.RealSeq;
-import com.cmtech.dsp.util.SeqUtil;
+import com.cmtech.msp.qrsdetbyhamilton.Derivative;
+import com.cmtech.msp.qrsdetbyhamilton.HighpassFilter;
+import com.cmtech.msp.qrsdetbyhamilton.LowpassFilter;
+import com.cmtech.msp.qrsdetbyhamilton.MAverageFilter;
+import com.cmtech.msp.qrsdetbyhamilton.QrsFilter;
 
 public class DspApp {
 
 	public static void main(String[] args) throws DspException{
-		BmeFile.setFileDirectory("/Users/bme/Documents/matlab");
-		//BmeFile.setFileDirectory("e://matlabcode");
+		//BmeFile.setFileDirectory("/Users/bme/Documents/matlab");
+		BmeFile.setFileDirectory("F:\\360云盘\\matlabcode\\QRSDetectorbyHamilton");
 		
+		BmeFile ecgFile = BmeFile.openBmeFile("chenm.bme");
+		//System.out.println(ecgFile);
+		int sampleRate = ecgFile.getFs();
+		int[] ecgData = ecgFile.readData(new int[0]);
+		
+		/*
+		LowpassFilter lpFilter = new LowpassFilter(sampleRate);
+		HighpassFilter hpFilter = new HighpassFilter(sampleRate);
+		Derivative derivative = new Derivative(sampleRate);
+		MAverageFilter maFilter = new MAverageFilter(sampleRate);
+		
+		System.out.println(lpFilter.getLength() + " " + hpFilter.getLength() + " " + derivative.getLength() + " " + maFilter.getLength());
+		
+		int[] dataProcessed = new int[ecgData.length];
+		
+		for(int i = 0; i < ecgData.length; i++) {
+			dataProcessed[i] = lpFilter.filter(ecgData[i]); 
+			dataProcessed[i] = hpFilter.filter(dataProcessed[i]);
+			dataProcessed[i] = derivative.filter(dataProcessed[i]);
+			dataProcessed[i] = Math.abs(dataProcessed[i]);
+			dataProcessed[i] = maFilter.filter(dataProcessed[i]);
+		}
+		*/
+		
+		QrsFilter filter = new QrsFilter(sampleRate);
+		int[] dataProcessed = new int[ecgData.length];
+		
+		for(int i = 0; i < ecgData.length; i++) {
+			dataProcessed[i] = filter.filter(ecgData[i]);
+		}
+		
+		BmeFileHead fileHead = BmeFileHeadFactory.createDefault().setDataType(BmeFileDataType.INT32);
+		BmeFile processFile = BmeFile.createBmeFile("dataProcessed.bme", fileHead).writeData(dataProcessed);
+		
+		ecgFile.close();
+		processFile.close();
+		
+		
+	}
+	
+	
+/*
 		RealSeq seq1 = SeqUtil.createSinSeq(1.0, 0.2*PI, 0, 101);
 		RealSeq seq2 = SeqUtil.createSinSeq(1.0, 0.7*PI, 0, 101);
 		RealSeq before = (RealSeq) SeqUtil.add(seq1, seq2);
@@ -58,11 +96,7 @@ public class DspApp {
 		System.out.println(after);
 		
 		//before.saveAsBmeFile("before.bme");
-		//after.saveAsBmeFile("after.bme");
-
-		
-	}
-	
-	
+		//after.saveAsBmeFile("after.bme");	
+ */
 
 }
