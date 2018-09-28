@@ -34,6 +34,13 @@ public class QrsFilter {
 		
 	}
 	
+	public void initialize() {
+		lpFilter.initialize();
+		hpFilter.initialize();
+		derivative.initialize();
+		maFilter.initialize();
+	}
+	
 	/******************************************************************************
 	* Syntax:
 	*	int QRSFilter(int datum, int init) ;
@@ -68,6 +75,19 @@ public class QrsFilter {
 						  "; Derivative Length:" + derivative.getLength() +
 						  "; MA Length: " + maFilter.getLength();
 		return str;
+	}
+	
+	public int getFilterDelay() {
+		double MS_PER_SAMPLE =	( (double) 1000/ (double) sampleRate);
+		int MS195 =	((int) (195/MS_PER_SAMPLE + 0.5));
+		int PRE_BLANK = MS195;
+		double delay = PRE_BLANK;
+		delay += (derivative.getDelay()+lpFilter.getDelay()+hpFilter.getDelay());
+		return (int)delay;
+	}
+	
+	public int getWindowWidth() {
+		return maFilter.getLength();
 	}
 	
 }

@@ -21,7 +21,11 @@ public class Derivative {
 		return DERIV_LENGTH;
 	}
 	
-	private void initialize() {
+	public double getDelay() {
+		return (double)DERIV_LENGTH/2;
+	}
+	
+	public void initialize() {
 		for(derI = 0; derI < DERIV_LENGTH; ++derI)
 			derBuff[derI] = 0 ;
 		derI = 0 ;

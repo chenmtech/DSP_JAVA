@@ -22,8 +22,12 @@ public class LowpassFilter {
 	public int getLength() {
 		return LPBUFFER_LGTH;
 	}
+	
+	public double getDelay() {
+		return (double)LPBUFFER_LGTH/2-1.0;
+	}
 
-	private void initialize() {
+	public void initialize() {
 		for(ptr = 0; ptr < LPBUFFER_LGTH; ++ptr)
 			data[ptr] = 0 ;
 		y1 = y2 = 0 ;

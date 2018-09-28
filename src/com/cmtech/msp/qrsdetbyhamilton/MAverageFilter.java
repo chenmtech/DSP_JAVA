@@ -22,7 +22,7 @@ public class MAverageFilter {
 		return WINDOW_WIDTH;
 	}
 	
-	private void initialize() {
+	public void initialize() {
 		for(ptr = 0; ptr < WINDOW_WIDTH ; ++ptr)
 			data[ptr] = 0 ;
 		sum = 0 ;

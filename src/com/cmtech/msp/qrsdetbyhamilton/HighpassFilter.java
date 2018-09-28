@@ -22,7 +22,11 @@ public class HighpassFilter {
 		return HPBUFFER_LGTH;
 	}
 	
-	private void initialize() {
+	public double getDelay() {
+		return ((double)HPBUFFER_LGTH-1.0)/2;
+	}
+	
+	public void initialize() {
 		for(ptr = 0; ptr < HPBUFFER_LGTH; ++ptr)
 			data[ptr] = 0 ;
 		ptr = 0 ;
