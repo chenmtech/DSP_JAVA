@@ -62,4 +62,12 @@ public class QrsFilter {
 	
 	}
 	
+	public String getLengthInfo() {
+		String str = "LPLength:" + lpFilter.getLength() +
+						  "; HPLength:" + hpFilter.getLength() +
+						  "; Derivative Length:" + derivative.getLength() +
+						  "; MA Length: " + maFilter.getLength();
+		return str;
+	}
+	
 }

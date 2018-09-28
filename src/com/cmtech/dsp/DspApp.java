@@ -42,6 +42,8 @@ public class DspApp {
 		*/
 		
 		QrsFilter filter = new QrsFilter(sampleRate);
+		System.out.println(filter.getLengthInfo());
+		
 		int[] dataProcessed = new int[ecgData.length];
 		
 		for(int i = 0; i < ecgData.length; i++) {
