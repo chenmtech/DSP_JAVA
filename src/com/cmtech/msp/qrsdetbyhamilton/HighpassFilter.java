@@ -11,7 +11,7 @@ public class HighpassFilter {
 		double MS_PER_SAMPLE =  (double) 1000/ (double) SAMPLE_RATE;
 		int MS125 =	((int) (125/MS_PER_SAMPLE + 0.5));
 		
-		HPBUFFER_LGTH = MS125;
+		HPBUFFER_LGTH = (MS125/2)*2+1;	// 保证为奇数
 		data = new int[HPBUFFER_LGTH];
 		
 		initialize();
@@ -46,7 +46,7 @@ public class HighpassFilter {
 		int z, halfPtr ;
 	
 		y += datum - data[ptr];
-		halfPtr = ptr-(HPBUFFER_LGTH/2) ;
+		halfPtr = ptr-(HPBUFFER_LGTH/2);
 		if(halfPtr < 0)
 			halfPtr += HPBUFFER_LGTH ;
 		z = (int) (data[halfPtr] - (y / HPBUFFER_LGTH));

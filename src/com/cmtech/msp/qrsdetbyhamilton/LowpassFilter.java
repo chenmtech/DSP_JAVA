@@ -12,7 +12,7 @@ public class LowpassFilter {
 		double MS_PER_SAMPLE =  (double) 1000/ (double) SAMPLE_RATE;
 		int MS25 = (int) (25/MS_PER_SAMPLE + 0.5);
 		
-		LPBUFFER_LGTH = 2*MS25;
+		LPBUFFER_LGTH = 2*MS25;		// 一定是偶数
 		data = new int[LPBUFFER_LGTH];
 		
 		initialize();
@@ -41,7 +41,7 @@ public class LowpassFilter {
 	*	Note that the filter delay is (LPBUFFER_LGTH/2)-1
 	*
 	**************************************************************************/
-	public  int filter( int datum)
+	public int filter( int datum)
 	{
 		long y0 ;
 		int output, halfPtr ;

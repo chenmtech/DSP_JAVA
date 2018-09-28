@@ -14,8 +14,8 @@ import com.cmtech.msp.qrsdetbyhamilton.QrsFilter;
 public class DspApp {
 
 	public static void main(String[] args) throws DspException{
-		//BmeFile.setFileDirectory("/Users/bme/Documents/matlab");
-		BmeFile.setFileDirectory("F:\\360云盘\\matlabcode\\QRSDetectorbyHamilton");
+		BmeFile.setFileDirectory("/Users/bme/360企业云盘同步版/matlabcode/QRSDetectorbyHamilton");
+		//BmeFile.setFileDirectory("F:\\360云盘\\matlabcode\\QRSDetectorbyHamilton");
 		
 		BmeFile ecgFile = BmeFile.openBmeFile("chenm.bme");
 		//System.out.println(ecgFile);
@@ -43,6 +43,7 @@ public class DspApp {
 		
 		QrsFilter filter = new QrsFilter(sampleRate);
 		System.out.println(filter.getLengthInfo());
+		//MAverageFilter filter = new MAverageFilter(sampleRate);
 		
 		int[] dataProcessed = new int[ecgData.length];
 		
