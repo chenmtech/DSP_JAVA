@@ -22,7 +22,7 @@ public class QrsDetector {
 	private static final double TH = 0.3125;
 	
 	private final int sampleRate;
-	private final int LSB1mV;
+	private final int value1mV;
 	private final int PRE_BLANK;
 	private final int MIN_PEAK_AMP;
 	private final int MS1500;
@@ -30,6 +30,7 @@ public class QrsDetector {
 	private final int MS95;
 	private final int MS150;
 	private final int MS220;
+	private final int MS360;
 	private final int FILTER_DELAY;
 	private final int DER_DELAY;
 	private final int WINDOW_WIDTH;
@@ -51,48 +52,51 @@ public class QrsDetector {
 	private int sbpeak = 0;	// 未知
 	private int sbloc;
 	private int sbcount;
-	private int maxder;
+	private int[] maxder = new int[1];
 	private int lastmax;
 	private int initBlank;
 	private int initMax;
 	private int preBlankCnt;
 	private int tempPeak;
 	
-	private final int[] DDBuffer;	// 导数缓冲区；
-	private int DDPtr;	// 导数缓冲区指针
+	private final int[] DDBuffer;	// derivative data buffer；
+	private int DDPtr;				// derivative data buffer point
 	private int Dly = 0;
 	
 	private int max = 0;
 	private int timeSinceMax = 0;
-	private int lastDatum;
+	private int lastDatum = 0;
 	
-	public QrsDetector(int sampleRate, int LSB1mV) {
+	public QrsDetector(int sampleRate, int value1mV) {
 		this.sampleRate = sampleRate;
-		this.LSB1mV = LSB1mV;
+		this.value1mV = value1mV;
 		
 		double MS_PER_SAMPLE =	( (double) 1000/ (double) sampleRate);
-		int MS195 =	((int) (195/MS_PER_SAMPLE + 0.5));
-		PRE_BLANK = MS195;
-		MIN_PEAK_AMP = LSB1mV*7/200;
-		MS1500 = ((int) (1500/MS_PER_SAMPLE));
-		MS1000 = sampleRate;
+
 		MS95 =	((int) (95/MS_PER_SAMPLE + 0.5));
 		MS150 =	((int) (150/MS_PER_SAMPLE + 0.5));
 		MS220 =	((int) (220/MS_PER_SAMPLE + 0.5));
+		MS360 = ((int) (360/MS_PER_SAMPLE + 0.5));
+		MS1000 = sampleRate;		
+		MS1500 = ((int) (1500/MS_PER_SAMPLE));
+		
+		int MS195 =	((int) (195/MS_PER_SAMPLE + 0.5));
+		PRE_BLANK = MS195;
+		
+		MIN_PEAK_AMP = value1mV*7/200;
 		
 		filter = new QrsFilter(sampleRate);
-		FILTER_DELAY = filter.getFilterDelay();
-		
-		int MS100 =	((int) (100/MS_PER_SAMPLE + 0.5));
-		WINDOW_WIDTH = filter.getWindowWidth();
-		
-		DER_DELAY = WINDOW_WIDTH + FILTER_DELAY + MS100;
-		DDBuffer = new int[DER_DELAY];
-		
 		derivative = new Derivative(sampleRate);
 		
-		initialize();
+		FILTER_DELAY = filter.getFilterDelay();
+		WINDOW_WIDTH = filter.getWindowWidth();
 		
+		int MS100 =	((int) (100/MS_PER_SAMPLE + 0.5));
+		DER_DELAY = WINDOW_WIDTH + FILTER_DELAY + MS100;
+		
+		DDBuffer = new int[DER_DELAY];
+
+		initialize();
 	}
 	
 	private void initialize() {
@@ -101,13 +105,15 @@ public class QrsDetector {
 			noise[i] = 0 ;	/* Initialize noise buffer */
 			rrbuf[i] = MS1000 ;/* and R-to-R interval buffer. */
 		}
-
-		qpkcnt = maxder = lastmax = count = sbpeak = 0 ;
+		maxder[0] = 0; 
+		qpkcnt = lastmax = count = sbpeak = 0 ;
 		initBlank = initMax = preBlankCnt = DDPtr = 0 ;
 		sbcount = MS1500 ;
+		
 		filter.initialize();
 		derivative.initialize();
-		Peak(0,true) ;
+		
+		Peak(0, true) ;
 	}
 	
 	public int detect( int datum )
@@ -129,32 +135,32 @@ public class QrsDetector {
 	
 		newPeak = 0 ;
 		if((aPeak!= 0) && (preBlankCnt == 0))			// If there has been no peak for 200 ms
-			{										// save this one and start counting.
+		{										// save this one and start counting.
 			tempPeak = aPeak ;
 			preBlankCnt = PRE_BLANK ;			// MS200
-			}
+		}
 	
-		else if(!aPeak && preBlankCnt)	// If we have held onto a peak for
-			{										// 200 ms pass it on for evaluation.
+		else if((aPeak == 0) && (preBlankCnt != 0))	// If we have held onto a peak for
+		{										// 200 ms pass it on for evaluation.
 			if(--preBlankCnt == 0)
 				newPeak = tempPeak ;
-			}
+		}
 	
-		else if(aPeak)							// If we were holding a peak, but
-			{										// this ones bigger, save it and
+		else if(aPeak != 0)							// If we were holding a peak, but
+		{										// this ones bigger, save it and
 			if(aPeak > tempPeak)				// start counting to 200 ms again.
-				{
+			{
 				tempPeak = aPeak ;
 				preBlankCnt = PRE_BLANK ; // MS200
-				}
+			}
 			else if(--preBlankCnt == 0)
 				newPeak = tempPeak ;
-			}
+		}
 	
 		/* Save derivative of raw signal for T-wave and baseline
 		   shift discrimination. */
 		
-		DDBuffer[DDPtr] = deriv1( datum, 0 ) ;
+		DDBuffer[DDPtr] = derivative.filter(datum);
 		if(++DDPtr == DER_DELAY)
 			DDPtr = 0 ;
 	
@@ -162,48 +168,48 @@ public class QrsDetector {
 		/* local maximum peaks detected.						*/
 	
 		if( qpkcnt < 8 )
-			{
+		{
 			++count ;
 			if(newPeak > 0) count = WINDOW_WIDTH ;
 			if(++initBlank == MS1000)
-				{
+			{
 				initBlank = 0 ;
 				qrsbuf[qpkcnt] = initMax ;
 				initMax = 0 ;
 				++qpkcnt ;
 				if(qpkcnt == 8)
-					{
+				{
 					qmean = mean( qrsbuf ) ;
 					nmean = 0 ;
 					rrmean = MS1000 ;
 					sbcount = MS1500+MS150 ;
 					det_thresh = thresh(qmean,nmean) ;
-					}
 				}
+			}
 			if( newPeak > initMax )
 				initMax = newPeak ;
-			}
+		}
 	
 		else	/* Else test for a qrs. */
-			{
+		{
 			++count ;
 			if(newPeak > 0)
-				{
+			{
 				
 				
 				/* Check for maximum derivative and matching minima and maxima
 				   for T-wave and baseline shift rejection.  Only consider this
 				   peak if it doesn't seem to be a base line shift. */
 				   
-				if(!BLSCheck(DDBuffer, DDPtr, &maxder))
-					{
+				if(!BLSCheck(DDBuffer, DDPtr, maxder))
+				{
 	
 	
 					// Classify the beat as a QRS complex
 					// if the peak is larger than the detection threshold.
 	
 					if(newPeak > det_thresh)
-						{
+					{
 						memmove(&qrsbuf[1], qrsbuf, MEMMOVELEN) ;
 						qrsbuf[0] = newPeak ;
 						qmean = mean(qrsbuf) ;
@@ -216,18 +222,18 @@ public class QrsDetector {
 	
 						sbpeak = 0 ;
 	
-						lastmax = maxder ;
-						maxder = 0 ;
+						lastmax = maxder[0] ;
+						maxder[0] = 0 ;
 						QrsDelay =  WINDOW_WIDTH + FILTER_DELAY ;
 						initBlank = initMax = rsetCount = 0 ;
-						}
+					}
 	
 					// If a peak isn't a QRS update noise buffer and estimate.
 					// Store the peak for possible search back.
 	
 	
 					else
-						{
+					{
 						memmove(&noise[1],noise,MEMMOVELEN) ;
 						noise[0] = newPeak ;
 						nmean = mean(noise) ;
@@ -238,19 +244,19 @@ public class QrsDetector {
 						// a small following QRS.
 	
 						if((newPeak > sbpeak) && ((count-WINDOW_WIDTH) >= MS360))
-							{
+						{
 							sbpeak = newPeak ;
 							sbloc = count  - WINDOW_WIDTH ;
-							}
 						}
 					}
 				}
+			}
 			
 			/* Test for search back condition.  If a QRS is found in  */
 			/* search back update the QRS buffer and det_thresh.      */
 	
 			if((count > sbcount) && (sbpeak > (det_thresh >> 1)))
-				{
+			{
 				memmove(&qrsbuf[1],qrsbuf,MEMMOVELEN) ;
 				qrsbuf[0] = sbpeak ;
 				qmean = mean(qrsbuf) ;
@@ -262,20 +268,20 @@ public class QrsDetector {
 				QrsDelay = count = count - sbloc ;
 				QrsDelay += FILTER_DELAY ;
 				sbpeak = 0 ;
-				lastmax = maxder ;
-				maxder = 0 ;
+				lastmax = maxder[0] ;
+				maxder[0] = 0 ;
 	
 				initBlank = initMax = rsetCount = 0 ;
-				}
 			}
+		}
 	
 		// In the background estimate threshold to replace adaptive threshold
 		// if eight seconds elapses without a QRS detection.
 	
 		if( qpkcnt == 8 )
-			{
+		{
 			if(++initBlank == MS1000)
-				{
+			{
 				initBlank = 0 ;
 				rsetBuff[rsetCount] = initMax ;
 				initMax = 0 ;
@@ -285,23 +291,24 @@ public class QrsDetector {
 				// a detection.
 	
 				if(rsetCount == 8)
-					{
+				{
 					for(i = 0; i < 8; ++i)
-						{
+					{
 						qrsbuf[i] = rsetBuff[i] ;
 						noise[i] = 0 ;
-						}
+					}
 					qmean = mean( rsetBuff ) ;
 					nmean = 0 ;
 					rrmean = MS1000 ;
 					sbcount = MS1500+MS150 ;
 					det_thresh = thresh(qmean,nmean) ;
 					initBlank = initMax = rsetCount = 0 ;
-					}
 				}
+			}
+			
 			if( newPeak > initMax )
 				initMax = newPeak ;
-			}
+		}
 	
 		return(QrsDelay) ;
 	}
@@ -312,7 +319,8 @@ public class QrsDetector {
 	
 	/**************************************************************
 	* peak() takes a datum as input and returns a peak height
-	* when the signal returns to half its peak height, or 
+	* when the signal returns to half its peak height. If the datum doesn't stand for 
+	* a peak, then a zero is returned. 
 	**************************************************************/
 
 	private int Peak( int datum, boolean init )
@@ -326,27 +334,28 @@ public class QrsDetector {
 			++timeSinceMax ;
 	
 		if((datum > lastDatum) && (datum > max))
-			{
+		{
 			max = datum ;
 			if(max > 2)
 				timeSinceMax = 1 ;
-			}
+		}
 	
 		else if(datum < (max >> 1))
-			{
+		{
 			pk = max ;
 			max = 0 ;
 			timeSinceMax = 0 ;
 			Dly = 0 ;
-			}
+		}
 	
 		else if(timeSinceMax > MS95)
-			{
+		{
 			pk = max ;
 			max = 0 ;
 			timeSinceMax = 0 ;
 			Dly = 3 ;
-			}
+		}
+		
 		lastDatum = datum ;
 		return(pk) ;
 	}
@@ -394,39 +403,39 @@ public class QrsDetector {
 
 	private boolean BLSCheck(int[] dBuf,int dbPtr,int[] maxder)
 	{
-	int max, min, maxt, mint, t, x ;
-	max = min = 0 ;
-	maxt = mint = 0;
-
-	for(t = 0; t < MS220; ++t)
-		{
-		x = dBuf[dbPtr] ;
-		if(x > max)
-			{
-			maxt = t ;
-			max = x ;
-			}
-		else if(x < min)
-			{
-			mint = t ;
-			min = x;
-			}
-		if(++dbPtr == DER_DELAY)
-			dbPtr = 0 ;
-		}
-
-	maxder[0] = max ;
-	min = -min ;
+		int max, min, maxt, mint, t, x ;
+		max = min = 0 ;
+		maxt = mint = 0;
 	
-	/* Possible beat if a maximum and minimum pair are found
-		where the interval between them is less than 150 ms. */
-	   
-	if((max > (min>>3)) && (min > (max>>3)) &&
-		(Math.abs(maxt - mint) < MS150))
-		return false ;
+		for(t = 0; t < MS220; ++t)
+		{
+			x = dBuf[dbPtr] ;
+			if(x > max)
+			{
+				maxt = t ;
+				max = x ;
+			}
+			else if(x < min)
+			{
+				mint = t ;
+				min = x;
+			}
+			if(++dbPtr == DER_DELAY)
+				dbPtr = 0 ;
+		}
+	
+		maxder[0] = max ;
+		min = -min ;
 		
-	else
-		return true ;
+		/* Possible beat if a maximum and minimum pair are found
+			where the interval between them is less than 150 ms. */
+		   
+		if((max > (min>>3)) && (min > (max>>3)) &&
+			(Math.abs(maxt - mint) < MS150))
+			return false ;
+			
+		else
+			return true ;
 	}
 
 
