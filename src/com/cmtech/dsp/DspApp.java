@@ -1,5 +1,7 @@
 package com.cmtech.dsp;
 
+import java.util.Arrays;
+
 import com.cmtech.dsp.bmefile.BmeFile;
 import com.cmtech.dsp.bmefile.BmeFileDataType;
 import com.cmtech.dsp.bmefile.BmeFileHead;
@@ -9,6 +11,7 @@ import com.cmtech.msp.qrsdetbyhamilton.Derivative;
 import com.cmtech.msp.qrsdetbyhamilton.HighpassFilter;
 import com.cmtech.msp.qrsdetbyhamilton.LowpassFilter;
 import com.cmtech.msp.qrsdetbyhamilton.MAverageFilter;
+import com.cmtech.msp.qrsdetbyhamilton.QrsDetector;
 import com.cmtech.msp.qrsdetbyhamilton.QrsFilter;
 
 public class DspApp {
@@ -18,44 +21,27 @@ public class DspApp {
 		//BmeFile.setFileDirectory("F:\\360云盘\\matlabcode\\QRSDetectorbyHamilton");
 		
 		BmeFile ecgFile = BmeFile.openBmeFile("chenm.bme");
-		//System.out.println(ecgFile);
+		System.out.println(ecgFile);
 		int sampleRate = ecgFile.getFs();
+		int value1mV = 2600;
 		int[] ecgData = ecgFile.readData(new int[0]);
+
 		
-		/*
-		LowpassFilter lpFilter = new LowpassFilter(sampleRate);
-		HighpassFilter hpFilter = new HighpassFilter(sampleRate);
-		Derivative derivative = new Derivative(sampleRate);
-		MAverageFilter maFilter = new MAverageFilter(sampleRate);
+		QrsDetector detector = new QrsDetector(sampleRate, value1mV);
 		
-		System.out.println(lpFilter.getLength() + " " + hpFilter.getLength() + " " + derivative.getLength() + " " + maFilter.getLength());
-		
-		int[] dataProcessed = new int[ecgData.length];
+		int[] detectOutput = new int[ecgData.length];
 		
 		for(int i = 0; i < ecgData.length; i++) {
-			dataProcessed[i] = lpFilter.filter(ecgData[i]); 
-			dataProcessed[i] = hpFilter.filter(dataProcessed[i]);
-			dataProcessed[i] = derivative.filter(dataProcessed[i]);
-			dataProcessed[i] = Math.abs(dataProcessed[i]);
-			dataProcessed[i] = maFilter.filter(dataProcessed[i]);
+			detectOutput[i] = detector.detect(ecgData[i]);
 		}
-		*/
 		
-		QrsFilter filter = new QrsFilter(sampleRate);
-		System.out.println(filter.getLengthInfo());
-		//MAverageFilter filter = new MAverageFilter(sampleRate);
-		
-		int[] dataProcessed = new int[ecgData.length];
-		
-		for(int i = 0; i < ecgData.length; i++) {
-			dataProcessed[i] = filter.filter(ecgData[i]);
-		}
+		System.out.println(Arrays.toString(detectOutput));
 		
 		BmeFileHead fileHead = BmeFileHeadFactory.createDefault().setDataType(BmeFileDataType.INT32);
-		BmeFile processFile = BmeFile.createBmeFile("dataProcessed.bme", fileHead).writeData(dataProcessed);
+		BmeFile outputFile = BmeFile.createBmeFile("detectOutput.bme", fileHead).writeData(detectOutput);
 		
 		ecgFile.close();
-		processFile.close();
+		outputFile.close();
 		
 		
 	}

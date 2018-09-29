@@ -21,16 +21,18 @@ package com.cmtech.msp.qrsdetbyhamilton;
 public class QrsDetector {
 	private static final double TH = 0.3125;
 	
-	private final int sampleRate;
-	private final int value1mV;
+	private final int sampleRate;		// 采样频率
+	private final int value1mV;			// 1mV量化值
 	private final int PRE_BLANK;
 	private final int MIN_PEAK_AMP;
-	private final int MS1500;
-	private final int MS1000;
+	
 	private final int MS95;
 	private final int MS150;
 	private final int MS220;
 	private final int MS360;
+	private final int MS1000;
+	private final int MS1500;
+	
 	private final int FILTER_DELAY;
 	private final int DER_DELAY;
 	private final int WINDOW_WIDTH;
@@ -135,7 +137,7 @@ public class QrsDetector {
 	
 		newPeak = 0 ;
 		if((aPeak!= 0) && (preBlankCnt == 0))			// If there has been no peak for 200 ms
-		{										// save this one and start counting.
+		{												// save this one and start counting.
 			tempPeak = aPeak ;
 			preBlankCnt = PRE_BLANK ;			// MS200
 		}
@@ -173,6 +175,8 @@ public class QrsDetector {
 			if(newPeak > 0) count = WINDOW_WIDTH ;
 			if(++initBlank == MS1000)
 			{
+				System.out.println("Get one peak!");
+				
 				initBlank = 0 ;
 				qrsbuf[qpkcnt] = initMax ;
 				initMax = 0 ;
@@ -192,6 +196,7 @@ public class QrsDetector {
 	
 		else	/* Else test for a qrs. */
 		{
+			
 			++count ;
 			if(newPeak > 0)
 			{
@@ -210,12 +215,14 @@ public class QrsDetector {
 	
 					if(newPeak > det_thresh)
 					{
-						memmove(&qrsbuf[1], qrsbuf, MEMMOVELEN) ;
-						qrsbuf[0] = newPeak ;
+						pushToHead(qrsbuf, newPeak);
+						//memmove(&qrsbuf[1], qrsbuf, MEMMOVELEN) ;
+						//qrsbuf[0] = newPeak ;
 						qmean = mean(qrsbuf) ;
 						det_thresh = thresh(qmean,nmean) ;
-						memmove(&rrbuf[1], rrbuf, MEMMOVELEN) ;
-						rrbuf[0] = count - WINDOW_WIDTH ;
+						pushToHead(rrbuf, count - WINDOW_WIDTH);
+						//memmove(&rrbuf[1], rrbuf, MEMMOVELEN) ;
+						//rrbuf[0] = count - WINDOW_WIDTH ;
 						rrmean = mean(rrbuf) ;
 						sbcount = rrmean + (rrmean >> 1) + WINDOW_WIDTH ;
 						count = WINDOW_WIDTH ;
@@ -234,8 +241,9 @@ public class QrsDetector {
 	
 					else
 					{
-						memmove(&noise[1],noise,MEMMOVELEN) ;
-						noise[0] = newPeak ;
+						pushToHead(noise, newPeak);
+						//memmove(&noise[1],noise,MEMMOVELEN) ;
+						//noise[0] = newPeak ;
 						nmean = mean(noise) ;
 						det_thresh = thresh(qmean,nmean) ;
 	
@@ -257,12 +265,14 @@ public class QrsDetector {
 	
 			if((count > sbcount) && (sbpeak > (det_thresh >> 1)))
 			{
-				memmove(&qrsbuf[1],qrsbuf,MEMMOVELEN) ;
-				qrsbuf[0] = sbpeak ;
+				pushToHead(qrsbuf, sbpeak);
+				//memmove(&qrsbuf[1],qrsbuf,MEMMOVELEN) ;
+				//qrsbuf[0] = sbpeak ;
 				qmean = mean(qrsbuf) ;
 				det_thresh = thresh(qmean,nmean) ;
-				memmove(&rrbuf[1],rrbuf,MEMMOVELEN) ;
-				rrbuf[0] = sbloc ;
+				pushToHead(rrbuf, sbloc);
+				//memmove(&rrbuf[1],rrbuf,MEMMOVELEN) ;
+				//rrbuf[0] = sbloc ;
 				rrmean = mean(rrbuf) ;
 				sbcount = rrmean + (rrmean >> 1) + WINDOW_WIDTH ;
 				QrsDelay = count = count - sbloc ;
@@ -438,5 +448,12 @@ public class QrsDetector {
 			return true ;
 	}
 
+	private void pushToHead(int[] buf, int data) {
+		for(int i = buf.length-1; i > 0; i--) {
+			buf[i] = buf[i-1];
+		}
+		buf[0] = data;
+	}
+	
 
 }
