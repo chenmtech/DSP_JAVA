@@ -207,7 +207,7 @@ public class QrsDetector {
 			if(newPeak > 0) count = WINDOW_WIDTH ;
 			if(++initBlank == MS1000)
 			{
-				System.out.println("Get one peak!");
+				//System.out.println("Get one peak!");
 				
 				initBlank = 0 ;
 				qrsbuf[qpkcnt] = initMax ;
