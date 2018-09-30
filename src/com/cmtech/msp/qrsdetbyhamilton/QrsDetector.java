@@ -69,6 +69,9 @@ public class QrsDetector {
 	private int timeSinceMax = 0;
 	private int lastDatum = 0;
 	
+	private int RRCount = 0;
+	private boolean firstPeak = true;
+	
 	public QrsDetector(int sampleRate, int value1mV) {
 		this.sampleRate = sampleRate;
 		this.value1mV = value1mV;
@@ -116,9 +119,38 @@ public class QrsDetector {
 		derivative.initialize();
 		
 		Peak(0, true) ;
+		
+		RRCount = 0;
+		firstPeak = true;
 	}
 	
-	public int detect( int datum )
+	public int outputRRInterval(int datum) {
+		int RRInterval = 0;
+		
+		int delay = detectQrs(datum);
+		if(delay != 0) {
+			if(firstPeak) {
+				firstPeak = false;
+			} else {
+				RRInterval = RRCount-delay+1;
+			}
+			RRCount = delay;
+		} else {
+			RRCount++;
+		}
+		return RRInterval;
+	}
+	
+	public int outputHR(int datum) {
+		int RRInterval = outputRRInterval(datum);
+		if(RRInterval != 0) {
+			return (int)(sampleRate*60/RRInterval + 0.5);
+		} else {
+			return 0;
+		}
+	}
+	
+	public int detectQrs( int datum )
 	{
 		int fdatum, QrsDelay = 0 ;
 		int i, newPeak, aPeak ;
@@ -216,13 +248,9 @@ public class QrsDetector {
 					if(newPeak > det_thresh)
 					{
 						pushToHead(qrsbuf, newPeak);
-						//memmove(&qrsbuf[1], qrsbuf, MEMMOVELEN) ;
-						//qrsbuf[0] = newPeak ;
 						qmean = mean(qrsbuf) ;
 						det_thresh = thresh(qmean,nmean) ;
 						pushToHead(rrbuf, count - WINDOW_WIDTH);
-						//memmove(&rrbuf[1], rrbuf, MEMMOVELEN) ;
-						//rrbuf[0] = count - WINDOW_WIDTH ;
 						rrmean = mean(rrbuf) ;
 						sbcount = rrmean + (rrmean >> 1) + WINDOW_WIDTH ;
 						count = WINDOW_WIDTH ;
@@ -242,8 +270,6 @@ public class QrsDetector {
 					else
 					{
 						pushToHead(noise, newPeak);
-						//memmove(&noise[1],noise,MEMMOVELEN) ;
-						//noise[0] = newPeak ;
 						nmean = mean(noise) ;
 						det_thresh = thresh(qmean,nmean) ;
 	
@@ -266,13 +292,9 @@ public class QrsDetector {
 			if((count > sbcount) && (sbpeak > (det_thresh >> 1)))
 			{
 				pushToHead(qrsbuf, sbpeak);
-				//memmove(&qrsbuf[1],qrsbuf,MEMMOVELEN) ;
-				//qrsbuf[0] = sbpeak ;
 				qmean = mean(qrsbuf) ;
 				det_thresh = thresh(qmean,nmean) ;
 				pushToHead(rrbuf, sbloc);
-				//memmove(&rrbuf[1],rrbuf,MEMMOVELEN) ;
-				//rrbuf[0] = sbloc ;
 				rrmean = mean(rrbuf) ;
 				sbcount = rrmean + (rrmean >> 1) + WINDOW_WIDTH ;
 				QrsDelay = count = count - sbloc ;

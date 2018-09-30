@@ -20,7 +20,7 @@ public class DspApp {
 		BmeFile.setFileDirectory("/Users/bme/360企业云盘同步版/matlabcode/QRSDetectorbyHamilton");
 		//BmeFile.setFileDirectory("F:\\360云盘\\matlabcode\\QRSDetectorbyHamilton");
 		
-		BmeFile ecgFile = BmeFile.openBmeFile("chenm.bme");
+		BmeFile ecgFile = BmeFile.openBmeFile("201809301.bme");
 		System.out.println(ecgFile);
 		int sampleRate = ecgFile.getFs();
 		int value1mV = 2600;
@@ -32,7 +32,7 @@ public class DspApp {
 		int[] detectOutput = new int[ecgData.length];
 		
 		for(int i = 0; i < ecgData.length; i++) {
-			detectOutput[i] = detector.detect(ecgData[i]);
+			detectOutput[i] = detector.outputHR(ecgData[i]);
 		}
 		
 		System.out.println(Arrays.toString(detectOutput));
