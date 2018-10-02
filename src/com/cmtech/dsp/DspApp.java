@@ -20,10 +20,37 @@ public class DspApp {
 		BmeFile.setFileDirectory("/Users/bme/360企业云盘同步版/matlabcode/QRSDetectorbyHamilton");
 		//BmeFile.setFileDirectory("F:\\360云盘\\matlabcode\\QRSDetectorbyHamilton");
 		
-		BmeFile ecgFile = BmeFile.openBmeFile("201809301.bme");
+		BmeFile ecgFile = BmeFile.openBmeFile("18_93_D7_77_EA_E3 20181002153727.bme");
 		System.out.println(ecgFile);
 		int sampleRate = ecgFile.getFs();
-		int value1mV = 2600;
+		int value1mV = 2615;
+		int[] ecgData = ecgFile.readData(new int[0]);
+
+		
+		QrsFilter filter = new QrsFilter(sampleRate);
+		
+		int[] filterOutput = new int[ecgData.length];
+		
+		for(int i = 0; i < ecgData.length; i++) {
+			filterOutput[i] = filter.filter(ecgData[i]);
+		}
+		
+		System.out.println(Arrays.toString(filterOutput));
+		
+		BmeFileHead fileHead = BmeFileHeadFactory.createDefault().setDataType(BmeFileDataType.INT32);
+		BmeFile outputFile = BmeFile.createBmeFile("filterOutput.bme", fileHead).writeData(filterOutput);
+		
+		ecgFile.close();
+		outputFile.close();
+		
+		
+	}
+	
+/*
+		BmeFile ecgFile = BmeFile.openBmeFile("18_93_D7_77_EA_E3 20181002153727.bme");
+		System.out.println(ecgFile);
+		int sampleRate = ecgFile.getFs();
+		int value1mV = 2615;
 		int[] ecgData = ecgFile.readData(new int[0]);
 
 		
@@ -42,9 +69,7 @@ public class DspApp {
 		
 		ecgFile.close();
 		outputFile.close();
-		
-		
-	}
+ */
 	
 	
 /*
