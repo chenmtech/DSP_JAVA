@@ -144,7 +144,7 @@ public class QrsDetector {
 	public int outputHR(int datum) {
 		int RRInterval = outputRRInterval(datum);
 		if(RRInterval != 0) {
-			return (int)(sampleRate*60/RRInterval + 0.5);
+			return (int)((double)(sampleRate*60)/RRInterval + 0.5);
 		} else {
 			return 0;
 		}
