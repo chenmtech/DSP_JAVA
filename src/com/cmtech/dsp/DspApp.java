@@ -42,8 +42,6 @@ public class DspApp {
 		
 		ecgFile.close();
 		outputFile.close();
-		
-		
 	}
 	
 /*
