@@ -7,6 +7,10 @@ import com.cmtech.dsp.bmefile.BmeFileDataType;
 import com.cmtech.dsp.bmefile.BmeFileHead;
 import com.cmtech.dsp.bmefile.BmeFileHeadFactory;
 import com.cmtech.dsp.exception.DspException;
+import com.cmtech.dsp.filter.design.FIRDesigner;
+import com.cmtech.dsp.filter.design.FilterType;
+import com.cmtech.dsp.filter.design.WinType;
+import com.cmtech.dsp.seq.RealSeq;
 import com.cmtech.msp.qrsdetbyhamilton.Derivative;
 import com.cmtech.msp.qrsdetbyhamilton.HighpassFilter;
 import com.cmtech.msp.qrsdetbyhamilton.LowpassFilter;
@@ -17,31 +21,17 @@ import com.cmtech.msp.qrsdetbyhamilton.QrsFilter;
 public class DspApp {
 
 	public static void main(String[] args) throws DspException{
-		BmeFile.setFileDirectory("/Users/bme/360企业云盘同步版/matlabcode/QRSDetectorbyHamilton");
+		//BmeFile.setFileDirectory("/Users/bme/360企业云盘同步版/matlabcode/QRSDetectorbyHamilton");
 		//BmeFile.setFileDirectory("F:\\360云盘\\matlabcode\\QRSDetectorbyHamilton");
 		
-		BmeFile ecgFile = BmeFile.openBmeFile("18_93_D7_77_EA_E3 20181002153727.bme");
-		System.out.println(ecgFile);
-		int sampleRate = ecgFile.getFs();
-		int value1mV = 2615;
-		int[] ecgData = ecgFile.readData(new int[0]);
-
+		int N = 575;
+	    double[] wc = {Math.PI/36};
+	    WinType wType = WinType.HAMMING;
+	    FilterType fType = FilterType.LOWPASS;
+		RealSeq h = FIRDesigner.FIRUsingWindow(N, wc, wType, fType);
 		
-		QrsFilter filter = new QrsFilter(sampleRate);
-		
-		int[] filterOutput = new int[ecgData.length];
-		
-		for(int i = 0; i < ecgData.length; i++) {
-			filterOutput[i] = filter.filter(ecgData[i]);
-		}
-		
-		System.out.println(Arrays.toString(filterOutput));
-		
-		BmeFileHead fileHead = BmeFileHeadFactory.createDefault().setDataType(BmeFileDataType.INT32);
-		BmeFile outputFile = BmeFile.createBmeFile("filterOutput.bme", fileHead).writeData(filterOutput);
-		
-		ecgFile.close();
-		outputFile.close();
+		System.out.println(h);
+		System.out.println(h.get(199));
 	}
 	
 /*
