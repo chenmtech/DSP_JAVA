@@ -8,6 +8,8 @@ import com.cmtech.dsp.bmefile.BmeFileHead;
 import com.cmtech.dsp.bmefile.BmeFileHeadFactory;
 import com.cmtech.dsp.exception.DspException;
 import com.cmtech.dsp.filter.FIRFilter;
+import com.cmtech.dsp.filter.IIRFilter;
+import com.cmtech.dsp.filter.design.DCBlockDesigner;
 import com.cmtech.dsp.filter.design.FIRDesigner;
 import com.cmtech.dsp.filter.design.FilterType;
 import com.cmtech.dsp.filter.design.WinType;
@@ -26,17 +28,20 @@ public class DspApp {
 		//BmeFile.setFileDirectory("F:\\360云盘\\matlabcode\\QRSDetectorbyHamilton");
 		
 		int sampleRate = 250;
-		double[] wp = {2*Math.PI*65/sampleRate};
-		double[] ws = {2*Math.PI*95/sampleRate};
+		double[] wp = {2*Math.PI*1/sampleRate};
+		double[] ws = {2*Math.PI*0.5/sampleRate};
 		double Rp = 1;
 		double As = 46;
-		FilterType fType = FilterType.LOWPASS;
+		FilterType fType = FilterType.HIGHPASS;
 		WinType wType = WinType.HAMMING;
 		
 		FIRFilter filter = FIRDesigner.design(wp, ws, Rp, As, fType, wType);
+		//System.out.println(filter);
+		//System.out.println(filter.getB().size());
 		
-		System.out.println(filter);
-		System.out.println(filter.getB().size());
+		IIRFilter dcBlocker = DCBlockDesigner.design(2, sampleRate);
+		System.out.println(dcBlocker);
+		
 	}
 	
 /*
