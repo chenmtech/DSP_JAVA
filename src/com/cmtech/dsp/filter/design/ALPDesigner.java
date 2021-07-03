@@ -16,10 +16,9 @@ import java.util.Map;
 
 import com.cmtech.dsp.seq.RealSeq;
 import com.cmtech.dsp.util.SeqUtil;
-import com.cmtech.dsp.util.TwoTuple;
 
 public class ALPDesigner {
-	//最小数值 
+	//鏈�灏忔暟鍊� 
 	private static final double EPS = 2.220446049250313E-016;
 	
 	private ALPDesigner() {			
@@ -38,14 +37,14 @@ public class ALPDesigner {
 		return filter;
 	}*/
 	
-	//设计模拟低通滤波器
-	//Qp：通带截止频率
-	//Qs：阻带截止频率
-	//Rp：通带最大衰减
-	//As：阻带最小衰减
-	//afType：模拟滤波器的类型
-	//pBs：返回的模拟滤波器的系统函数Ha(s)分子多项式系数数组
-	//pAs：返回的模拟滤波器的系统函数Ha(s)分母多项式系数数组 
+	//璁捐妯℃嫙浣庨�氭护娉㈠櫒
+	//Qp锛氶�氬甫鎴棰戠巼
+	//Qs锛氶樆甯︽埅姝㈤鐜�
+	//Rp锛氶�氬甫鏈�澶ц“鍑�
+	//As锛氶樆甯︽渶灏忚“鍑�
+	//afType锛氭ā鎷熸护娉㈠櫒鐨勭被鍨�
+	//pBs锛氳繑鍥炵殑妯℃嫙婊ゆ尝鍣ㄧ殑绯荤粺鍑芥暟Ha(s)鍒嗗瓙澶氶」寮忕郴鏁版暟缁�
+	//pAs锛氳繑鍥炵殑妯℃嫙婊ゆ尝鍣ㄧ殑绯荤粺鍑芥暟Ha(s)鍒嗘瘝澶氶」寮忕郴鏁版暟缁� 
 	public static Map<String, Object> DesignAnalogLowPassFilter(double Qp, double Qs, double Rp, double As, AFType afType)//, RealSeq * pBs, RealSeq * pAs)
 	{
 	    switch(afType)
@@ -63,13 +62,13 @@ public class ALPDesigner {
 	    }
 	}
 
-	//用设计指标设计Butterworth模拟低通滤波器
-	//Qp：通带截止频率
-	//Qs：阻带截止频率
-	//Rp：通带最大衰减
-	//As：阻带最小衰减
-	//pBs：返回的模拟滤波器的系统函数Ha(s)分子多项式系数数组
-	//pAs：返回的模拟滤波器的系统函数Ha(s)分母多项式系数数组
+	//鐢ㄨ璁℃寚鏍囪璁utterworth妯℃嫙浣庨�氭护娉㈠櫒
+	//Qp锛氶�氬甫鎴棰戠巼
+	//Qs锛氶樆甯︽埅姝㈤鐜�
+	//Rp锛氶�氬甫鏈�澶ц“鍑�
+	//As锛氶樆甯︽渶灏忚“鍑�
+	//pBs锛氳繑鍥炵殑妯℃嫙婊ゆ尝鍣ㄧ殑绯荤粺鍑芥暟Ha(s)鍒嗗瓙澶氶」寮忕郴鏁版暟缁�
+	//pAs锛氳繑鍥炵殑妯℃嫙婊ゆ尝鍣ㄧ殑绯荤粺鍑芥暟Ha(s)鍒嗘瘝澶氶」寮忕郴鏁版暟缁�
 	private static Map<String, Object> DesignAnalogButter1(double Qp, double Qs, double Rp, double As)//, RealSeq * pBs, RealSeq * pAs)
 	{
 		Map<String, Object> tmpMap = GetButterMagHPara(Qp, Qs, Rp, As);
@@ -79,23 +78,23 @@ public class ALPDesigner {
 	    //printf("Analog Butt: N = %d, Qc = %f\n", N, Qc);
 	}
 
-	//用直接指定滤波器阶数来设计Butterworth模拟低通滤波器 
-	//N：模拟滤波器的阶数
-	//Qc：模拟滤波器的截止频率，对于Butterworth指3dB截止频率
-	//pBs：返回的模拟滤波器的系统函数Ha(s)分子多项式系数数组
-	//pAs：返回的模拟滤波器的系统函数Ha(s)分母多项式系数数组 
+	//鐢ㄧ洿鎺ユ寚瀹氭护娉㈠櫒闃舵暟鏉ヨ璁utterworth妯℃嫙浣庨�氭护娉㈠櫒 
+	//N锛氭ā鎷熸护娉㈠櫒鐨勯樁鏁�
+	//Qc锛氭ā鎷熸护娉㈠櫒鐨勬埅姝㈤鐜囷紝瀵逛簬Butterworth鎸�3dB鎴棰戠巼
+	//pBs锛氳繑鍥炵殑妯℃嫙婊ゆ尝鍣ㄧ殑绯荤粺鍑芥暟Ha(s)鍒嗗瓙澶氶」寮忕郴鏁版暟缁�
+	//pAs锛氳繑鍥炵殑妯℃嫙婊ゆ尝鍣ㄧ殑绯荤粺鍑芥暟Ha(s)鍒嗘瘝澶氶」寮忕郴鏁版暟缁� 
 	private static Map<String, Object> DesignAnalogButter2(int N, double Qc)//, RealSeq * pBs, RealSeq * pAs)
 	{
 	    return DesignAnalogButterWithPara(N, Qc);
 	} 
 
-	//用模拟滤波器的设计规格获取Butterworth滤波器幅度响应函数中的参数，阶数N，截止频率Qc（3dB截止频率）
-	//Qp：通带截止频率
-	//Qs：阻带截止频率
-	//Rp：通带最大衰减
-	//As：阻带最小衰减
-	//pN：返回的模拟滤波器的阶数
-	//pQc：返回的模拟滤波器的截止频率
+	//鐢ㄦā鎷熸护娉㈠櫒鐨勮璁¤鏍艰幏鍙朆utterworth婊ゆ尝鍣ㄥ箙搴﹀搷搴斿嚱鏁颁腑鐨勫弬鏁帮紝闃舵暟N锛屾埅姝㈤鐜嘠c锛�3dB鎴棰戠巼锛�
+	//Qp锛氶�氬甫鎴棰戠巼
+	//Qs锛氶樆甯︽埅姝㈤鐜�
+	//Rp锛氶�氬甫鏈�澶ц“鍑�
+	//As锛氶樆甯︽渶灏忚“鍑�
+	//pN锛氳繑鍥炵殑妯℃嫙婊ゆ尝鍣ㄧ殑闃舵暟
+	//pQc锛氳繑鍥炵殑妯℃嫙婊ゆ尝鍣ㄧ殑鎴棰戠巼
 	private static Map<String, Object> GetButterMagHPara(double Qp, double Qs, double Rp, double As)//, int * pN, double * pQc)
 	{
 	    double tmp1 = pow(10, Rp/10) - 1;
@@ -114,26 +113,26 @@ public class ALPDesigner {
 	    return rtnMap;
 	}
 
-	//用幅度响应函数的参数设计Butterworth模拟低通滤波器
-	//N：模拟滤波器的阶数
-	//Qc：模拟滤波器的截止频率，对于Butterworth指3dB截止频率
-	//pBs：返回的模拟滤波器的系统函数Ha(s)分子多项式系数数组
-	//pAs：返回的模拟滤波器的系统函数Ha(s)分母多项式系数数组 
+	//鐢ㄥ箙搴﹀搷搴斿嚱鏁扮殑鍙傛暟璁捐Butterworth妯℃嫙浣庨�氭护娉㈠櫒
+	//N锛氭ā鎷熸护娉㈠櫒鐨勯樁鏁�
+	//Qc锛氭ā鎷熸护娉㈠櫒鐨勬埅姝㈤鐜囷紝瀵逛簬Butterworth鎸�3dB鎴棰戠巼
+	//pBs锛氳繑鍥炵殑妯℃嫙婊ゆ尝鍣ㄧ殑绯荤粺鍑芥暟Ha(s)鍒嗗瓙澶氶」寮忕郴鏁版暟缁�
+	//pAs锛氳繑鍥炵殑妯℃嫙婊ゆ尝鍣ㄧ殑绯荤粺鍑芥暟Ha(s)鍒嗘瘝澶氶」寮忕郴鏁版暟缁� 
 	private static Map<String, Object> DesignAnalogButterWithPara(int N, double Qc)//, RealSeq * pBs, RealSeq * pAs)
 	{
 	    if( N <= 0) {return null;}
 	    
-	    //生成Bm：Qc^N      //(7.5.8)    
+	    //鐢熸垚Bm锛歈c^N      //(7.5.8)    
 	    RealSeq bs = new RealSeq(pow(Qc, N));
 	    
-	    //生成一个一阶节：Qc/(s+Qc)         (7.5.9) 
+	    //鐢熸垚涓�涓竴闃惰妭锛歈c/(s+Qc)         (7.5.9) 
 	    RealSeq as = null;
 	    
-	    if( N % 2 == 0 )    //N为偶数，没有一阶节 
+	    if( N % 2 == 0 )    //N涓哄伓鏁帮紝娌℃湁涓�闃惰妭 
 	    {
 	        as = new RealSeq(1.0);
 	    }
-	    else                //N为奇数，生成一阶节的Ak 
+	    else                //N涓哄鏁帮紝鐢熸垚涓�闃惰妭鐨凙k 
 	    {
 	        as = new RealSeq(1.0, Qc);
 	    }    
@@ -142,15 +141,15 @@ public class ALPDesigner {
 	    if( N == 1) {
 	    		rtnMap.put("BS", bs);
 	    		rtnMap.put("AS", as);
-	    		return rtnMap;     //一阶滤波器，直接返回
+	    		return rtnMap;     //涓�闃舵护娉㈠櫒锛岀洿鎺ヨ繑鍥�
 	    }
 	    
-	    int biN = N/2;  //二阶节的个数
+	    int biN = N/2;  //浜岄樁鑺傜殑涓暟
 	    
-	    //生成一个二阶节：Qc^2/(s^2 - 2*Qc*cos( (0.5+(2k-1)/(2N))*PI )*s + Qc^2)的分母系数数组  //（7.5.9）
+	    //鐢熸垚涓�涓簩闃惰妭锛歈c^2/(s^2 - 2*Qc*cos( (0.5+(2k-1)/(2N))*PI )*s + Qc^2)鐨勫垎姣嶇郴鏁版暟缁�  //锛�7.5.9锛�
 	    RealSeq biSeq = new RealSeq(1.0, 0.0, Qc*Qc);
 	    
-	    //求分母多项式系数Ak        //(7.5.11)
+	    //姹傚垎姣嶅椤瑰紡绯绘暟Ak        //(7.5.11)
 	    int k = 0;
 	    for(k = 1; k <= biN; k++)
 	    {
@@ -163,13 +162,13 @@ public class ALPDesigner {
 	}
 
 
-	//用设计指标设计Chebyshev-I型模拟低通滤波器
-	//Qp：通带截止频率
-	//Qs：阻带截止频率
-	//Rp：通带最大衰减
-	//As：阻带最小衰减
-	//pBs：返回的模拟滤波器的系统函数Ha(s)分子多项式系数数组
-	//pAs：返回的模拟滤波器的系统函数Ha(s)分母多项式系数数组
+	//鐢ㄨ璁℃寚鏍囪璁hebyshev-I鍨嬫ā鎷熶綆閫氭护娉㈠櫒
+	//Qp锛氶�氬甫鎴棰戠巼
+	//Qs锛氶樆甯︽埅姝㈤鐜�
+	//Rp锛氶�氬甫鏈�澶ц“鍑�
+	//As锛氶樆甯︽渶灏忚“鍑�
+	//pBs锛氳繑鍥炵殑妯℃嫙婊ゆ尝鍣ㄧ殑绯荤粺鍑芥暟Ha(s)鍒嗗瓙澶氶」寮忕郴鏁版暟缁�
+	//pAs锛氳繑鍥炵殑妯℃嫙婊ゆ尝鍣ㄧ殑绯荤粺鍑芥暟Ha(s)鍒嗘瘝澶氶」寮忕郴鏁版暟缁�
 	private static Map<String, Object> DesignAnalogCheby11(double Qp, double Qs, double Rp, double As)//, RealSeq * pBs, RealSeq * pAs)
 	{
 		Map<String, Object> tmpMap = GetCheby1MagHPara(Qp, Qs, Rp, As);
@@ -180,26 +179,26 @@ public class ALPDesigner {
 	    //printf("Analog Cheb1: N = %d, Qc = %f, E = %f\n", N, Qc, E);   
 	}
 
-	//直接指定滤波器阶数来设计Chebyshev-I型模拟低通滤波器
-	//N：模拟滤波器的阶数
-	//Qp：模拟滤波器的通带截止频率Qp
-	//Rp：模拟滤波器的通带衰减 
-	//pBs：返回的模拟滤波器的系统函数Ha(s)分子多项式系数数组
-	//pAs：返回的模拟滤波器的系统函数Ha(s)分母多项式系数数组
+	//鐩存帴鎸囧畾婊ゆ尝鍣ㄩ樁鏁版潵璁捐Chebyshev-I鍨嬫ā鎷熶綆閫氭护娉㈠櫒
+	//N锛氭ā鎷熸护娉㈠櫒鐨勯樁鏁�
+	//Qp锛氭ā鎷熸护娉㈠櫒鐨勯�氬甫鎴棰戠巼Qp
+	//Rp锛氭ā鎷熸护娉㈠櫒鐨勯�氬甫琛板噺 
+	//pBs锛氳繑鍥炵殑妯℃嫙婊ゆ尝鍣ㄧ殑绯荤粺鍑芥暟Ha(s)鍒嗗瓙澶氶」寮忕郴鏁版暟缁�
+	//pAs锛氳繑鍥炵殑妯℃嫙婊ゆ尝鍣ㄧ殑绯荤粺鍑芥暟Ha(s)鍒嗘瘝澶氶」寮忕郴鏁版暟缁�
 	private static Map<String, Object> DesignAnalogCheby12(int N, double Qp, double Rp)//, RealSeq * pBs, RealSeq * pAs)
 	{
 	    double E = sqrt( pow(10, Rp/10) - 1 );           //7.5.58
 	    return DesignAnalogCheby1WithPara(N, Qp, E);
 	}
 
-	//用模拟滤波器的设计规格获取Chebyshev-I型滤波器幅度响应函数中的参数，阶数N，截止频率Qc（通带截止频率），通带波纹epsilon 
-	//Qp：通带截止频率
-	//Qs：阻带截止频率
-	//Rp：通带最大衰减
-	//As：阻带最小衰减
-	//pN：返回的模拟滤波器的阶数
-	//pQc：返回的模拟滤波器的截止频率
-	//pE：返回的模拟滤波器的通带波纹
+	//鐢ㄦā鎷熸护娉㈠櫒鐨勮璁¤鏍艰幏鍙朇hebyshev-I鍨嬫护娉㈠櫒骞呭害鍝嶅簲鍑芥暟涓殑鍙傛暟锛岄樁鏁癗锛屾埅姝㈤鐜嘠c锛堥�氬甫鎴棰戠巼锛夛紝閫氬甫娉㈢汗epsilon 
+	//Qp锛氶�氬甫鎴棰戠巼
+	//Qs锛氶樆甯︽埅姝㈤鐜�
+	//Rp锛氶�氬甫鏈�澶ц“鍑�
+	//As锛氶樆甯︽渶灏忚“鍑�
+	//pN锛氳繑鍥炵殑妯℃嫙婊ゆ尝鍣ㄧ殑闃舵暟
+	//pQc锛氳繑鍥炵殑妯℃嫙婊ゆ尝鍣ㄧ殑鎴棰戠巼
+	//pE锛氳繑鍥炵殑妯℃嫙婊ゆ尝鍣ㄧ殑閫氬甫娉㈢汗
 	private static Map<String, Object> GetCheby1MagHPara(double Qp, double Qs, double Rp, double As)//, int * pN, double * pQc, double * pE)
 	{
 	    double Qc = Qp;    
@@ -218,17 +217,17 @@ public class ALPDesigner {
 	    return rtnMap; 
 	}
 
-	//用幅度响应函数的参数设计Chebyshev-I型模拟低通滤波器
-	//N：模拟滤波器的阶数
-	//Qc：模拟滤波器的截止频率，对于Chebyshev-I型指通带截止频率Qp
-	//E：模拟滤波器的通带波纹 
-	//pBs：返回的模拟滤波器的系统函数Ha(s)分子多项式系数数组
-	//pAs：返回的模拟滤波器的系统函数Ha(s)分母多项式系数数组
+	//鐢ㄥ箙搴﹀搷搴斿嚱鏁扮殑鍙傛暟璁捐Chebyshev-I鍨嬫ā鎷熶綆閫氭护娉㈠櫒
+	//N锛氭ā鎷熸护娉㈠櫒鐨勯樁鏁�
+	//Qc锛氭ā鎷熸护娉㈠櫒鐨勬埅姝㈤鐜囷紝瀵逛簬Chebyshev-I鍨嬫寚閫氬甫鎴棰戠巼Qp
+	//E锛氭ā鎷熸护娉㈠櫒鐨勯�氬甫娉㈢汗 
+	//pBs锛氳繑鍥炵殑妯℃嫙婊ゆ尝鍣ㄧ殑绯荤粺鍑芥暟Ha(s)鍒嗗瓙澶氶」寮忕郴鏁版暟缁�
+	//pAs锛氳繑鍥炵殑妯℃嫙婊ゆ尝鍣ㄧ殑绯荤粺鍑芥暟Ha(s)鍒嗘瘝澶氶」寮忕郴鏁版暟缁�
 	private static Map<String, Object> DesignAnalogCheby1WithPara(int N, double Qc, double E)//, RealSeq * pBs, RealSeq * pAs)
 	{
 	    if( N <= 0) {return null;}
 
-	    //生成Bm：Qc^N/(E*2^(N-1))      //(7.5.47)  
+	    //鐢熸垚Bm锛歈c^N/(E*2^(N-1))      //(7.5.47)  
 	    RealSeq bs = new RealSeq(pow(Qc, N)/E/pow(2, N-1));
 	    
 	    double gama = 1.0/E + sqrt(1.0/E/E+1);  //(7.5.44)
@@ -236,14 +235,14 @@ public class ALPDesigner {
 	    double a = (tmp - 1/tmp)/2;     //(7.5.43a)
 	    double b = (tmp + 1/tmp)/2;     //(7.5.43b)   
 	     
-	    //生成一个一阶节分母多项式：(s+Qc*a)  
+	    //鐢熸垚涓�涓竴闃惰妭鍒嗘瘝澶氶」寮忥細(s+Qc*a)  
 	    RealSeq as = null;
 	    
-	    if( N % 2 == 0 )    //N为偶数，没有一阶节 
+	    if( N % 2 == 0 )    //N涓哄伓鏁帮紝娌℃湁涓�闃惰妭 
 	    {
 	        as = new RealSeq(1.0);
 	    }
-	    else                //N为奇数，生成一阶节的Ak 
+	    else                //N涓哄鏁帮紝鐢熸垚涓�闃惰妭鐨凙k 
 	    {
 	        as = new RealSeq(1.0, Qc*a);
 	    }    
@@ -252,18 +251,18 @@ public class ALPDesigner {
 	    if( N == 1) {
 	    		rtnMap.put("BS", bs);
 	    		rtnMap.put("AS", as);
-	    		return rtnMap;     //一阶滤波器，直接返回
+	    		return rtnMap;     //涓�闃舵护娉㈠櫒锛岀洿鎺ヨ繑鍥�
 	    }
 	    
-	    int biN = N/2;  //二阶节的个数
+	    int biN = N/2;  //浜岄樁鑺傜殑涓暟
 	    
-	    //生成一个二阶节分母多项式：s^2 - 2*Re[s_k]*s + |s_k|^2)系数数组  //这个需要自己推导一下了 
+	    //鐢熸垚涓�涓簩闃惰妭鍒嗘瘝澶氶」寮忥細s^2 - 2*Re[s_k]*s + |s_k|^2)绯绘暟鏁扮粍  //杩欎釜闇�瑕佽嚜宸辨帹瀵间竴涓嬩簡 
 	    RealSeq biSeq = new RealSeq(1.0, 0.0, 0.0);
 
 	    double re = 0.0;
 	    double im = 0.0;
 	    
-	    //求分母多项式系数Ak 
+	    //姹傚垎姣嶅椤瑰紡绯绘暟Ak 
 	    int k = 0;
 	    for(k = 1; k <= biN; k++)
 	    {
@@ -278,16 +277,16 @@ public class ALPDesigner {
 	     
 		rtnMap.put("BS", bs);
 		rtnMap.put("AS", as);
-		return rtnMap;     //一阶滤波器，直接返回   
+		return rtnMap;     //涓�闃舵护娉㈠櫒锛岀洿鎺ヨ繑鍥�   
 	}
 
-	//用设计指标设计Chebyshev-II型模拟低通滤波器
-	//Qp：通带截止频率
-	//Qs：阻带截止频率
-	//Rp：通带最大衰减
-	//As：阻带最小衰减
-	//pBs：返回的模拟滤波器的系统函数Ha(s)分子多项式系数数组
-	//pAs：返回的模拟滤波器的系统函数Ha(s)分母多项式系数数组
+	//鐢ㄨ璁℃寚鏍囪璁hebyshev-II鍨嬫ā鎷熶綆閫氭护娉㈠櫒
+	//Qp锛氶�氬甫鎴棰戠巼
+	//Qs锛氶樆甯︽埅姝㈤鐜�
+	//Rp锛氶�氬甫鏈�澶ц“鍑�
+	//As锛氶樆甯︽渶灏忚“鍑�
+	//pBs锛氳繑鍥炵殑妯℃嫙婊ゆ尝鍣ㄧ殑绯荤粺鍑芥暟Ha(s)鍒嗗瓙澶氶」寮忕郴鏁版暟缁�
+	//pAs锛氳繑鍥炵殑妯℃嫙婊ゆ尝鍣ㄧ殑绯荤粺鍑芥暟Ha(s)鍒嗘瘝澶氶」寮忕郴鏁版暟缁�
 	private static Map<String, Object> DesignAnalogCheby21(double Qp, double Qs, double Rp, double As)//, RealSeq * pBs, RealSeq * pAs)
 	{
 		Map<String, Object> tmpMap = GetCheby2MagHPara(Qp, Qs, Rp, As);
@@ -298,26 +297,26 @@ public class ALPDesigner {
 	    //printf("Analog Cheb2: N = %d, Qc = %f, E = %f\n", N, Qc, E);      
 	}
 
-	//直接指定滤波器阶数来设计Chebyshev-II型模拟低通滤波器
-	//N：模拟滤波器的阶数
-	//Qs：模拟滤波器的阻带截止频率
-	//As：模拟滤波器的阻带衰减 
-	//pBs：返回的模拟滤波器的系统函数Ha(s)分子多项式系数数组
-	//pAs：返回的模拟滤波器的系统函数Ha(s)分母多项式系数数组
+	//鐩存帴鎸囧畾婊ゆ尝鍣ㄩ樁鏁版潵璁捐Chebyshev-II鍨嬫ā鎷熶綆閫氭护娉㈠櫒
+	//N锛氭ā鎷熸护娉㈠櫒鐨勯樁鏁�
+	//Qs锛氭ā鎷熸护娉㈠櫒鐨勯樆甯︽埅姝㈤鐜�
+	//As锛氭ā鎷熸护娉㈠櫒鐨勯樆甯﹁“鍑� 
+	//pBs锛氳繑鍥炵殑妯℃嫙婊ゆ尝鍣ㄧ殑绯荤粺鍑芥暟Ha(s)鍒嗗瓙澶氶」寮忕郴鏁版暟缁�
+	//pAs锛氳繑鍥炵殑妯℃嫙婊ゆ尝鍣ㄧ殑绯荤粺鍑芥暟Ha(s)鍒嗘瘝澶氶」寮忕郴鏁版暟缁�
 	private static Map<String, Object> DesignAnalogCheby22(int N, double Qs, double As)//, RealSeq * pBs, RealSeq * pAs)
 	{
 	    double E = 1.0/sqrt( pow(10, As/10) - 1 );           //7.5.75
 	    return DesignAnalogCheby2WithPara(N, Qs, E);
 	}
 
-	//用模拟滤波器的设计规格获取Chebyshev-II型滤波器幅度响应函数中的参数，阶数N，截止频率Qc（阻带截止频率），通带波纹epsilon 
-	//Qp：通带截止频率
-	//Qs：阻带截止频率
-	//Rp：通带最大衰减
-	//As：阻带最小衰减
-	//pN：返回的模拟滤波器的阶数
-	//pQc：返回的模拟滤波器的截止频率
-	//pE：返回的模拟滤波器的通带波纹
+	//鐢ㄦā鎷熸护娉㈠櫒鐨勮璁¤鏍艰幏鍙朇hebyshev-II鍨嬫护娉㈠櫒骞呭害鍝嶅簲鍑芥暟涓殑鍙傛暟锛岄樁鏁癗锛屾埅姝㈤鐜嘠c锛堥樆甯︽埅姝㈤鐜囷級锛岄�氬甫娉㈢汗epsilon 
+	//Qp锛氶�氬甫鎴棰戠巼
+	//Qs锛氶樆甯︽埅姝㈤鐜�
+	//Rp锛氶�氬甫鏈�澶ц“鍑�
+	//As锛氶樆甯︽渶灏忚“鍑�
+	//pN锛氳繑鍥炵殑妯℃嫙婊ゆ尝鍣ㄧ殑闃舵暟
+	//pQc锛氳繑鍥炵殑妯℃嫙婊ゆ尝鍣ㄧ殑鎴棰戠巼
+	//pE锛氳繑鍥炵殑妯℃嫙婊ゆ尝鍣ㄧ殑閫氬甫娉㈢汗
 	private static Map<String, Object> GetCheby2MagHPara(double Qp, double Qs, double Rp, double As)//, int * pN, double * pQc, double * pE)
 	{
 	    double Qc = Qs;    
@@ -336,12 +335,12 @@ public class ALPDesigner {
 	    return rtnMap;    
 	}
 
-	//用幅度响应函数的参数设计Chebyshev-II型模拟低通滤波器
-	//N：模拟滤波器的阶数
-	//Qc：模拟滤波器的截止频率，对于Chebyshev-II型指阻带截止频率Qp
-	//E：模拟滤波器的通带波纹 
-	//pBs：返回的模拟滤波器的系统函数Ha(s)分子多项式系数数组
-	//pAs：返回的模拟滤波器的系统函数Ha(s)分母多项式系数数组
+	//鐢ㄥ箙搴﹀搷搴斿嚱鏁扮殑鍙傛暟璁捐Chebyshev-II鍨嬫ā鎷熶綆閫氭护娉㈠櫒
+	//N锛氭ā鎷熸护娉㈠櫒鐨勯樁鏁�
+	//Qc锛氭ā鎷熸护娉㈠櫒鐨勬埅姝㈤鐜囷紝瀵逛簬Chebyshev-II鍨嬫寚闃诲甫鎴棰戠巼Qp
+	//E锛氭ā鎷熸护娉㈠櫒鐨勯�氬甫娉㈢汗 
+	//pBs锛氳繑鍥炵殑妯℃嫙婊ゆ尝鍣ㄧ殑绯荤粺鍑芥暟Ha(s)鍒嗗瓙澶氶」寮忕郴鏁版暟缁�
+	//pAs锛氳繑鍥炵殑妯℃嫙婊ゆ尝鍣ㄧ殑绯荤粺鍑芥暟Ha(s)鍒嗘瘝澶氶」寮忕郴鏁版暟缁�
 	private static Map<String, Object> DesignAnalogCheby2WithPara(int N, double Qc, double E)//, RealSeq * pBs, RealSeq * pAs)
 	{
 		if( N <= 0) {return null;}
@@ -351,17 +350,17 @@ public class ALPDesigner {
 	    double a = (tmp - 1/tmp)/2;     //(7.5.43a)
 	    double b = (tmp + 1/tmp)/2;     //(7.5.43b)       
 	    
-	    //生成Bm： 
+	    //鐢熸垚Bm锛� 
 	    RealSeq bs = new RealSeq(1.0);
 	     
-	    //生成一个一阶节：Qc/(s+Qc)         
+	    //鐢熸垚涓�涓竴闃惰妭锛歈c/(s+Qc)         
 	    RealSeq as = null;
 	    
-	    if( N % 2 == 0 )    //N为偶数，没有一阶节 
+	    if( N % 2 == 0 )    //N涓哄伓鏁帮紝娌℃湁涓�闃惰妭 
 	    {
 	        as = new RealSeq(1.0);
 	    }
-	    else                //N为奇数，生成一阶节的Ak 
+	    else                //N涓哄鏁帮紝鐢熸垚涓�闃惰妭鐨凙k 
 	    {
 	        as = new RealSeq(1.0, Qc/a);
 	    }    
@@ -372,14 +371,14 @@ public class ALPDesigner {
 	    		rtnMap.put("BS", bs);
 	    		rtnMap.put("AS", as);
 	    		return rtnMap;
-	    	}     //一阶滤波器，直接返回
+	    	}     //涓�闃舵护娉㈠櫒锛岀洿鎺ヨ繑鍥�
 	    
-	    int biN = N/2;  //二阶节的个数
+	    int biN = N/2;  //浜岄樁鑺傜殑涓暟
 	    
-	    //生成一个二阶节分子多项式，零点见(7.5.81)
+	    //鐢熸垚涓�涓簩闃惰妭鍒嗗瓙澶氶」寮忥紝闆剁偣瑙�(7.5.81)
 	    RealSeq biNomSeq = new RealSeq(1.0, 0.0, 0.0);
 	    
-	    //生成一个二阶节分母多项式，极点见(7.5.79)     
+	    //鐢熸垚涓�涓簩闃惰妭鍒嗘瘝澶氶」寮忥紝鏋佺偣瑙�(7.5.79)     
 	    RealSeq biDenSeq = new RealSeq(1.0, 0.0, 0.0);
 
 	    double theta = 0.0;
@@ -389,13 +388,13 @@ public class ALPDesigner {
 	    double alpha = 0.0;
 	    double beta = 0.0;
 	    
-	    //求分子多项式系数bm和分母多项式系数Ak 
+	    //姹傚垎瀛愬椤瑰紡绯绘暟bm鍜屽垎姣嶅椤瑰紡绯绘暟Ak 
 	    int k = 0;
 	    for(k = 1; k <= biN; k++)
 	    {
 	        theta = PI*(2.0*k-1)/2.0/N;
 	        
-	        biNomSeq.set(2, Qc*Qc/cos(theta)/cos(theta));        //分子多项式的最后一项为零点的幅度
+	        biNomSeq.set(2, Qc*Qc/cos(theta)/cos(theta));        //鍒嗗瓙澶氶」寮忕殑鏈�鍚庝竴椤逛负闆剁偣鐨勫箙搴�
 	        
 	        alpha = -a*sin(theta);  //(7.5.80a)
 	        beta = b*cos(theta);    //(7.5.80b) 
@@ -410,7 +409,7 @@ public class ALPDesigner {
 	        as = (RealSeq) SeqUtil.conv(as, biDenSeq);
 	    }
 	    
-	    //下面归一化，保证|H(j0)|=1
+	    //涓嬮潰褰掍竴鍖栵紝淇濊瘉|H(j0)|=1
 	    double factor = as.get(as.size()-1)/bs.get(bs.size()-1);
 	    bs = (RealSeq) bs.multiple(factor);
 
@@ -419,44 +418,44 @@ public class ALPDesigner {
 		return rtnMap;      
 	}
 
-	//用设计指标设计Elliptic模拟低通滤波器 
+	//鐢ㄨ璁℃寚鏍囪璁lliptic妯℃嫙浣庨�氭护娉㈠櫒 
 	private static Map<String, Object> DesignAnalogEllip1(double Qp, double Qs, double Rp, double As)//, RealSeq * pBs, RealSeq * pAs)
 	{
 		Map<String, Object> tmpMap = GetEllipOrder(Qp, Qs, Rp, As);
 		int N = (int)tmpMap.get("N");
 		double ActuralAs = (double)tmpMap.get("ACTURALAS");
-		//printf("Analog Ellipti: N = %d, 实际达到的As = %lf\n", N, ActuralAs);
+		//printf("Analog Ellipti: N = %d, 瀹為檯杈惧埌鐨凙s = %lf\n", N, ActuralAs);
 		return DesignAnalogEllip2(N, Qp, Qs, Rp);
 	}
 
-	//直接指定滤波器阶数来设计Elliptic模拟低通滤波器 
+	//鐩存帴鎸囧畾婊ゆ尝鍣ㄩ樁鏁版潵璁捐Elliptic妯℃嫙浣庨�氭护娉㈠櫒 
 	private static Map<String, Object> DesignAnalogEllip2(int N, double Qp, double Qs, double Rp)//, RealSeq * pBs, RealSeq * pAs)
 	{
-		//本函数前半部来自算法5.2，求归一化的椭圆型滤波器 
+		//鏈嚱鏁板墠鍗婇儴鏉ヨ嚜绠楁硶5.2锛屾眰褰掍竴鍖栫殑妞渾鍨嬫护娉㈠櫒 
 		 
-		//计算选择性因子k 
+		//璁＄畻閫夋嫨鎬у洜瀛恔 
 		double k = Qp/Qs;
 		
-		//计算模数常量q 	
+		//璁＄畻妯℃暟甯搁噺q 	
 		double tmp = sqrt(sqrt(1-k*k));
 		double u = (1-tmp)/2.0/(1+tmp);		//(5.11)
 		double q = u + 2*pow(u, 5) + 15*pow(u, 9) + 150*pow(u, 13);		//(5.10)
 		
-		//计算V 
+		//璁＄畻V 
 		tmp = pow(10.0, Rp/20);
 		double V = log((tmp+1)/(tmp-1))	/ N / 2;		//(5.12)
 		
-		//计算p0 
+		//璁＄畻p0 
 		double p0 = CalculateP0ForEllip(q, V);		//(5.13)
 		
-		//计算W 
+		//璁＄畻W 
 		double W = sqrt( (1.0+p0*p0/k)*(1+p0*p0*k) );		//(5.14)
 		
-		//确定二阶节个数
+		//纭畾浜岄樁鑺備釜鏁�
 		int r = (N % 2 == 0) ? N/2 : (N-1)/2;
 		
-		//计算Xi和Yi 
-		Map<String, Object> tmpMap = CalculateXandYForEllip(N, q, k);		//(5.15)和(5.16) 
+		//璁＄畻Xi鍜孻i 
+		Map<String, Object> tmpMap = CalculateXandYForEllip(N, q, k);		//(5.15)鍜�(5.16) 
 		RealSeq Xi = (RealSeq)tmpMap.get("XI");
 		RealSeq Yi = (RealSeq)tmpMap.get("YI");
 		
@@ -475,29 +474,29 @@ public class ALPDesigner {
 			ci.set(i, (p0*p0*Y*Y + W*W*X*X)/(1.0+p0*p0*X*X)/(1.0+p0*p0*X*X));	//(5.19)
 		}
 		
-		//根据(5.20)计算H0 
+		//鏍规嵁(5.20)璁＄畻H0 
 		double H0 = (N % 2 == 0) ? pow(10.0, -Rp/20) : p0;
 		for(i = 0; i < r; i++)
 		{
 			H0 *= (ci.get(i)/ai.get(i));
 		}
 		
-		//下面做频率尺度化操作，见文献第9页 
+		//涓嬮潰鍋氶鐜囧昂搴﹀寲鎿嶄綔锛岃鏂囩尞绗�9椤� 
 		double alpha = sqrt(Qp*Qs);
 		 
-		//第一项 	
+		//绗竴椤� 	
 		ai = (RealSeq) ai.multiple(alpha*alpha);
 		
-		//第二项 
+		//绗簩椤� 
 		ci = (RealSeq) ci.multiple(alpha*alpha);
 		
-		//第三项 
+		//绗笁椤� 
 		bi = (RealSeq) bi.multiple(alpha);
 
 		RealSeq bs = new RealSeq(1);
 		RealSeq as = null;
 		
-		//根据(5.22)中K的说明 
+		//鏍规嵁(5.22)涓璌鐨勮鏄� 
 		if(N % 2 == 0)
 		{
 			bs.set(0, H0);
@@ -505,8 +504,8 @@ public class ALPDesigner {
 		}
 		else
 		{
-			bs.set(0, H0*alpha);		//第四项
-			as = new RealSeq(1.0, p0*alpha);		//第五项 
+			bs.set(0, H0*alpha);		//绗洓椤�
+			as = new RealSeq(1.0, p0*alpha);		//绗簲椤� 
 		}
 
 		RealSeq NomSeq = new RealSeq(1.0, 0.0, 0.0);
@@ -527,27 +526,27 @@ public class ALPDesigner {
 		return rtnMap;
 	}
 
-	//用模拟滤波器的设计规格获取Elliptic型滤波器的阶数N和实际达到的阻带最小衰减As
+	//鐢ㄦā鎷熸护娉㈠櫒鐨勮璁¤鏍艰幏鍙朎lliptic鍨嬫护娉㈠櫒鐨勯樁鏁癗鍜屽疄闄呰揪鍒扮殑闃诲甫鏈�灏忚“鍑廇s
 	private static Map<String, Object> GetEllipOrder(double Qp, double Qs, double Rp, double As)//, int * pN, double * pActuralAs)
 	{
-		//本函数来自算法5.1
+		//鏈嚱鏁版潵鑷畻娉�5.1
 		 
-		//计算选择性因子k 
+		//璁＄畻閫夋嫨鎬у洜瀛恔 
 		double k = Qp/Qs;
 		
-		//计算模数常量q 
+		//璁＄畻妯℃暟甯搁噺q 
 		double tmp = sqrt(sqrt(1-k*k));
 		double u = (1-tmp)/2.0/(1+tmp);		//(5.2)
 		double q = u + 2*pow(u, 5) + 15*pow(u, 9) + 150*pow(u, 13);		//(5.1)
 		
-		//计算判别性因子D 
+		//璁＄畻鍒ゅ埆鎬у洜瀛怐 
 		double D = ( pow(10.0, As/10)-1 )/( pow(10.0, Rp/10)-1 );		//(5.3)
 		
-		//计算阶数n 
+		//璁＄畻闃舵暟n 
 		double n = log10(16*D)/log10(1.0/q);	//(5.4)
 		int N = (int)n+1;
 		
-		//计算实际达到的As 
+		//璁＄畻瀹為檯杈惧埌鐨凙s 
 		double ActuralAs = 10*log10( 1+(pow(10.0, Rp/10)-1)/16.0/pow(q, N) );		//(5.5)
 		
 		Map<String, Object> rtnMap = new HashMap<>();
@@ -556,7 +555,7 @@ public class ALPDesigner {
 		return rtnMap;
 	}
 
-	//实现算法5.2中公式(5.13)用于计算p0值 
+	//瀹炵幇绠楁硶5.2涓叕寮�(5.13)鐢ㄤ簬璁＄畻p0鍊� 
 	private static double CalculateP0ForEllip(double q, double V)
 	{
 		int m  = 0;
@@ -570,21 +569,21 @@ public class ALPDesigner {
 			term = pow(-1.0, m)*pow(q, m*(m+1))*sinh((2*m+1)*V);
 			sum += term;
 		}
-		nom = 2.0*sqrt(sqrt(q))*sum;	//我这里把分子和分母都乘以了2 
+		nom = 2.0*sqrt(sqrt(q))*sum;	//鎴戣繖閲屾妸鍒嗗瓙鍜屽垎姣嶉兘涔樹互浜�2 
 		sum = 0.0;
 		for(m = 1; m < iternum; m++)
 		{
 			term = pow(-1.0, m)*pow(q, m*m)*cosh(2*m*V);
 			sum += term;
 		}
-		den = 1.0+2*sum;		//分母也乘以2 
+		den = 1.0+2*sum;		//鍒嗘瘝涔熶箻浠�2 
 		return abs(nom/den);
 	}
 
-	//实现算法5.2中公式(5.15)用于计算Xi,Yi,i=1,2,...,r的值
+	//瀹炵幇绠楁硶5.2涓叕寮�(5.15)鐢ㄤ簬璁＄畻Xi,Yi,i=1,2,...,r鐨勫��
 	private static Map<String, Object> CalculateXandYForEllip(int N, double q, double k)//, RealSeq * pXi, RealSeq * pYi)
 	{
-		//确定二阶节个数
+		//纭畾浜岄樁鑺備釜鏁�
 		int r = (N % 2 == 0) ? N/2 : (N-1)/2;
 
 		RealSeq Xi = new RealSeq(r);
@@ -627,8 +626,8 @@ public class ALPDesigner {
 		return rtnMap;
 	}
 
-	//用于计算第一类完全椭圆积分K(k) 
-	//暂时没有用 
+	//鐢ㄤ簬璁＄畻绗竴绫诲畬鍏ㄦき鍦嗙Н鍒咾(k) 
+	//鏆傛椂娌℃湁鐢� 
 	private static double CalculateCompleteEllipIntegral(double k)
 	{
 		double a = 1-k;

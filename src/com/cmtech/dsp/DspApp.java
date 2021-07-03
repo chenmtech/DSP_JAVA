@@ -1,11 +1,5 @@
 package com.cmtech.dsp;
 
-import java.util.Arrays;
-
-import com.cmtech.dsp.bmefile.BmeFile;
-import com.cmtech.dsp.bmefile.BmeFileDataType;
-import com.cmtech.dsp.bmefile.BmeFileHead;
-import com.cmtech.dsp.bmefile.BmeFileHeadFactory;
 import com.cmtech.dsp.exception.DspException;
 import com.cmtech.dsp.filter.FIRFilter;
 import com.cmtech.dsp.filter.IIRFilter;
@@ -13,19 +7,12 @@ import com.cmtech.dsp.filter.design.DCBlockDesigner;
 import com.cmtech.dsp.filter.design.FIRDesigner;
 import com.cmtech.dsp.filter.design.FilterType;
 import com.cmtech.dsp.filter.design.WinType;
-import com.cmtech.dsp.seq.RealSeq;
-import com.cmtech.msp.qrsdetbyhamilton.Derivative;
-import com.cmtech.msp.qrsdetbyhamilton.HighpassFilter;
-import com.cmtech.msp.qrsdetbyhamilton.LowpassFilter;
-import com.cmtech.msp.qrsdetbyhamilton.MAverageFilter;
-import com.cmtech.msp.qrsdetbyhamilton.QrsDetector;
-import com.cmtech.msp.qrsdetbyhamilton.QrsFilter;
 
 public class DspApp {
 
 	public static void main(String[] args) throws DspException{
-		//BmeFile.setFileDirectory("/Users/bme/360企业云盘同步版/matlabcode/QRSDetectorbyHamilton");
-		//BmeFile.setFileDirectory("F:\\360云盘\\matlabcode\\QRSDetectorbyHamilton");
+		//BmeFile.setFileDirectory("/Users/bme/360浼佷笟浜戠洏鍚屾鐗�/matlabcode/QRSDetectorbyHamilton");
+		//BmeFile.setFileDirectory("F:\\360浜戠洏\\matlabcode\\QRSDetectorbyHamilton");
 		
 		int sampleRate = 250;
 		double[] wp = {2*Math.PI*1/sampleRate};

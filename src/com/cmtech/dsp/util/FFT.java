@@ -2,7 +2,7 @@
  * Project Name:DSP_JAVA
  * File Name:FFT.java
  * Package Name:com.cmtech.dsp.seq
- * Date:2018年2月7日上午9:29:17
+ * Date:2018骞�2鏈�7鏃ヤ笂鍗�9:29:17
  * Copyright (c) 2018, e_yujunquan@163.com All Rights Reserved.
  *
  */
@@ -13,24 +13,24 @@ import static java.lang.Math.cos;
 import static java.lang.Math.pow;
 import static java.lang.Math.sin;
 
-import com.cmtech.dsp.seq.Seq;
 import com.cmtech.dsp.seq.ComplexSeq;
 import com.cmtech.dsp.seq.ISeq;
 import com.cmtech.dsp.seq.RealSeq;
+import com.cmtech.dsp.seq.Seq;
 
 
 /**
  * ClassName: FFT
- * Function: 快速傅里叶变换
- * Reason: TODO ADD REASON(可选). 
- * date: 2018年2月7日 上午9:29:17 
+ * Function: 蹇�熷倕閲屽彾鍙樻崲
+ * Reason: TODO ADD REASON(鍙��). 
+ * date: 2018骞�2鏈�7鏃� 涓婂崍9:29:17 
  *
  * @author bme
  * @version 
  * @since JDK 1.6
  */
 public final class FFT {
-	private static int N = 0;				// FFT的点数，必须为2的幂
+	private static int N = 0;				// FFT鐨勭偣鏁帮紝蹇呴』涓�2鐨勫箓
 	private static int L = 0;				// N = 2^L
 	private static double[] re = new double[0];
 	private static double[] im = new double[0];
@@ -40,14 +40,14 @@ public final class FFT {
 	
 	/**
 	 * 
-	 * fft: 序列FFT. FFT的点数为大于等于序列长度的最小2的整数次幂
-	 * TODO(这里描述这个方法适用条件 – 可选)
-	 * TODO(这里描述这个方法的执行流程 – 可选)
-	 * TODO(这里描述这个方法的使用方法 – 可选)
-	 * TODO(这里描述这个方法的注意事项 – 可选)
+	 * fft: 搴忓垪FFT. FFT鐨勭偣鏁颁负澶т簬绛変簬搴忓垪闀垮害鐨勬渶灏�2鐨勬暣鏁版骞�
+	 * TODO(杩欓噷鎻忚堪杩欎釜鏂规硶閫傜敤鏉′欢 鈥� 鍙��)
+	 * TODO(杩欓噷鎻忚堪杩欎釜鏂规硶鐨勬墽琛屾祦绋� 鈥� 鍙��)
+	 * TODO(杩欓噷鎻忚堪杩欎釜鏂规硶鐨勪娇鐢ㄦ柟娉� 鈥� 鍙��)
+	 * TODO(杩欓噷鎻忚堪杩欎釜鏂规硶鐨勬敞鎰忎簨椤� 鈥� 鍙��)
 	 *
 	 * @author bme
-	 * @param seq 序列
+	 * @param seq 搴忓垪
 	 * @return FFT
 	 * @since JDK 1.6
 	 */
@@ -57,15 +57,15 @@ public final class FFT {
 	
 	/**
 	 * 
-	 * fft: 序列指定点数的FFT. FFT的点数为大于等于wishN的最小2的整数次幂
-	 * TODO(这里描述这个方法适用条件 – 可选)
-	 * TODO(这里描述这个方法的执行流程 – 可选)
-	 * TODO(这里描述这个方法的使用方法 – 可选)
-	 * TODO(这里描述这个方法的注意事项 – 可选)
+	 * fft: 搴忓垪鎸囧畾鐐规暟鐨凢FT. FFT鐨勭偣鏁颁负澶т簬绛変簬wishN鐨勬渶灏�2鐨勬暣鏁版骞�
+	 * TODO(杩欓噷鎻忚堪杩欎釜鏂规硶閫傜敤鏉′欢 鈥� 鍙��)
+	 * TODO(杩欓噷鎻忚堪杩欎釜鏂规硶鐨勬墽琛屾祦绋� 鈥� 鍙��)
+	 * TODO(杩欓噷鎻忚堪杩欎釜鏂规硶鐨勪娇鐢ㄦ柟娉� 鈥� 鍙��)
+	 * TODO(杩欓噷鎻忚堪杩欎釜鏂规硶鐨勬敞鎰忎簨椤� 鈥� 鍙��)
 	 *
 	 * @author bme
-	 * @param seq 序列
-	 * @param wishN 指定的点数
+	 * @param seq 搴忓垪
+	 * @param wishN 鎸囧畾鐨勭偣鏁�
 	 * @return FFT
 	 * @since JDK 1.6
 	 */
@@ -79,14 +79,14 @@ public final class FFT {
 	
 	/**
 	 * 
-	 * ifft: 序列IFFT. IFFT的点数为大于等于序列长度的最小2的整数次幂
-	 * TODO(这里描述这个方法适用条件 – 可选)
-	 * TODO(这里描述这个方法的执行流程 – 可选)
-	 * TODO(这里描述这个方法的使用方法 – 可选)
-	 * TODO(这里描述这个方法的注意事项 – 可选)
+	 * ifft: 搴忓垪IFFT. IFFT鐨勭偣鏁颁负澶т簬绛変簬搴忓垪闀垮害鐨勬渶灏�2鐨勬暣鏁版骞�
+	 * TODO(杩欓噷鎻忚堪杩欎釜鏂规硶閫傜敤鏉′欢 鈥� 鍙��)
+	 * TODO(杩欓噷鎻忚堪杩欎釜鏂规硶鐨勬墽琛屾祦绋� 鈥� 鍙��)
+	 * TODO(杩欓噷鎻忚堪杩欎釜鏂规硶鐨勪娇鐢ㄦ柟娉� 鈥� 鍙��)
+	 * TODO(杩欓噷鎻忚堪杩欎釜鏂规硶鐨勬敞鎰忎簨椤� 鈥� 鍙��)
 	 *
 	 * @author bme
-	 * @param seq 序列
+	 * @param seq 搴忓垪
 	 * @return IFFT
 	 * @since JDK 1.6
 	 */
@@ -96,15 +96,15 @@ public final class FFT {
 	
 	/**
 	 * 
-	 * ifft: 序列指定点数的IFFT. IFFT的点数为大于等于wishN的最小2的整数次幂
-	 * TODO(这里描述这个方法适用条件 – 可选)
-	 * TODO(这里描述这个方法的执行流程 – 可选)
-	 * TODO(这里描述这个方法的使用方法 – 可选)
-	 * TODO(这里描述这个方法的注意事项 – 可选)
+	 * ifft: 搴忓垪鎸囧畾鐐规暟鐨処FFT. IFFT鐨勭偣鏁颁负澶т簬绛変簬wishN鐨勬渶灏�2鐨勬暣鏁版骞�
+	 * TODO(杩欓噷鎻忚堪杩欎釜鏂规硶閫傜敤鏉′欢 鈥� 鍙��)
+	 * TODO(杩欓噷鎻忚堪杩欎釜鏂规硶鐨勬墽琛屾祦绋� 鈥� 鍙��)
+	 * TODO(杩欓噷鎻忚堪杩欎釜鏂规硶鐨勪娇鐢ㄦ柟娉� 鈥� 鍙��)
+	 * TODO(杩欓噷鎻忚堪杩欎釜鏂规硶鐨勬敞鎰忎簨椤� 鈥� 鍙��)
 	 *
 	 * @author bme
-	 * @param seq 序列
-	 * @param wishN 指定的点数
+	 * @param seq 搴忓垪
+	 * @param wishN 鎸囧畾鐨勭偣鏁�
 	 * @return IFFT
 	 * @since JDK 1.6
 	 */ 
@@ -113,7 +113,7 @@ public final class FFT {
 		if(wishN <= 0) return null;
 	    if(!initFFT(seq, wishN)) return null;
 	    
-	    //取共轭 
+	    //鍙栧叡杞� 
 	    int i = 0;
 	    for(i = 0; i < N; i++)
 	         im[i] = -im[i];
@@ -187,9 +187,9 @@ public final class FFT {
 	          }
 	          
 	          K = halfN;
-	          while(J >= K) //J的最高位为1
+	          while(J >= K) //J鐨勬渶楂樹綅涓�1
 	          {
-	               J -= K;  //置0
+	               J -= K;  //缃�0
 	               K = (K>>1); 
 	          } 
 	          J += K;
@@ -211,20 +211,20 @@ public final class FFT {
 	    int M = 0;
 	    int J = 0;
 	    int I = 0;
-	    for(M = 1; M <= L; M++)  //层循环 
+	    for(M = 1; M <= L; M++)  //灞傚惊鐜� 
 	    {
 	          LE = (int)pow(2,M);  
 	          LE1 = LE>>1;
 	          URe = 1.0; UIm = 0.0;
 	          WRe = cos(PI/LE1); WIm = -sin(PI/LE1);
 	          
-	          for(J = 0; J < LE1; J++)   //蝶形运算循环 
+	          for(J = 0; J < LE1; J++)   //铦跺舰杩愮畻寰幆 
 	          { 
-	               for(I = J; I < N; I += LE)   //小DFT循环
+	               for(I = J; I < N; I += LE)   //灏廌FT寰幆
 	               { 
 	                    IP = I + LE1;
 	                    
-	                    //下面为蝶形同址运算 
+	                    //涓嬮潰涓鸿澏褰㈠悓鍧�杩愮畻 
 	                    TRe = URe*re[IP] - UIm*im[IP];
 	                    TIm = URe*im[IP] + re[IP]*UIm;
 	                    
@@ -234,10 +234,10 @@ public final class FFT {
 	                    re[I] += TRe;
 	                    im[I] += TIm;        
 	            
-	                    //蝶形运算结束 
+	                    //铦跺舰杩愮畻缁撴潫 
 	               }
 	               
-	               //更新乘法系数
+	               //鏇存柊涔樻硶绯绘暟
 	               TRe = URe*WRe - UIm*WIm;
 	               UIm = URe*WIm + WRe*UIm;
 	               URe = TRe; 
