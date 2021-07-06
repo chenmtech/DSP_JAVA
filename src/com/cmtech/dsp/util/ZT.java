@@ -20,7 +20,7 @@ import com.cmtech.dsp.seq.RealSeq;
  * date: 2018年2月15日 上午6:54:20 
  *
  * @author bme
- * @version 
+ * @version 0.0.1
  * @since JDK 1.6
  */
 public class ZT {

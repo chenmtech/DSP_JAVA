@@ -13,16 +13,7 @@ import java.util.Collection;
 import com.cmtech.dsp.util.Complex;
 import com.cmtech.dsp.util.SeqUtil;
 
-/**
- * ClassName: ComplexSeq1
- * Function: TODO ADD FUNCTION. 
- * Reason: TODO ADD REASON(可选). 
- * date: 2018年2月25日 上午6:40:29 
- *
- * @author bme
- * @version 
- * @since JDK 1.6
- */
+
 public class ComplexSeq extends Seq<Complex> {
 
 	/**

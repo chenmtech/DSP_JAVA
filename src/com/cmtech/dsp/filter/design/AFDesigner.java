@@ -25,7 +25,7 @@ import com.cmtech.dsp.util.ZT;
  * date: 2018年2月17日 下午5:13:57 
  *
  * @author bme
- * @version 
+ * @version 0.0.1
  * @since JDK 1.6
  */
 public class AFDesigner {

@@ -8,23 +8,10 @@
  */
 package com.cmtech.dsp.seq;
 
-/**
- * ClassName: RealSeqEleOperator
- * Function: TODO ADD FUNCTION. 
- * Reason: TODO ADD REASON(可选). 
- * date: 2018年2月25日 上午5:56:56 
- *
- * @author bme
- * @version 
- * @since JDK 1.6
- */
+
 public class RealSeqBaseOperator implements ISeqBaseOperator<Double>{
 
 
-	/**
-	 * TODO 简单描述该方法的实现功能（可选）.
-	 * @see com.cmtech.dsp.seq.newseq.ISeqBaseOperator#zeroElement()
-	 */
 	@Override
 	public Double zeroElement() {
 		return 0.0;
@@ -35,10 +22,7 @@ public class RealSeqBaseOperator implements ISeqBaseOperator<Double>{
 		return ele;
 	}
 
-	/**
-	 * TODO 简单描述该方法的实现功能（可选）.
-	 * @see com.cmtech.dsp.seq.newseq.ISeqBaseOperator#newArray(int)
-	 */
+
 	@Override
 	public Double[] newArray(int N) {
 		Double[] out = new Double[N];
@@ -48,10 +32,7 @@ public class RealSeqBaseOperator implements ISeqBaseOperator<Double>{
 		return out;
 	}
 
-	/**
-	 * TODO 简单描述该方法的实现功能（可选）.
-	 * @see com.cmtech.dsp.seq.newseq.ISeqBaseOperator#add(java.lang.Object, java.lang.Object)
-	 */
+
 	@Override
 	public Double add(Double d1, Double d2) {
 		return d1+d2;

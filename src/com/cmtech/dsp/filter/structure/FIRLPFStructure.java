@@ -12,16 +12,7 @@ import java.util.Arrays;
 
 import com.cmtech.dsp.filter.FIRFilter;
 
-/**
- * ClassName: FIRLPFStructure
- * Function: TODO ADD FUNCTION. 
- * Reason: TODO ADD REASON(可选). 
- * date: 2018年2月17日 上午7:24:25 
- *
- * @author bme
- * @version 
- * @since JDK 1.6
- */
+
 public abstract class FIRLPFStructure extends AbstractDFStructure {
 	protected double[] h_n;
 	protected double[] x_n;

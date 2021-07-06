@@ -19,16 +19,7 @@ import com.cmtech.dsp.seq.RealSeq;
 import com.cmtech.dsp.seq.Seq;
 
 
-/**
- * ClassName: FFT
- * Function: 蹇�熷倕閲屽彾鍙樻崲
- * Reason: TODO ADD REASON(鍙��). 
- * date: 2018骞�2鏈�7鏃� 涓婂崍9:29:17 
- *
- * @author bme
- * @version 
- * @since JDK 1.6
- */
+
 public final class FFT {
 	private static int N = 0;				// FFT鐨勭偣鏁帮紝蹇呴』涓�2鐨勫箓
 	private static int L = 0;				// N = 2^L
@@ -38,37 +29,12 @@ public final class FFT {
 	private FFT() {
 	}
 	
-	/**
-	 * 
-	 * fft: 搴忓垪FFT. FFT鐨勭偣鏁颁负澶т簬绛変簬搴忓垪闀垮害鐨勬渶灏�2鐨勬暣鏁版骞�
-	 * TODO(杩欓噷鎻忚堪杩欎釜鏂规硶閫傜敤鏉′欢 鈥� 鍙��)
-	 * TODO(杩欓噷鎻忚堪杩欎釜鏂规硶鐨勬墽琛屾祦绋� 鈥� 鍙��)
-	 * TODO(杩欓噷鎻忚堪杩欎釜鏂规硶鐨勪娇鐢ㄦ柟娉� 鈥� 鍙��)
-	 * TODO(杩欓噷鎻忚堪杩欎釜鏂规硶鐨勬敞鎰忎簨椤� 鈥� 鍙��)
-	 *
-	 * @author bme
-	 * @param seq 搴忓垪
-	 * @return FFT
-	 * @since JDK 1.6
-	 */
+
 	public synchronized static <T> ComplexSeq fft(ISeq<T> seq) {
 		return fft(seq, seq.size());
 	}
 	
-	/**
-	 * 
-	 * fft: 搴忓垪鎸囧畾鐐规暟鐨凢FT. FFT鐨勭偣鏁颁负澶т簬绛変簬wishN鐨勬渶灏�2鐨勬暣鏁版骞�
-	 * TODO(杩欓噷鎻忚堪杩欎釜鏂规硶閫傜敤鏉′欢 鈥� 鍙��)
-	 * TODO(杩欓噷鎻忚堪杩欎釜鏂规硶鐨勬墽琛屾祦绋� 鈥� 鍙��)
-	 * TODO(杩欓噷鎻忚堪杩欎釜鏂规硶鐨勪娇鐢ㄦ柟娉� 鈥� 鍙��)
-	 * TODO(杩欓噷鎻忚堪杩欎釜鏂规硶鐨勬敞鎰忎簨椤� 鈥� 鍙��)
-	 *
-	 * @author bme
-	 * @param seq 搴忓垪
-	 * @param wishN 鎸囧畾鐨勭偣鏁�
-	 * @return FFT
-	 * @since JDK 1.6
-	 */
+
 	public synchronized static <T> ComplexSeq fft(ISeq<T> seq, int wishN) {
 		if(wishN <= 0) return null;
 		if(!initFFT(seq, wishN)) return null;
@@ -77,37 +43,12 @@ public final class FFT {
 		return new ComplexSeq(re, im);
 	}
 	
-	/**
-	 * 
-	 * ifft: 搴忓垪IFFT. IFFT鐨勭偣鏁颁负澶т簬绛変簬搴忓垪闀垮害鐨勬渶灏�2鐨勬暣鏁版骞�
-	 * TODO(杩欓噷鎻忚堪杩欎釜鏂规硶閫傜敤鏉′欢 鈥� 鍙��)
-	 * TODO(杩欓噷鎻忚堪杩欎釜鏂规硶鐨勬墽琛屾祦绋� 鈥� 鍙��)
-	 * TODO(杩欓噷鎻忚堪杩欎釜鏂规硶鐨勪娇鐢ㄦ柟娉� 鈥� 鍙��)
-	 * TODO(杩欓噷鎻忚堪杩欎釜鏂规硶鐨勬敞鎰忎簨椤� 鈥� 鍙��)
-	 *
-	 * @author bme
-	 * @param seq 搴忓垪
-	 * @return IFFT
-	 * @since JDK 1.6
-	 */
+
 	public synchronized static <T> ComplexSeq ifft(ISeq<T> seq) {
 		return ifft(seq, seq.size());
 	}
 	
-	/**
-	 * 
-	 * ifft: 搴忓垪鎸囧畾鐐规暟鐨処FFT. IFFT鐨勭偣鏁颁负澶т簬绛変簬wishN鐨勬渶灏�2鐨勬暣鏁版骞�
-	 * TODO(杩欓噷鎻忚堪杩欎釜鏂规硶閫傜敤鏉′欢 鈥� 鍙��)
-	 * TODO(杩欓噷鎻忚堪杩欎釜鏂规硶鐨勬墽琛屾祦绋� 鈥� 鍙��)
-	 * TODO(杩欓噷鎻忚堪杩欎釜鏂规硶鐨勪娇鐢ㄦ柟娉� 鈥� 鍙��)
-	 * TODO(杩欓噷鎻忚堪杩欎釜鏂规硶鐨勬敞鎰忎簨椤� 鈥� 鍙��)
-	 *
-	 * @author bme
-	 * @param seq 搴忓垪
-	 * @param wishN 鎸囧畾鐨勭偣鏁�
-	 * @return IFFT
-	 * @since JDK 1.6
-	 */ 
+
 	public synchronized static <T> ComplexSeq ifft(ISeq<T> seq, int wishN)
 	{
 		if(wishN <= 0) return null;

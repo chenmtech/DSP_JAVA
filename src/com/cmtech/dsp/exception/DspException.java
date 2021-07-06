@@ -17,7 +17,7 @@ import java.io.Serializable;
  * date: 2018年2月11日 上午7:06:11 
  *
  * @author bme
- * @version 
+ * @version 0.0.1
  * @since JDK 1.6
  */
 public class DspException extends Exception implements Serializable {

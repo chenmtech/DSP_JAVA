@@ -19,7 +19,7 @@ import com.cmtech.dsp.exception.FileException;
  * date: 2018年2月17日 上午5:33:27 
  *
  * @author bme
- * @version 
+ * @version 0.0.1
  * @since JDK 1.6
  */
 public class BmeFileHeadFactory {

@@ -10,22 +10,10 @@ package com.cmtech.dsp.seq;
 
 import com.cmtech.dsp.util.Complex;
 
-/**
- * ClassName: ComplexSeqEleOperator
- * Function: TODO ADD FUNCTION. 
- * Reason: TODO ADD REASON(可选). 
- * date: 2018年2月25日 上午5:58:33 
- *
- * @author bme
- * @version 
- * @since JDK 1.6
- */
+
 public class ComplexSeqBaseOperator implements ISeqBaseOperator<Complex>{
 
-	/**
-	 * TODO 简单描述该方法的实现功能（可选）.
-	 * @see com.cmtech.dsp.seq.newseq.ISeqBaseOperator#zeroElement()
-	 */
+
 	@Override
 	public Complex zeroElement() {
 		return new Complex();
@@ -36,10 +24,7 @@ public class ComplexSeqBaseOperator implements ISeqBaseOperator<Complex>{
 		return new Complex(ele);
 	}
 	
-	/**
-	 * TODO 简单描述该方法的实现功能（可选）.
-	 * @see com.cmtech.dsp.seq.newseq.ISeqBaseOperator#newArray(int)
-	 */
+
 	@Override
 	public Complex[] newArray(int N) {
 		Complex[] out = new Complex[N];
@@ -50,10 +35,7 @@ public class ComplexSeqBaseOperator implements ISeqBaseOperator<Complex>{
 	}
 
 
-	/**
-	 * TODO 简单描述该方法的实现功能（可选）.
-	 * @see com.cmtech.dsp.seq.newseq.ISeqBaseOperator#add(java.lang.Object, java.lang.Object)
-	 */
+
 	@Override
 	public Complex add(Complex d1, Complex d2) {
 		return Complex.add(d1, d2);

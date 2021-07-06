@@ -10,16 +10,7 @@ package com.cmtech.dsp.filter.structure;
 
 import com.cmtech.dsp.filter.IIRFilter;
 
-/**
- * ClassName: IIRNotchStructure
- * Function: TODO ADD FUNCTION. 
- * Reason: TODO ADD REASON(可选). 
- * date: 2018年4月2日 下午3:58:35 
- *
- * @author bme
- * @version 
- * @since JDK 1.6
- */
+
 public class IIRNotchStructure extends AbstractDFStructure {
 	private double b1 = 0.0;
 	private double b2 = 0.0;

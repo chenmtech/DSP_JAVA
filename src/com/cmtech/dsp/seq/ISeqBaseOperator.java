@@ -8,16 +8,7 @@
  */
 package com.cmtech.dsp.seq;
 
-/**
- * ClassName: SeqEleOperator
- * Function: TODO ADD FUNCTION. 
- * Reason: TODO ADD REASON(可选). 
- * date: 2018年2月25日 上午5:53:49 
- *
- * @author bme
- * @version 
- * @since JDK 1.6
- */
+
 public interface ISeqBaseOperator<T> {
 	T zeroElement();
 	T newElement(T ele);

@@ -15,7 +15,7 @@ package com.cmtech.dsp.exception;
  * date: 2018年2月14日 下午2:14:43 
  *
  * @author bme
- * @version 
+ * @version 0.0.1
  * @since JDK 1.6
  */
 public class FilterException extends DspException {

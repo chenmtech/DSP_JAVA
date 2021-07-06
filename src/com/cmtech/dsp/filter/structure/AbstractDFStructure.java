@@ -15,7 +15,7 @@ package com.cmtech.dsp.filter.structure;
  * date: 2018年2月17日 下午3:52:29 
  *
  * @author bme
- * @version 
+ * @version 0.0.1
  * @since JDK 1.6
  */
 public abstract class AbstractDFStructure implements IDFStructure {

@@ -15,7 +15,7 @@ package com.cmtech.dsp.bmefile;
  * date: 2018年2月12日 上午11:05:51 
  *
  * @author bme
- * @version 
+ * @version 0.0.1
  * @since JDK 1.6
  */
 public enum BmeFileDataType {

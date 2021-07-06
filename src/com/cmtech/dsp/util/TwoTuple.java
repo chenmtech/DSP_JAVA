@@ -15,7 +15,7 @@ package com.cmtech.dsp.util;
  * date: 2018年2月18日 上午7:26:40 
  *
  * @author bme
- * @version 
+ * @version 0.0.1
  * @since JDK 1.6
  */
 public class TwoTuple<A,B> {

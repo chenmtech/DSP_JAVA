@@ -15,7 +15,7 @@ package com.cmtech.dsp.exception;
  * date: 2018年2月11日 上午7:07:08 
  *
  * @author bme
- * @version 
+ * @version 0.0.1
  * @since JDK 1.6
  */
 public enum DspExceptionCode {

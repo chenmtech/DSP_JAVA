@@ -10,16 +10,7 @@ package com.cmtech.dsp.filter.structure;
 
 import com.cmtech.dsp.filter.FIRFilter;
 
-/**
- * ClassName: FIRLPF1Structure
- * Function: TODO ADD FUNCTION. 
- * Reason: TODO ADD REASON(可选). 
- * date: 2018年2月17日 上午7:09:17 
- *
- * @author bme
- * @version 
- * @since JDK 1.6
- */
+
 public class FIRLPF1Structure extends FIRLPFStructure {
 	
 	public FIRLPF1Structure(double[] h_n) {

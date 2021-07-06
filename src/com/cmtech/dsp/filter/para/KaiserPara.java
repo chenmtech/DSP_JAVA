@@ -18,7 +18,7 @@ import com.cmtech.dsp.filter.design.WinType;
  * date: 2018年2月16日 上午8:11:11 
  *
  * @author bme
- * @version 
+ * @version 0.0.1
  * @since JDK 1.6
  */
 public class KaiserPara extends FIRPara {

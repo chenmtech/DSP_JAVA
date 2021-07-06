@@ -18,7 +18,7 @@ import com.cmtech.dsp.filter.structure.StructType;
  * date: 2018年2月17日 下午4:23:49 
  *
  * @author bme
- * @version 
+ * @version 0.0.1
  * @since JDK 1.6
  */
 public class NotchDesigner {

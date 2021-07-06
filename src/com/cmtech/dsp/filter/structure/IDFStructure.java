@@ -8,16 +8,7 @@
  */
 package com.cmtech.dsp.filter.structure;
 
-/**
- * ClassName: IFilterStructure
- * Function: TODO ADD FUNCTION. 
- * Reason: TODO ADD REASON(可选). 
- * date: 2018年2月17日 上午6:18:59 
- *
- * @author bme
- * @version 
- * @since JDK 1.6
- */
+
 public interface IDFStructure {
 	double filter(double x);
 }

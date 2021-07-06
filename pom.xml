@@ -2,7 +2,46 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.github.chenmtech</groupId>
   <artifactId>DSP_JAVA</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.0.1</version>
+  <name>DSP_JAVA</name>
+  <description>A java package for DSP</description>
+  <url>https://chenmtech.github.io/DSP_JAVA/</url>
+  <!--打包方式-->
+  <packaging>jar</packaging>
+	
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+    <scm>
+        <url>https://github.com/chenmtech/DSP_JAVA</url>
+		<connection>https://github.com/chenmtech/DSP_JAVA.git</connection>
+    </scm>
+    <developers>
+        <developer>
+            <name>chenm</name>
+            <email>1276094137@qq.com</email>
+        </developer>
+    </developers>
+ 
+    <distributionManagement>
+        <snapshotRepository>
+            <id>sonatype-nexus-snapshots</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+        </snapshotRepository>
+        <repository>
+            <id>sonatype-nexus-staging</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
+  
+  <properties>
+    <!--编译编码-->
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
   <build>
     <sourceDirectory>src</sourceDirectory>
     <resources>
@@ -12,8 +51,55 @@
           <exclude>**/*.java</exclude>
         </excludes>
       </resource>
-    </resources>
-    <plugins>
+     </resources>
+
+      <plugins>
+			<!--java source生成插件-->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>2.2.1</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			
+			<!--java doc生成插件-->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.9.1</version>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			
+			<!--gpg签名插件-->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<version>1.5</version>
+				<executions>
+					<execution>
+						<id>sign-artifacts</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>     
+     
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.7.0</version>
@@ -22,7 +108,7 @@
           <target>1.8</target>
         </configuration>
       </plugin>
-    </plugins>
+     </plugins>
   </build>
   
   

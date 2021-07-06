@@ -12,16 +12,7 @@ import java.util.Arrays;
 
 import com.cmtech.dsp.filter.IIRFilter;
 
-/**
- * ClassName: IIRTDF2Structure
- * Function: TODO ADD FUNCTION. 
- * Reason: TODO ADD REASON(可选). 
- * date: 2018年2月17日 下午3:35:45 
- *
- * @author bme
- * @version 
- * @since JDK 1.6
- */
+
 public class IIRTDF2Structure extends AbstractDFStructure {
 	private double[] bm;
 	private double[] ak;

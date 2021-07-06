@@ -15,7 +15,7 @@ package com.cmtech.dsp.filter;
  * date: 2018年2月17日 上午5:49:32 
  *
  * @author bme
- * @version 
+ * @version 0.0.1
  * @since JDK 1.6
  */
 public enum LPFType {

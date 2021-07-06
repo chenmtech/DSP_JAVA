@@ -16,16 +16,7 @@ import com.cmtech.dsp.bmefile.BmeFileHead;
 import com.cmtech.dsp.exception.FileException;
 import com.cmtech.dsp.util.SeqUtil;
 
-/**
- * ClassName: RealSeq1
- * Function: TODO ADD FUNCTION. 
- * Reason: TODO ADD REASON(可选). 
- * date: 2018年2月25日 上午6:15:57 
- *
- * @author bme
- * @version 
- * @since JDK 1.6
- */
+
 public class RealSeq extends Seq<Double>{
 	/**
 	 * serialVersionUID:TODO(用一句话描述这个变量表示什么).

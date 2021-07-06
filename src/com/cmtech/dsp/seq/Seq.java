@@ -14,17 +14,7 @@ import java.util.List;
 
 import com.cmtech.dsp.util.FFT;
 
-/**
- * ClassName: AbstractSeq
- * Function: TODO ADD FUNCTION. 
- * Reason: TODO ADD REASON(可选). 
- * date: 2018年2月25日 上午6:01:20 
- *
- * @author bme
- * @version 
- * @param <T>
- * @since JDK 1.6
- */
+
 public abstract class Seq<T> implements ISeq<T> {
 	/**
 	 * serialVersionUID:TODO(用一句话描述这个变量表示什么).

@@ -24,7 +24,7 @@ import com.cmtech.dsp.util.FormatTransfer;
  * date: 2018年2月11日 下午1:57:37 
  *
  * @author bme
- * @version 
+ * @version 0.0.1
  * @since JDK 1.6
  */
 public class BmeFileHead10 extends BmeFileHead {

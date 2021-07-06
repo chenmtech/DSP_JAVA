@@ -21,7 +21,7 @@ package com.cmtech.dsp.util;
  * date: 2018年2月11日 下午4:11:23 
  *
  * @author bme
- * @version 
+ * @version 0.01
  * @since JDK 1.6
  */
 public class FormatTransfer {
@@ -97,7 +97,7 @@ public class FormatTransfer {
 	  
 	  
 	  
-	/**  
+	/*  
 	  * 将将int转为高字节在前，低字节在后的byte数组   
 	  
 	public static byte[] toHH(int number) {  
@@ -122,28 +122,28 @@ public class FormatTransfer {
 	  
 	*/   
 	  
-	/**  
+	/*
 	  * 将float转为低字节在前，高字节在后的byte数组  
 	  */  
 	public static byte[] toLH(float f) {  
 	  return toLH(Float.floatToRawIntBits(f));  
 	}   
 	  
-	/**  
+	/*  
 	  * 将float转为高字节在前，低字节在后的byte数组  
 	  */  
 	public static byte[] toHH(float f) {  
 	  return toHH(Float.floatToRawIntBits(f));  
 	}   
 	
-	/**  
+	/*  
 	  * 将double转为低字节在前，高字节在后的byte数组  
 	  */  
 	public static byte[] toLH(double f) {  
 	  return toLH(Double.doubleToRawLongBits(f));  
 	} 
 	  
-	/**  
+	/*  
 	  * 将String转为byte数组  
 	  */  
 	public static byte[] stringToBytes(String s, int length) {  
@@ -154,7 +154,7 @@ public class FormatTransfer {
 	}   
 	  
 	  
-	/**  
+	/*
 	  * 将字节数组转换为String  
 	  * @param b byte[]  
 	  * @return String  
@@ -168,7 +168,7 @@ public class FormatTransfer {
 	  return result.toString();  
 	}   
 	  
-	/**  
+	/*  
 	  * 将字符串转换为byte数组  
 	  * @param s String  
 	  * @return byte[]  
@@ -177,7 +177,7 @@ public class FormatTransfer {
 	  return s.getBytes();  
 	}   
 	  
-	/**  
+	/*  
 	  * 将高字节数组转换为int  
 	  * @param b byte[]  
 	  * @return int  
@@ -200,7 +200,7 @@ public class FormatTransfer {
 	  return s;  
 	}   
 	  
-	/**  
+	/*  
 	  * 将低字节数组转换为int  
 	  * @param b byte[]  
 	  * @return int  
@@ -224,7 +224,7 @@ public class FormatTransfer {
 	}   
 	  
 	  
-	/**  
+	/* 
 	  * 高字节数组到short的转换  
 	  * @param b byte[]  
 	  * @return short  
@@ -246,7 +246,7 @@ public class FormatTransfer {
 	  return result;  
 	}   
 	  
-	/**  
+	/*  
 	  * 低字节数组到short的转换  
 	  * @param b byte[]  
 	  * @return short  
@@ -268,7 +268,7 @@ public class FormatTransfer {
 	  return result;  
 	}   
 	  
-	/**  
+	/*  
 	  * 高字节数组转换为float  
 	  * @param b byte[]  
 	  * @return float  
@@ -280,7 +280,7 @@ public class FormatTransfer {
 	  return F.intBitsToFloat(i);  
 	}   
 	  
-	/**  
+	/*  
 	  * 低字节数组转换为float  
 	  * @param b byte[]  
 	  * @return float  
@@ -292,7 +292,7 @@ public class FormatTransfer {
 	  return F.intBitsToFloat(i);  
 	}   
 	  
-	/**  
+	/*  
 	  * 将byte数组中的元素倒序排列  
 	  */  
 	public static byte[] bytesReverseOrder(byte[] b) {  
@@ -304,7 +304,7 @@ public class FormatTransfer {
 	  return result;  
 	}   
 	  
-	/**  
+	/*  
 	  * 打印byte数组  
 	  */  
 	public static void printBytes(byte[] bb) {  
@@ -324,7 +324,7 @@ public class FormatTransfer {
 	  
 	}   
 	  
-	/**  
+	/*  
 	  * 将int类型的值转换为字节序颠倒过来对应的int值  
 	  * @param i int  
 	  * @return int  
@@ -334,7 +334,7 @@ public class FormatTransfer {
 	  return result;  
 	}   
 	  
-	/**  
+	/*  
 	  * 将short类型的值转换为字节序颠倒过来对应的short值  
 	  * @param s short  
 	  * @return short  
@@ -344,7 +344,7 @@ public class FormatTransfer {
 	  return result;  
 	}   
 	  
-	/**  
+	/* 
 	  * 将float类型的值转换为字节序颠倒过来对应的float值  
 	  * @param f float  
 	  * @return float  

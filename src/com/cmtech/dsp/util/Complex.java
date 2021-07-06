@@ -1,17 +1,8 @@
-																					package com.cmtech.dsp.util;
+package com.cmtech.dsp.util;
 
 import java.io.Serializable;
 
-/**
- * ClassName: Complex
- * Function: 复数类. 
- * Reason: TODO ADD REASON(可选). 
- * date: 2018年2月2日 上午6:00:36 
- *
- * @author bme
- * @version 
- * @since JDK 1.6
- */
+
 public final class Complex implements Serializable{
 
 	private static final long serialVersionUID = 1L;
@@ -339,19 +330,7 @@ public final class Complex implements Serializable{
 		return out;
 	}
 	
-	/**
-	 * subtract:(这里用一句话描述这个方法的作用)
-	 * TODO(这里描述这个方法适用条件 – 可选)
-	 * TODO(这里描述这个方法的执行流程 – 可选)
-	 * TODO(这里描述这个方法的使用方法 – 可选)
-	 * TODO(这里描述这个方法的注意事项 – 可选)
-	 *
-	 * @author bme
-	 * @param op1
-	 * @param op2
-	 * @return
-	 * @since JDK 1.6
-	 */
+
 	public static Complex subtract(Complex c1, Complex c2) {
 		Complex out = new Complex(c1);
 		out.subtract(c2);

@@ -8,16 +8,7 @@
  */
 package com.cmtech.dsp.filter.structure;
 
-/**
- * ClassName: FIRSTRUCT
- * Function: TODO ADD FUNCTION. 
- * Reason: TODO ADD REASON(可选). 
- * date: 2018年2月17日 下午4:32:59 
- *
- * @author bme
- * @version 
- * @since JDK 1.6
- */
+
 public enum StructType {
 	FIR_DF,
 	FIR_LPF,

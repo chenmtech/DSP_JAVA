@@ -10,16 +10,7 @@ package com.cmtech.dsp.seq;
 
 import java.io.Serializable;
 
-/**
- * ClassName: ISeq1
- * Function: TODO ADD FUNCTION. 
- * Reason: TODO ADD REASON(可选). 
- * date: 2018年2月25日 上午5:50:06 
- *
- * @author bme
- * @version 
- * @since JDK 1.6
- */
+
 public interface ISeq<T> extends Serializable{
 	ISeqBaseOperator<T> getSeqBaseOperator();
 	int size();

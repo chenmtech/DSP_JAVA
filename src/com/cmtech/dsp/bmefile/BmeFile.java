@@ -36,7 +36,7 @@ import com.cmtech.dsp.util.FormatTransfer;
  * date: 2018年2月11日 上午6:23:50 
  *
  * @author bme
- * @version 
+ * @version 0.0.1
  * @since JDK 1.6
  */
 public class BmeFile {

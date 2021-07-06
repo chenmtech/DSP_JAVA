@@ -10,16 +10,7 @@ package com.cmtech.dsp.filter.structure;
 
 import com.cmtech.dsp.filter.IIRFilter;
 
-/**
- * ClassName: IIRDCBlockStructure
- * Function: TODO ADD FUNCTION. 
- * Reason: TODO ADD REASON(可选). 
- * date: 2018年4月2日 下午3:12:44 
- *
- * @author bme
- * @version 
- * @since JDK 1.6
- */
+
 public class IIRDCBlockStructure extends AbstractDFStructure {
 	private double b = 0.0;
 	private double a = 0.0;

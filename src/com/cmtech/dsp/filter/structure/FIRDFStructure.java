@@ -19,7 +19,7 @@ import com.cmtech.dsp.filter.FIRFilter;
  * date: 2018年2月17日 上午6:34:03 
  *
  * @author bme
- * @version 
+ * @version 0.0.1
  * @since JDK 1.6
  */
 public class FIRDFStructure extends AbstractDFStructure {
@@ -37,10 +37,7 @@ public class FIRDFStructure extends AbstractDFStructure {
 		this(filter.getB().toArray()); 
 	}
 	
-	/**
-	 * TODO 简单描述该方法的实现功能（可选）.
-	 * @see com.cmtech.dsp.filter.structure.IDFStructure#filter(java.lang.Object)
-	 */
+
 	@Override
 	public double filter(double x) {
 		double y = 0.0;
