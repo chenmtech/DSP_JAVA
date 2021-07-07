@@ -1,11 +1,3 @@
-/**
- * Project Name:DSP_JAVA
- * File Name:SeqEleOperator.java
- * Package Name:com.cmtech.dsp.seq
- * Date:2018年2月25日上午5:53:49
- * Copyright (c) 2018, e_yujunquan@163.com All Rights Reserved.
- *
- */
 package com.cmtech.dsp.seq;
 
 

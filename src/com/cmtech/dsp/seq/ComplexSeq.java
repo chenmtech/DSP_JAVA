@@ -1,25 +1,21 @@
-/**
- * Project Name:DSP_JAVA
- * File Name:ComplexSeq1.java
- * Package Name:com.cmtech.dsp.seq.newseq
- * Date:2018年2月25日上午6:40:29
- * Copyright (c) 2018, e_yujunquan@163.com All Rights Reserved.
- *
- */
 package com.cmtech.dsp.seq;
+
+/*
+Copyright (c) 2008 chenm
+*/
 
 import java.util.Collection;
 
 import com.cmtech.dsp.util.Complex;
 import com.cmtech.dsp.util.SeqUtil;
 
-
+/**
+ * A ComplexSeq is a sequence with complex values
+ * @author chenm
+ * @version 2008-06
+ */
 public class ComplexSeq extends Seq<Complex> {
 
-	/**
-	 * serialVersionUID:TODO(用一句话描述这个变量表示什么).
-	 * @since JDK 1.6
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	private static final ISeqBaseOperator<Complex> EOP = new ComplexSeqBaseOperator();
