@@ -1,20 +1,19 @@
-/**
- * Project Name:DSP_JAVA
- * File Name:ISeq1.java
- * Package Name:com.cmtech.dsp.seq
- * Date:2018年2月25日上午5:50:06
- * Copyright (c) 2018, e_yujunquan@163.com All Rights Reserved.
- *
- */
 package com.cmtech.dsp.seq;
-
+/*
+Copyright (c) 2008 chenm
+*/
 import java.io.Serializable;
 
-
+/**
+ * An interface for a sequence
+ * @author chenm
+ * @version 2008-05
+ * @param <T> the element type
+ */
 public interface ISeq<T> extends Serializable{
-	ISeqBaseOperator<T> getSeqBaseOperator();
-	int size();
-	ISeq<T> setToZero(int N);
+	INumBasicOperator<T> getBasicOperator(); // get element basic operator
+	int size();  // size
+	ISeq<T> setToZeroSeq(int N); // set to a sequence with the element zero and the length N
 	T get(int i);
 	boolean set(int i, T element);
 	ISeq<T> clear();
@@ -34,5 +33,4 @@ public interface ISeq<T> extends Serializable{
 	ComplexSeq fft(int N);
 	ComplexSeq ifft();
 	ComplexSeq ifft(int N);
-	
 }

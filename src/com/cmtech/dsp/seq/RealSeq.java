@@ -1,13 +1,7 @@
-/**
- * Project Name:DSP_JAVA
- * File Name:RealSeq1.java
- * Package Name:com.cmtech.dsp.seq
- * Date:2018年2月25日上午6:15:57
- * Copyright (c) 2018, e_yujunquan@163.com All Rights Reserved.
- *
- */
 package com.cmtech.dsp.seq;
-
+/*
+Copyright (c) 2008 chenm
+*/
 import java.util.Collection;
 import java.util.Collections;
 
@@ -18,16 +12,13 @@ import com.cmtech.dsp.util.SeqUtil;
 
 
 public class RealSeq extends Seq<Double>{
-	/**
-	 * serialVersionUID:TODO(用一句话描述这个变量表示什么).
-	 * @since JDK 1.6
-	 */
+
 	private static final long serialVersionUID = 1L;
 	
-	private static final ISeqBaseOperator<Double> EOP = new RealSeqBaseOperator();
+	private static final INumBasicOperator<Double> EOP = new DoubleBasicOperator();
 	
 	@Override
-	public ISeqBaseOperator<Double> getSeqBaseOperator() {
+	public INumBasicOperator<Double> getBasicOperator() {
 		return EOP;
 	}
 	

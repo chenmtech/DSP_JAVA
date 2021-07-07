@@ -1,5 +1,7 @@
 package com.cmtech.dsp.seq;
-
+/*
+Copyright (c) 2008 chenm
+*/
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -8,29 +10,26 @@ import com.cmtech.dsp.util.FFT;
 
 
 public abstract class Seq<T> implements ISeq<T> {
-	/**
-	 * serialVersionUID:TODO(用一句话描述这个变量表示什么).
-	 * @since JDK 1.6
-	 */
+
 	private static final long serialVersionUID = 1L;
 	
-	ISeqBaseOperator<T> eOp = null;
+	INumBasicOperator<T> eOp = null;
 	
 	List<T> data = new ArrayList<T>();
 	
 	public Seq() {
-		eOp = getSeqBaseOperator();
+		eOp = getBasicOperator();
 	}
 	
 	public Seq(int N) {
 		this();
-		setToZero(N);
+		setToZeroSeq(N);
 	}
 	
 	public Seq(Collection<T> d) {
 		this();
 		for(T ele : d) {
-			data.add(eOp.newElement(ele));
+			data.add(ele);
 		}
 	}
 	
@@ -44,7 +43,7 @@ public abstract class Seq<T> implements ISeq<T> {
 	}
 	
 	@Override
-	public ISeq<T> setToZero(int N) {
+	public ISeq<T> setToZeroSeq(int N) {
 		data = new ArrayList<T>();
 		for(int i = 0; i < N; i++) {
 			data.add(eOp.zeroElement());
@@ -107,17 +106,17 @@ public abstract class Seq<T> implements ISeq<T> {
 
 	@Override
 	public ISeq<T> reverse() {
-		Seq<T> out = eOp.newInstance();
+		Seq<T> out = eOp.newSeq();
 		for(int i = 0; i < data.size(); i++)
 	    {
-	        out.data.add(eOp.newElement(data.get(data.size()-1-i)));
+	        out.data.add(data.get(data.size()-1-i));
 	    }
 		return out;
 	}
 
 	@Override
 	public ISeq<T> plus(T a) {
-		Seq<T> out = eOp.newInstance();
+		Seq<T> out = eOp.newSeq();
 		for(int i = 0; i < data.size(); i++)
 	    {
 	        out.data.add(eOp.add(data.get(i), a));
@@ -127,7 +126,7 @@ public abstract class Seq<T> implements ISeq<T> {
 	
 	@Override
 	public ISeq<T> minus(T a) {
-		Seq<T> out = eOp.newInstance();
+		Seq<T> out = eOp.newSeq();
 		for(int i = 0; i < data.size(); i++)
 	    {
 	        out.data.add(eOp.subtract(data.get(i), a));
@@ -137,17 +136,17 @@ public abstract class Seq<T> implements ISeq<T> {
 
 	@Override
 	public ISeq<T> multiple(T a) {
-		Seq<T> out = eOp.newInstance();
+		Seq<T> out = eOp.newSeq();
 		for(int i = 0; i < data.size(); i++)
 	    {
-	        out.data.add(eOp.multiple(data.get(i), a));
+	        out.data.add(eOp.multiply(data.get(i), a));
 	    }
 		return out;
 	}
 
 	@Override
 	public ISeq<T> divide(T a) {
-		Seq<T> out = eOp.newInstance();
+		Seq<T> out = eOp.newSeq();
 		for(int i = 0; i < data.size(); i++)
 	    {
 	        out.data.add(eOp.divide(data.get(i), a));
@@ -205,7 +204,5 @@ public abstract class Seq<T> implements ISeq<T> {
 	@Override
 	public ComplexSeq ifft(int N) {
 		return FFT.ifft(this, N);
-	}
-	
-	
+	}	
 }

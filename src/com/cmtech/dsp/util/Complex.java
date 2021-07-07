@@ -1,18 +1,23 @@
 package com.cmtech.dsp.util;
+/*
+Copyright (c) 2008 chenm
+*/
 
 import java.io.Serializable;
 
-
+/**
+ * A Complex stands for a complex value.
+ * @author chenm
+ * @version 2008-04
+ */
 public final class Complex implements Serializable{
 
 	private static final long serialVersionUID = 1L;
-	private double real;
-	private double imag;
+	private double real;  // real value
+	private double imag;  // imaginary value
 	
 	/**
-	 * 
-	 * Creates a new instance of Complex.
-	 * 实部和虚部都为0.0
+	 * Creates a new instance of a Complex with real 0 and imag 0..
 	 */
 	public Complex()
 	{
@@ -22,10 +27,10 @@ public final class Complex implements Serializable{
 	
 	/**
 	 * 
-	 * Creates a new instance of Complex.
+	 * Creates a new instance of a Complex.
 	 *
-	 * @param re 实部
-	 * @param im 虚部
+	 * @param re real value
+	 * @param im imaginary value
 	 */
 	public Complex(double re, double im)
 	{
@@ -35,9 +40,9 @@ public final class Complex implements Serializable{
 	
 	/**
 	 * 
-	 * Creates a new instance of Complex.
+	 * Creates a new instance of a Complex.
 	 *
-	 * @param c 复数
+	 * @param c complex value
 	 */
 	public Complex(Complex c) {
 		real = c.real;
@@ -45,94 +50,53 @@ public final class Complex implements Serializable{
 	}
 
 	/**
-	 * getReal:获取实部
+	 * to get the real value of this complex.
 	 *
-	 * @author bme
-	 * @return 实部
-	 * @since JDK 1.6
+	 * @return real
 	 */
 	public double getReal() {
 		return real;
 	}
 
 	/**
-	 * 
-	 * setReal: 设置实部
-	 * TODO(这里描述这个方法适用条件 – 可选)
-	 * TODO(这里描述这个方法的执行流程 – 可选)
-	 * TODO(这里描述这个方法的使用方法 – 可选)
-	 * TODO(这里描述这个方法的注意事项 – 可选)
-	 *
-	 * @author bme
-	 * @param real 实部
-	 * @since JDK 1.6
+	 * to set the real value of this complex.
+	 * @param real
 	 */
 	public void setReal(double real) {
 		this.real = real;
 	}
 
 	/**
-	 * 
-	 * getImag: 获取虚部
-	 * TODO(这里描述这个方法适用条件 – 可选)
-	 * TODO(这里描述这个方法的执行流程 – 可选)
-	 * TODO(这里描述这个方法的使用方法 – 可选)
-	 * TODO(这里描述这个方法的注意事项 – 可选)
+	 * to get the imaginary value of this complex.
 	 *
-	 * @author bme
-	 * @return 虚部
-	 * @since JDK 1.6
+	 * @return real
 	 */
 	public double getImag() {
 		return imag;
 	}
 
 	/**
-	 * 
-	 * setImag: 设置虚部
-	 * TODO(这里描述这个方法适用条件 – 可选)
-	 * TODO(这里描述这个方法的执行流程 – 可选)
-	 * TODO(这里描述这个方法的使用方法 – 可选)
-	 * TODO(这里描述这个方法的注意事项 – 可选)
-	 *
-	 * @author bme
-	 * @param imag 虚部
-	 * @since JDK 1.6
+	 * to set the imaginary value of this complex.
+	 * @param imag
 	 */
 	public void setImag(double imag) {
 		this.imag = imag;
 	}
 	
 	/**
-	 * 
-	 * set: 设置实部和虚部
-	 * TODO(这里描述这个方法适用条件 – 可选)
-	 * TODO(这里描述这个方法的执行流程 – 可选)
-	 * TODO(这里描述这个方法的使用方法 – 可选)
-	 * TODO(这里描述这个方法的注意事项 – 可选)
-	 *
-	 * @author bme
-	 * @param re 实部
-	 * @param im 虚部
-	 * @since JDK 1.6
+	 * to set the real and imaginary value of this complex.
+	 * @param re real value
+	 * @param im imaginary value
 	 */
 	public void set(double re, double im) {
 		real = re;
 		imag = im;
 	}
-	
+
 	/**
-	 * 
-	 * add: 实部加上一个实数
-	 * TODO(这里描述这个方法适用条件 – 可选)
-	 * TODO(这里描述这个方法的执行流程 – 可选)
-	 * TODO(这里描述这个方法的使用方法 – 可选)
-	 * TODO(这里描述这个方法的注意事项 – 可选)
-	 *
-	 * @author bme
-	 * @param a 实数
-	 * @return this
-	 * @since JDK 1.6
+	 * to add a real value to the real part, and return this complex
+	 * @param a a real value 
+	 * @return this complex
 	 */
 	public Complex add(double a) {
 		real += a;
@@ -140,12 +104,9 @@ public final class Complex implements Serializable{
 	}
 	
 	/**
-	 * subtract: 实部减去一个实数
-	 *
-	 * @author bme
-	 * @param a 实数
-	 * @return this
-	 * @since JDK 1.6
+	 * to subtract a real value to the real part, and return this complex
+	 * @param a a real value 
+	 * @return this complex
 	 */
 	public Complex subtract(double a) {
 		real -= a;
@@ -153,17 +114,9 @@ public final class Complex implements Serializable{
 	}
 	
 	/**
-	 * 
-	 * add: 加上一个复数
-	 * TODO(这里描述这个方法适用条件 – 可选)
-	 * TODO(这里描述这个方法的执行流程 – 可选)
-	 * TODO(这里描述这个方法的使用方法 – 可选)
-	 * TODO(这里描述这个方法的注意事项 – 可选)
-	 *
-	 * @author bme
-	 * @param c 复数
-	 * @return this
-	 * @since JDK 1.6
+	 * to add a complex value and return this complex
+	 * @param c a complex value 
+	 * @return this complex
 	 */
 	public Complex add(Complex c) {
 		real += c.real;
@@ -171,18 +124,11 @@ public final class Complex implements Serializable{
 		return this;
 	}
 	
+	
 	/**
-	 * 
-	 * subtract: 减去一个复数
-	 * TODO(这里描述这个方法适用条件 – 可选)
-	 * TODO(这里描述这个方法的执行流程 – 可选)
-	 * TODO(这里描述这个方法的使用方法 – 可选)
-	 * TODO(这里描述这个方法的注意事项 – 可选)
-	 *
-	 * @author bme
-	 * @param c 复数
-	 * @return this
-	 * @since JDK 1.6
+	 * to subtract a complex value and return this complex
+	 * @param c a complex value 
+	 * @return this complex
 	 */
 	public Complex subtract(Complex c) {
 		real -= c.real;
@@ -190,55 +136,32 @@ public final class Complex implements Serializable{
 		return this;
 	}
 	
+	
 	/**
-	 * 
-	 * multiple: 实部和虚部都乘以一个实数
-	 * TODO(这里描述这个方法适用条件 – 可选)
-	 * TODO(这里描述这个方法的执行流程 – 可选)
-	 * TODO(这里描述这个方法的使用方法 – 可选)
-	 * TODO(这里描述这个方法的注意事项 – 可选)
-	 *
-	 * @author bme
-	 * @param a 实数
-	 * @return this
-	 * @since JDK 1.6
+	 * to multiply the real and imaginary part by a real value and return this complex
+	 * @param a a real value 
+	 * @return this complex
 	 */
-	public Complex multiple(double a) {
+	public Complex multiply(double a) {
 		real *= a;
 		imag *= a;
 		return this;
 	}
 	
 	/**
-	 * 
-	 * multiple: 乘以一个复数
-	 * TODO(这里描述这个方法适用条件 – 可选)
-	 * TODO(这里描述这个方法的执行流程 – 可选)
-	 * TODO(这里描述这个方法的使用方法 – 可选)
-	 * TODO(这里描述这个方法的注意事项 – 可选)
-	 *
-	 * @author bme
-	 * @param c 复数
-	 * @return this
-	 * @since JDK 1.6
+	 * to multiply by a complex and return this complex
+	 * @param c a complex value 
+	 * @return this complex
 	 */
-	public Complex multiple(Complex c) {
+	public Complex multiply(Complex c) {
 		set(real*c.real - imag*c.imag, real*c.imag + imag*c.real);
 		return this;
 	}
 	
 	/**
-	 * 
-	 * divide: 实部和虚部都除以一个实数
-	 * TODO(这里描述这个方法适用条件 – 可选)
-	 * TODO(这里描述这个方法的执行流程 – 可选)
-	 * TODO(这里描述这个方法的使用方法 – 可选)
-	 * TODO(这里描述这个方法的注意事项 – 可选)
-	 *
-	 * @author bme
-	 * @param a 实数
-	 * @return this
-	 * @since JDK 1.6
+	 * to divide the real and imaginary part by a real value and return this complex
+	 * @param a a real value 
+	 * @return this complex
 	 */
 	public Complex divide(double a) {
 		real /= a;
@@ -247,17 +170,9 @@ public final class Complex implements Serializable{
 	}
 	
 	/**
-	 * 
-	 * divide: 除以一个复数
-	 * TODO(这里描述这个方法适用条件 – 可选)
-	 * TODO(这里描述这个方法的执行流程 – 可选)
-	 * TODO(这里描述这个方法的使用方法 – 可选)
-	 * TODO(这里描述这个方法的注意事项 – 可选)
-	 *
-	 * @author bme
-	 * @param c 复数
-	 * @return this
-	 * @since JDK 1.6
+	 * to divide by a complex and return this complex
+	 * @param c a complex value 
+	 * @return this complex
 	 */
 	public Complex divide(Complex c) {
 		double mod = c.real*c.real + c.imag*c.imag;
@@ -266,32 +181,16 @@ public final class Complex implements Serializable{
 	}
 	
 	/**
-	 * 
-	 * abs: 求幅度
-	 * TODO(这里描述这个方法适用条件 – 可选)
-	 * TODO(这里描述这个方法的执行流程 – 可选)
-	 * TODO(这里描述这个方法的使用方法 – 可选)
-	 * TODO(这里描述这个方法的注意事项 – 可选)
-	 *
-	 * @author bme
-	 * @return 幅度
-	 * @since JDK 1.6
+	 * to get the modulus
+	 * @return the modulus
 	 */
 	public double abs() {
 		return Math.sqrt(real*real+imag*imag);
 	}
-	
+
 	/**
-	 * 
-	 * angle: 求相位角弧度，范围[-PI,PI]
-	 * TODO(这里描述这个方法适用条件 – 可选)
-	 * TODO(这里描述这个方法的执行流程 – 可选)
-	 * TODO(这里描述这个方法的使用方法 – 可选)
-	 * TODO(这里描述这个方法的注意事项 – 可选)
-	 *
-	 * @author bme
-	 * @return 相位角弧度
-	 * @since JDK 1.6
+	 * to get the angle
+	 * @return the angle
 	 */
 	public double angle() {
 		return Math.atan2(imag, real);
@@ -310,53 +209,96 @@ public final class Complex implements Serializable{
 		Complex other = (Complex)otherObject;
 		return  real == other.real && imag == other.imag;
 	}
-	
-	
+		
 	
 	@Override
 	public int hashCode() {
 		return 7*Double.hashCode(real) + 11*Double.hashCode(imag);
 	}
 
+	/**
+	 * to add a real value to a complex
+	 * @param c a complex
+	 * @param a a real value
+	 * @return the add result
+	 */
 	public static Complex add(Complex c, double a) {
 		Complex out = new Complex(c);
 		out.add(a);
 		return out;
 	}
 	
+	/**
+	 * to add two complexes
+	 * @param c1 a complex
+	 * @param c2 another complex
+	 * @return the add result
+	 */
 	public static Complex add(Complex c1, Complex c2) {
 		Complex out = new Complex(c1);
 		out.add(c2);
 		return out;
 	}
 	
-
+	/**
+	 * to subtract two complexes
+	 * @param c1 a complex
+	 * @param c2 another complex
+	 * @return the subtract result
+	 */
 	public static Complex subtract(Complex c1, Complex c2) {
 		Complex out = new Complex(c1);
 		out.subtract(c2);
 		return out;
 	}
 	
-	public static Complex multiple(Complex c, double a) {
+	/**
+	 * to multiply a real value to a complex
+	 * @param c a complex
+	 * @param a a real value
+	 * @return the multiply result
+	 */
+	public static Complex multiply(Complex c, double a) {
 		Complex out = new Complex(c);
-		out.multiple(a);
+		out.multiply(a);
 		return out;
 	}
 	
-	public static Complex multiple(Complex c1, Complex c2) {
+	/**
+	 * to multiply two complexes
+	 * @param c1 a complex
+	 * @param c2 another complex
+	 * @return the multiply result c1*c2
+	 */
+	public static Complex multiply(Complex c1, Complex c2) {
 		Complex out = new Complex(c1);
-		out.multiple(c2);
+		out.multiply(c2);
 		return out;
 	}
 	
+	/**
+	 * to divide a real value to a complex
+	 * @param c a complex
+	 * @param a a real value
+	 * @return the divide result
+	 */
+	public static Complex divide(Complex c, double a) {
+		Complex out = new Complex(c);
+		out.divide(a);
+		return out;
+	}
+	
+	/**
+	 * to divide two complexes
+	 * @param c1 a complex
+	 * @param c2 another complex
+	 * @return the divide result c1/c2
+	 */
 	public static Complex divide(Complex c1, Complex c2) {
 		Complex out = new Complex(c1);
 		out.divide(c2);
 		return out;
 	}
-
-
-	
 	
 
 }

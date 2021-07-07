@@ -1,29 +1,19 @@
-/**
- * Project Name:DSP_JAVA
- * File Name:ComplexSeqEleOperator.java
- * Package Name:com.cmtech.dsp.seq
- * Date:2018年2月25日上午5:58:33
- * Copyright (c) 2018, e_yujunquan@163.com All Rights Reserved.
- *
- */
 package com.cmtech.dsp.seq;
+
+/*
+Copyright (c) 2008 chenm
+*/
 
 import com.cmtech.dsp.util.Complex;
 
 
-public class ComplexSeqBaseOperator implements ISeqBaseOperator<Complex>{
+public class ComplexBasicOperator implements INumBasicOperator<Complex>{
 
 
 	@Override
 	public Complex zeroElement() {
 		return new Complex();
-	}
-	
-	@Override
-	public Complex newElement(Complex ele) {
-		return new Complex(ele);
-	}
-	
+	}	
 
 	@Override
 	public Complex[] newArray(int N) {
@@ -34,8 +24,11 @@ public class ComplexSeqBaseOperator implements ISeqBaseOperator<Complex>{
 		return out;
 	}
 
-
-
+	@Override
+	public Seq<Complex> newSeq() {
+		return new ComplexSeq();
+	}
+	
 	@Override
 	public Complex add(Complex d1, Complex d2) {
 		return Complex.add(d1, d2);
@@ -47,8 +40,8 @@ public class ComplexSeqBaseOperator implements ISeqBaseOperator<Complex>{
 	}
 	
 	@Override
-	public Complex multiple(Complex d1, Complex d2) {
-		return Complex.multiple(d1, d2);
+	public Complex multiply(Complex d1, Complex d2) {
+		return Complex.multiply(d1, d2);
 	}
 	
 	@Override
@@ -64,10 +57,5 @@ public class ComplexSeqBaseOperator implements ISeqBaseOperator<Complex>{
 	@Override
 	public double angle(Complex ele) {
 		return ele.angle();
-	}
-
-	@Override
-	public Seq<Complex> newInstance() {
-		return new ComplexSeq();
 	}
 }

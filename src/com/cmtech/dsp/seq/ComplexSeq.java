@@ -18,10 +18,10 @@ public class ComplexSeq extends Seq<Complex> {
 
 	private static final long serialVersionUID = 1L;
 	
-	private static final ISeqBaseOperator<Complex> EOP = new ComplexSeqBaseOperator();
+	private static final INumBasicOperator<Complex> EOP = new ComplexBasicOperator();
 	
 	@Override
-	public ISeqBaseOperator<Complex> getSeqBaseOperator() {
+	public INumBasicOperator<Complex> getBasicOperator() {
 		return EOP;
 	}
 	
@@ -36,7 +36,7 @@ public class ComplexSeq extends Seq<Complex> {
 	public ComplexSeq(Complex...d) {
 		super();
 		for(Complex ele : d) {
-			data.add(eOp.newElement(ele));
+			data.add(ele);
 		}
 	}
 	
@@ -126,7 +126,7 @@ public class ComplexSeq extends Seq<Complex> {
 		Complex[] rtn = eOp.newArray(N);
 		int min = Math.min(N, size());
 		for(int i = 0; i < min; i++) {
-			rtn[i] = eOp.newElement(data.get(i));
+			rtn[i] = data.get(i);
 		}
 		return rtn;
 	}

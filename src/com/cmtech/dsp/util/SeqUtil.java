@@ -2,7 +2,7 @@ package com.cmtech.dsp.util;
 
 import com.cmtech.dsp.seq.ComplexSeq;
 import com.cmtech.dsp.seq.ISeq;
-import com.cmtech.dsp.seq.ISeqBaseOperator;
+import com.cmtech.dsp.seq.INumBasicOperator;
 import com.cmtech.dsp.seq.RealSeq;
 import com.cmtech.dsp.seq.Seq;
 
@@ -20,7 +20,7 @@ public class SeqUtil {
 		return process(seq1, seq2, new IBiOperator<T>() {
 			@Override
 			public T operator(T op1, T op2) {
-				return seq1.getSeqBaseOperator().add(op1, op2);
+				return seq1.getBasicOperator().add(op1, op2);
 			}
 		});
 	}
@@ -30,7 +30,7 @@ public class SeqUtil {
 		return process(seq1, seq2, new IBiOperator<T>() {
 			@Override
 			public T operator(T op1, T op2) {
-				return seq1.getSeqBaseOperator().subtract(op1, op2);
+				return seq1.getBasicOperator().subtract(op1, op2);
 			}
 		});
 	}
@@ -39,7 +39,7 @@ public class SeqUtil {
 		return process(seq1, seq2, new IBiOperator<T>() {
 			@Override
 			public T operator(T op1, T op2) {
-				return seq1.getSeqBaseOperator().multiple(op1, op2);
+				return seq1.getBasicOperator().multiply(op1, op2);
 			}
 		});
 	}
@@ -48,7 +48,7 @@ public class SeqUtil {
 		return process(seq1, seq2, new IBiOperator<T>() {
 			@Override
 			public T operator(T op1, T op2) {
-				return seq1.getSeqBaseOperator().divide(op1, op2);
+				return seq1.getBasicOperator().divide(op1, op2);
 			}
 		});
 	}
@@ -57,7 +57,7 @@ public class SeqUtil {
 		int N = Math.max(seq1.size(), seq2.size());
 		seq1.changeSize(N);
 		seq2.changeSize(N);
-		Seq<T> out = seq1.getSeqBaseOperator().newInstance();
+		Seq<T> out = seq1.getBasicOperator().newSeq();
 		
 		for(int i = 0; i < N; i++) {
 			out.append(op.operator(seq1.get(i), seq2.get(i)));
@@ -70,8 +70,8 @@ public class SeqUtil {
 	    int N2 = seq2.size();
 	    int N = N1+N2-1;
 	    
-	    ISeqBaseOperator<T> op = seq1.getSeqBaseOperator();
-	    ISeq<T> out = op.newInstance();
+	    INumBasicOperator<T> op = seq1.getBasicOperator();
+	    ISeq<T> out = op.newSeq();
 	    
 	    int n = 0;
 	    int m = 0;
@@ -84,7 +84,7 @@ public class SeqUtil {
 	        {
 	            n_m = n - m;
 	            if( (n_m >= 0) && (n_m < N2) )
-	            		tmp = op.add(tmp, op.multiple(seq1.get(m), seq2.get(n_m)));
+	            		tmp = op.add(tmp, op.multiply(seq1.get(m), seq2.get(n_m)));
 	        }
 	        out.append(tmp);
 	    }
