@@ -14,12 +14,12 @@ import com.cmtech.dsp.filter.FIRFilter;
 
 
 public abstract class FIRLPFStructure extends AbstractDFStructure {
-	protected double[] h_n;
+	protected Double[] h_n;
 	protected double[] x_n;
 	protected int N;
 	protected int hN;
 	
-	public FIRLPFStructure(double[] h_n) {
+	public FIRLPFStructure(Double[] h_n) {
 		N = h_n.length;
 		this.h_n = Arrays.copyOf(h_n, N);
 		x_n = new double[N];		

@@ -16,8 +16,8 @@ public class FIRFilter extends DigitalFilter{
 	public static final int DF = 0;
 	public static final int LPF = 1;
 	 
-	public FIRFilter(double[] b) {
-		super(b, new double[]{1.0});
+	public FIRFilter(Double[] b) {
+		super(b, new Double[]{1.0});
 	}
 	
 	public FIRFilter(RealSeq hseq){
@@ -25,7 +25,7 @@ public class FIRFilter extends DigitalFilter{
 	}
 	
 	public FIRFilter(RealSeq hseq, double a){
-		super((RealSeq)hseq.multiple(1/a), new RealSeq(1.0));
+		super((RealSeq)hseq.multiply(1/a), new RealSeq(1.0));
 	}
 
 	public RealSeq getHn() {

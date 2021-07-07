@@ -7,7 +7,7 @@ import com.cmtech.dsp.util.SeqUtil;
 
 public class AnalogFilter extends AbstractFilter implements IAnalogFilter {
 	
-	public AnalogFilter(double[] b, double[] a) {
+	public AnalogFilter(Double[] b, Double[] a) {
 		super(b, a);
 	}
 	

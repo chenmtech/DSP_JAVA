@@ -17,17 +17,17 @@ public class IIRDCBlockStructure extends AbstractDFStructure {
 	private double xn = 0.0;
 	private double yn = 0.0;
 	
-	public IIRDCBlockStructure(double[] b_m, double[] a_k) {
-		if(b_m.length != 2 || a_k.length != 2) {
+	public IIRDCBlockStructure(Double[] b2, Double[] a2) {
+		if(b2.length != 2 || a2.length != 2) {
 			throw new IllegalArgumentException();
 		}
 		
-		if(a_k[0] != 1.0) {
-			b = b_m[0]/a_k[0];
-			a = a_k[1]/a_k[0];
+		if(a2[0] != 1.0) {
+			b = b2[0]/a2[0];
+			a = a2[1]/a2[0];
 		} else {
-			b = b_m[0];
-			a = a_k[1];
+			b = b2[0];
+			a = a2[1];
 		}
 	}
 	

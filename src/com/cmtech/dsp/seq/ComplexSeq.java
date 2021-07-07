@@ -18,11 +18,11 @@ public class ComplexSeq extends Seq<Complex> {
 
 	private static final long serialVersionUID = 1L;
 	
-	private static final INumBasicOperator<Complex> EOP = new ComplexBasicOperator();
+	private static final IElementBasicOperator<Complex> ELEMENT_OP = new ComplexBasicOperator();
 	
 	@Override
-	public INumBasicOperator<Complex> getBasicOperator() {
-		return EOP;
+	public IElementBasicOperator<Complex> getBasicOperator() {
+		return ELEMENT_OP;
 	}
 	
 	public ComplexSeq() {
@@ -48,13 +48,20 @@ public class ComplexSeq extends Seq<Complex> {
 		super(seq);
 	}
 	
-	public ComplexSeq(RealSeq re, RealSeq im) {
+	public <T> ComplexSeq(Seq<T> seq) {
+		super();
+		for(int i = 0; i < seq.size(); i++) {
+			data.add(new Complex((double)seq.get(i), 0.0));
+		}
+	}
+	
+	public <T> ComplexSeq(Seq<T> re, Seq<T> im) {
 		super();
 		int N = Math.max(re.size(), im.size());
-		re.changeSize(N);
-		im.changeSize(N);
+		re.reSize(N);
+		im.reSize(N);
 		for(int i = 0; i < N; i++) {
-			data.add(new Complex(re.get(i), im.get(i)));
+			data.add(new Complex((double)re.get(i), (double)im.get(i)));
 		}
 	}
 	
@@ -67,10 +74,6 @@ public class ComplexSeq extends Seq<Complex> {
 			I = (i < im.length) ? im[i] : 0.0;
 			data.add(new Complex(R, I));
 		}
-	}
-	
-	public ComplexSeq(RealSeq re) {
-		this(re, new RealSeq(re.size()));
 	}
 
 	public RealSeq dB() {
@@ -116,19 +119,6 @@ public class ComplexSeq extends Seq<Complex> {
 			out.append(data.get(i).getImag());
 		}
 		return out;
-	}
-
-	public Complex[] toArray() {
-		return toArray(size());
-	}
-
-	public Complex[] toArray(int N) {
-		Complex[] rtn = eOp.newArray(N);
-		int min = Math.min(N, size());
-		for(int i = 0; i < min; i++) {
-			rtn[i] = data.get(i);
-		}
-		return rtn;
 	}
 
 }

@@ -253,7 +253,7 @@ public class BmeFile {
 		return head;
 	}
 	
-	public BmeFile writeData(double[] data) throws FileException{
+	public BmeFile writeData(Double[] data) throws FileException{
 		if(out == null || fileHead == null) {
 			throw new FileException("", "请先创建文件");
 		}

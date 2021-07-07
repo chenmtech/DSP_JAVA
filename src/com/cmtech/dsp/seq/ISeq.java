@@ -8,29 +8,78 @@ import java.io.Serializable;
  * An interface for a sequence
  * @author chenm
  * @version 2008-05
- * @param <T> the element type
+ * @param <T> the element type, which can be one of the number types or the Complex class
  */
 public interface ISeq<T> extends Serializable{
-	INumBasicOperator<T> getBasicOperator(); // get element basic operator
-	int size();  // size
-	ISeq<T> setToZeroSeq(int N); // set to a sequence with the element zero and the length N
-	T get(int i);
+	// get the element basic operator
+	IElementBasicOperator<T> getBasicOperator(); 
+	
+	// get the length of this sequence
+	int size(); 
+	
+	// set to a sequence with all the elements zero and the length N
+	void zero(int N);
+	
+	// get the ith element
+	T get(int i); 
+	
+	// set the ith element
 	boolean set(int i, T element);
-	ISeq<T> clear();
-	ISeq<T> changeSize(int N);
-	RealSeq abs();
+	
+	// clear all the elements
+	void clear(); 
+	
+	// change the length of this sequence to N
+	void reSize(int N); 
+	
+	// calculate the absolute value of every element and create a RealSeq using the values
+	RealSeq abs(); 
+	
+	// calculate the angle value of every element and create a RealSeq using the values
 	RealSeq angle();
-	ISeq<T> reverse();
-	ISeq<T> plus(T a);
-	ISeq<T> minus(T a);
-	ISeq<T> multiple(T a);
-	ISeq<T> divide(T a);
-	T sum();
-	ISeq<T> append(T ele);
-	ComplexSeq dtft(RealSeq omega);
-	ComplexSeq dtft(int N);
-	ComplexSeq fft();
+	
+	// sum all the elements
+	T sum(); 
+	
+	// append one element
+	void append(T ele); 
+	
+	// reverse the sequence and return a new sequence. the original sequence don't change
+	ISeq<T> reverse(); 
+	
+	// add every element with the "a". the original sequence don't change
+	ISeq<T> add(T a); 
+	
+	// make every element subtracted with the "a". the original sequence don't change
+	ISeq<T> subtract(T a); 
+	
+	// make every element multiplied with the "a". the original sequence don't change
+	ISeq<T> multiply(T a); 
+	
+	// make every element divided with the "a". the original sequence don't change
+	ISeq<T> divide(T a); 
+	
+	// transfer to an array with the length N
+	T[] toArray(int N);
+	
+	// transfer to an array
+	T[] toArray();
+	
+	// return the DTFT values of this sequence at the frequencies omega
+	ComplexSeq dtft(RealSeq omega); 
+	
+	// return the DTFT values of this sequence at the N frequencies between [0, pi]
+	ComplexSeq dtft(int N); 
+	
+	// return FFT values of this sequence. If the length of the sequence is not 2^X, the FFT length is changed to 2^X
+	ComplexSeq fft(); 
+	
+	// return the FFT values of this sequence. If the N is not 2^X, the FFT length is changed to 2^X
 	ComplexSeq fft(int N);
+	
+	// return the iFFT values of this sequence. If the length of the sequence is not 2^X, the iFFT length is changed to 2^X
 	ComplexSeq ifft();
+	
+	// return the iFFT values of this sequence. If the N is not 2^X, the iFFT length is changed to 2^X
 	ComplexSeq ifft(int N);
 }

@@ -411,7 +411,7 @@ public class ALPDesigner {
 	    
 	    //涓嬮潰褰掍竴鍖栵紝淇濊瘉|H(j0)|=1
 	    double factor = as.get(as.size()-1)/bs.get(bs.size()-1);
-	    bs = (RealSeq) bs.multiple(factor);
+	    bs = (RealSeq) bs.multiply(factor);
 
 	    rtnMap.put("BS", bs);
 		rtnMap.put("AS", as);
@@ -485,13 +485,13 @@ public class ALPDesigner {
 		double alpha = sqrt(Qp*Qs);
 		 
 		//绗竴椤� 	
-		ai = (RealSeq) ai.multiple(alpha*alpha);
+		ai = (RealSeq) ai.multiply(alpha*alpha);
 		
 		//绗簩椤� 
-		ci = (RealSeq) ci.multiple(alpha*alpha);
+		ci = (RealSeq) ci.multiply(alpha*alpha);
 		
 		//绗笁椤� 
-		bi = (RealSeq) bi.multiple(alpha);
+		bi = (RealSeq) bi.multiply(alpha);
 
 		RealSeq bs = new RealSeq(1);
 		RealSeq as = null;

@@ -2,7 +2,7 @@ package com.cmtech.dsp.seq;
 /*
 Copyright (c) 2008 chenm
 */
-public class DoubleBasicOperator implements INumBasicOperator<Double>{
+public class DoubleBasicOperator implements IElementBasicOperator<Double>{
 
 	@Override
 	public Double zeroElement() {
@@ -19,7 +19,7 @@ public class DoubleBasicOperator implements INumBasicOperator<Double>{
 	}
 
 	@Override
-	public Seq<Double> newSeq() {
+	public Seq<Double> nullSeq() {
 		return new RealSeq();
 	}
 

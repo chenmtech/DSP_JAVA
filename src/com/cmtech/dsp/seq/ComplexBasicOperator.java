@@ -7,7 +7,7 @@ Copyright (c) 2008 chenm
 import com.cmtech.dsp.util.Complex;
 
 
-public class ComplexBasicOperator implements INumBasicOperator<Complex>{
+public class ComplexBasicOperator implements IElementBasicOperator<Complex>{
 
 
 	@Override
@@ -25,7 +25,7 @@ public class ComplexBasicOperator implements INumBasicOperator<Complex>{
 	}
 
 	@Override
-	public Seq<Complex> newSeq() {
+	public Seq<Complex> nullSeq() {
 		return new ComplexSeq();
 	}
 	

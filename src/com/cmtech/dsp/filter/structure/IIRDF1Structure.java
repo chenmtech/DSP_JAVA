@@ -14,18 +14,18 @@ import com.cmtech.dsp.filter.IIRFilter;
 
 
 public class IIRDF1Structure extends AbstractDFStructure {
-	private double[] bm;
-	private double[] ak;
+	private Double[] bm;
+	private Double[] ak;
 	private double[] xm;
 	private double[] yk;
 	private int M;
 	private int N;
 	
-	public IIRDF1Structure(double[] b_m, double[] a_k) {
-		M = b_m.length;
-		N = a_k.length;
-		bm = Arrays.copyOf(b_m, M);
-		ak = Arrays.copyOf(a_k, N);
+	public IIRDF1Structure(Double[] b, Double[] a) {
+		M = b.length;
+		N = a.length;
+		bm = Arrays.copyOf(b, M);
+		ak = Arrays.copyOf(a, N);
 		xm = new double[M];
 		yk = new double[N];
 		if(ak[0] != 1.0) {

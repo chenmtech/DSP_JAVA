@@ -19,7 +19,7 @@ public class IIRFilter extends DigitalFilter {
 	public static final int DF2 = 1;
 	public static final int TDF2 = 2;
 	
-	public IIRFilter(double[] b, double[] a) {
+	public IIRFilter(Double[] b, Double[] a) {
 		super(b, a);
 	}
 	

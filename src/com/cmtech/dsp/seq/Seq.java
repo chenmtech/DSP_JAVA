@@ -6,31 +6,38 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.cmtech.dsp.util.Complex;
 import com.cmtech.dsp.util.FFT;
+import com.cmtech.dsp.util.SeqUtil;
 
-
+/**
+ * this is a abstract Seq<T>, which implement almost the methods in the interface ISeq<T>
+ * @author chenm
+ * @version 2008-06
+ * @param <T> the element type, which can only be the extended Number or the Complex class
+ */
 public abstract class Seq<T> implements ISeq<T> {
 
 	private static final long serialVersionUID = 1L;
 	
-	INumBasicOperator<T> eOp = null;
+	// number basic operator
+	IElementBasicOperator<T> basicOp = null;
 	
+	// the data array
 	List<T> data = new ArrayList<T>();
 	
 	public Seq() {
-		eOp = getBasicOperator();
+		basicOp = getBasicOperator();
 	}
 	
 	public Seq(int N) {
 		this();
-		setToZeroSeq(N);
+		zero(N);
 	}
 	
 	public Seq(Collection<T> d) {
 		this();
-		for(T ele : d) {
-			data.add(ele);
-		}
+		data.addAll(d);
 	}
 	
 	public Seq(Seq<T> seq) {
@@ -43,19 +50,13 @@ public abstract class Seq<T> implements ISeq<T> {
 	}
 	
 	@Override
-	public ISeq<T> setToZeroSeq(int N) {
+	public void zero(int N) {
 		data = new ArrayList<T>();
 		for(int i = 0; i < N; i++) {
-			data.add(eOp.zeroElement());
+			data.add(basicOp.zeroElement());
 		}
-		return this;
 	}
 	
-	@Override
-	public String toString() {
-		return getClass().getSimpleName() + "[ size=" + size() + " data=" + data + " ]";
-	}
-
 	@Override
 	public T get(int i) {
 		return data.get(i);
@@ -68,29 +69,27 @@ public abstract class Seq<T> implements ISeq<T> {
 	}
 	
 	@Override
-	public ISeq<T> clear() {
+	public void clear() {
 		data = new ArrayList<>();
-		return this;
 	}
 	
 	@Override
-	public ISeq<T> changeSize(int N) {
-		if(size() == N) return this;
+	public void reSize(int N) {
+		if(size() == N) return;
 		
-		List<T> buf = new ArrayList<>();
+		List<T> tmp = new ArrayList<>();
 		for(int i = 0; i < N; i++) {
-			if(i < data.size()) buf.add(data.get(i));
-			else buf.add(eOp.zeroElement());
+			if(i < data.size()) tmp.add(data.get(i));
+			else tmp.add(basicOp.zeroElement());
 		}
-		data = buf;
-		return this;
+		data = tmp;
 	}
 	
 	@Override
 	public RealSeq abs() {
 		RealSeq out = new RealSeq();
 		for(T ele : data) {
-			out.data.add(eOp.abs(ele));
+			out.data.add(basicOp.abs(ele));
 		}
 		return out;
 	}
@@ -99,14 +98,14 @@ public abstract class Seq<T> implements ISeq<T> {
 	public RealSeq angle() {
 		RealSeq out = new RealSeq();
 		for(T ele : data) {
-			out.data.add(eOp.angle(ele));
+			out.data.add(basicOp.angle(ele));
 		}
 		return out;
 	}
 
 	@Override
 	public ISeq<T> reverse() {
-		Seq<T> out = eOp.newSeq();
+		Seq<T> out = basicOp.nullSeq();
 		for(int i = 0; i < data.size(); i++)
 	    {
 	        out.data.add(data.get(data.size()-1-i));
@@ -115,77 +114,86 @@ public abstract class Seq<T> implements ISeq<T> {
 	}
 
 	@Override
-	public ISeq<T> plus(T a) {
-		Seq<T> out = eOp.newSeq();
+	public ISeq<T> add(T a) {
+		Seq<T> out = basicOp.nullSeq();
 		for(int i = 0; i < data.size(); i++)
 	    {
-	        out.data.add(eOp.add(data.get(i), a));
+	        out.data.add(basicOp.add(data.get(i), a));
 	    }
 		return out;
 	}
 	
 	@Override
-	public ISeq<T> minus(T a) {
-		Seq<T> out = eOp.newSeq();
+	public ISeq<T> subtract(T a) {
+		Seq<T> out = basicOp.nullSeq();
 		for(int i = 0; i < data.size(); i++)
 	    {
-	        out.data.add(eOp.subtract(data.get(i), a));
+	        out.data.add(basicOp.subtract(data.get(i), a));
 	    }
 		return out;
 	}
 
 	@Override
-	public ISeq<T> multiple(T a) {
-		Seq<T> out = eOp.newSeq();
+	public ISeq<T> multiply(T a) {
+		Seq<T> out = basicOp.nullSeq();
 		for(int i = 0; i < data.size(); i++)
 	    {
-	        out.data.add(eOp.multiply(data.get(i), a));
+	        out.data.add(basicOp.multiply(data.get(i), a));
 	    }
 		return out;
 	}
 
 	@Override
 	public ISeq<T> divide(T a) {
-		Seq<T> out = eOp.newSeq();
+		Seq<T> out = basicOp.nullSeq();
 		for(int i = 0; i < data.size(); i++)
 	    {
-	        out.data.add(eOp.divide(data.get(i), a));
+	        out.data.add(basicOp.divide(data.get(i), a));
 	    }
 		return out;
 	}
 
 	@Override
 	public T sum() {
-		T sum = eOp.zeroElement();
+		T sum = basicOp.zeroElement();
 		for(T ele : data) {
-			sum = eOp.add(sum, ele);
+			sum = basicOp.add(sum, ele);
 		}
 		
 		return sum;
 	}
 
 	@Override
-	public boolean equals(Object otherObject) {
-		if(this == otherObject) return true;
-		if(otherObject == null) return false;
-		if(getClass() != otherObject.getClass()) return false;
-		@SuppressWarnings("unchecked")
-		Seq<T> other = (Seq<T>)otherObject;
-		return  data.equals(other.data);
-	}
-
-	@Override
-	public int hashCode() {
-		return data.hashCode();
-	}
-
-	@Override
-	public ISeq<T> append(T ele) {
+	public void append(T ele) {
 		data.add(ele);
-		return this;
 	}
 
+	@Override
+	public T[] toArray(int N) {
+		T[] rtn = basicOp.newArray(N);
+		int min = Math.min(N, size());
+		for(int i = 0; i < min; i++) {
+			rtn[i] = data.get(i);
+		}
+		return rtn;
+	}
+
+	@Override
+	public T[] toArray() {
+		return toArray(size());
+	}
 	
+	@Override
+	public ComplexSeq dtft(RealSeq omega) {
+		ComplexSeq out = new ComplexSeq(this).dtft(omega);
+		return out;
+	}
+	
+	@Override
+	public ComplexSeq dtft(int N) {
+		return dtft(SeqUtil.linSpace(0, Math.PI, N));
+	}
+
 	@Override
 	public ComplexSeq fft() {
 		return FFT.fft(this);
@@ -205,4 +213,25 @@ public abstract class Seq<T> implements ISeq<T> {
 	public ComplexSeq ifft(int N) {
 		return FFT.ifft(this, N);
 	}	
+	
+	@Override
+	public boolean equals(Object otherObject) {
+		if(this == otherObject) return true;
+		if(otherObject == null) return false;
+		if(getClass() != otherObject.getClass()) return false;
+		@SuppressWarnings("unchecked")
+		Seq<T> other = (Seq<T>)otherObject;
+		return  data.equals(other.data);
+	}
+
+	@Override
+	public int hashCode() {
+		return data.hashCode();
+	}
+	
+	@Override
+	public String toString() {
+		return getClass().getSimpleName() + "[ size=" + size() + " data=" + data + " ]";
+	}
+
 }

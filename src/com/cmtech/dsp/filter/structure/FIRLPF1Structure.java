@@ -13,8 +13,8 @@ import com.cmtech.dsp.filter.FIRFilter;
 
 public class FIRLPF1Structure extends FIRLPFStructure {
 	
-	public FIRLPF1Structure(double[] h_n) {
-		super(h_n);
+	public FIRLPF1Structure(Double[] b) {
+		super(b);
 	}
 	
 	public FIRLPF1Structure(FIRFilter filter) {

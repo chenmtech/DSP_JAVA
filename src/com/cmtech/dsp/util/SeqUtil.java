@@ -2,7 +2,7 @@ package com.cmtech.dsp.util;
 
 import com.cmtech.dsp.seq.ComplexSeq;
 import com.cmtech.dsp.seq.ISeq;
-import com.cmtech.dsp.seq.INumBasicOperator;
+import com.cmtech.dsp.seq.IElementBasicOperator;
 import com.cmtech.dsp.seq.RealSeq;
 import com.cmtech.dsp.seq.Seq;
 
@@ -55,9 +55,9 @@ public class SeqUtil {
 	
 	private static <T> ISeq<T> process(ISeq<T> seq1, ISeq<T> seq2, IBiOperator<T> op) {
 		int N = Math.max(seq1.size(), seq2.size());
-		seq1.changeSize(N);
-		seq2.changeSize(N);
-		Seq<T> out = seq1.getBasicOperator().newSeq();
+		seq1.reSize(N);
+		seq2.reSize(N);
+		Seq<T> out = seq1.getBasicOperator().nullSeq();
 		
 		for(int i = 0; i < N; i++) {
 			out.append(op.operator(seq1.get(i), seq2.get(i)));
@@ -70,8 +70,8 @@ public class SeqUtil {
 	    int N2 = seq2.size();
 	    int N = N1+N2-1;
 	    
-	    INumBasicOperator<T> op = seq1.getBasicOperator();
-	    ISeq<T> out = op.newSeq();
+	    IElementBasicOperator<T> op = seq1.getBasicOperator();
+	    ISeq<T> out = op.nullSeq();
 	    
 	    int n = 0;
 	    int m = 0;
@@ -102,7 +102,9 @@ public class SeqUtil {
 	public static <T> ComplexSeq convUsingDFT(ISeq<T> seq1, ISeq<T> seq2)
 	{
 		int N = seq1.size()+seq2.size()-1;
-	    return (ComplexSeq) cirConvUsingDFT(seq1, seq2, N).changeSize(N);
+	    ComplexSeq out = (ComplexSeq) cirConvUsingDFT(seq1, seq2, N);
+	    out.reSize(N);
+	    return out;
 	}
 	
 	public static RealSeq createZeroRealSeq(int N) {

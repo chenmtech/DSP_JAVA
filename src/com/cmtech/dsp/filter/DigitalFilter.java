@@ -8,7 +8,7 @@ import com.cmtech.dsp.util.SeqUtil;
 public abstract class DigitalFilter extends AbstractFilter implements IDigitalFilter{
 	protected IDFStructure structure;
 	
-	public DigitalFilter(double[] b, double[] a) {
+	public DigitalFilter(Double[] b, Double[] a) {
 		super(b, a);
 	}
 

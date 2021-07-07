@@ -21,21 +21,21 @@ public class IIRNotchStructure extends AbstractDFStructure {
 	private double yn_1 = 0.0;
 	private double yn_2 = 0.0;
 	
-	public IIRNotchStructure(double[] b_m, double[] a_k) {
-		if(b_m.length != 3 || a_k.length != 3) {
+	public IIRNotchStructure(Double[] b, Double[] a) {
+		if(b.length != 3 || a.length != 3) {
 			throw new IllegalArgumentException();
 		}
 		
-		if(a_k[0] != 1.0) {
-			b1 = b_m[1]/a_k[0];
-			b2 = b_m[2]/a_k[0];
-			a1 = a_k[1]/a_k[0];
-			a2 = a_k[2]/a_k[0];
+		if(a[0] != 1.0) {
+			b1 = b[1]/a[0];
+			b2 = b[2]/a[0];
+			a1 = a[1]/a[0];
+			a2 = a[2]/a[0];
 		} else {
-			b1 = b_m[1];
-			b2 = b_m[2];
-			a1 = a_k[1];
-			a2 = a_k[2];
+			b1 = b[1];
+			b2 = b[2];
+			a1 = a[1];
+			a2 = a[2];
 		}
 	}
 	

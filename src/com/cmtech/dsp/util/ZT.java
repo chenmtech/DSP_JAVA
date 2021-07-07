@@ -71,7 +71,7 @@ public class ZT {
 	        {  
 	            oneSeq = (RealSeq) SeqUtil.conv(oneSeq, Dz);
 	        }
-	        oneSeq = (RealSeq) oneSeq.multiple(bZ.get(i));
+	        oneSeq = (RealSeq) oneSeq.multiply(bZ.get(i));
 
 	        Bz = (RealSeq) SeqUtil.add(Bz, oneSeq);
 
@@ -91,7 +91,7 @@ public class ZT {
 	            oneSeq = (RealSeq) SeqUtil.conv(oneSeq, Dz);
 	        }
 
-	        oneSeq = (RealSeq) oneSeq.multiple(aZ.get(i));
+	        oneSeq = (RealSeq) oneSeq.multiply(aZ.get(i));
 
 	        Az = (RealSeq) SeqUtil.add(Az, oneSeq);
      

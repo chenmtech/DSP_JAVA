@@ -27,12 +27,12 @@ public class DCBlockDesigner {
 	}
 	
 	public static synchronized IIRFilter design(double deltaw) {
-		double[] b = new double[2];
-		double[] a = new double[2];
+		Double[] b = new Double[2];
+		Double[] a = new Double[2];
 		double r = 1-deltaw;
 		b[0] = (1+r)/2;
 		b[1] = -b[0];
-		a[0] = 1;
+		a[0] = 1.0;
 		a[1] = -r;
 		return new IIRFilter(b,a).createStructure(StructType.IIR_DF2);
 	}

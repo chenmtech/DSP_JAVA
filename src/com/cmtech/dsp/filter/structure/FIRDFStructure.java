@@ -23,13 +23,13 @@ import com.cmtech.dsp.filter.FIRFilter;
  * @since JDK 1.6
  */
 public class FIRDFStructure extends AbstractDFStructure {
-	private double[] h_n;
+	private Double[] h_n;
 	private double[] x_n;
 	private int N;
 	
-	public FIRDFStructure(double[] h_n) {
-		N = h_n.length;
-		this.h_n = Arrays.copyOf(h_n, N);
+	public FIRDFStructure(Double[] b) {
+		N = b.length;		
+		this.h_n = Arrays.copyOf(b, N);
 		x_n = new double[N];		
 	}
 	

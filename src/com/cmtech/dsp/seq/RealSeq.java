@@ -8,18 +8,17 @@ import java.util.Collections;
 import com.cmtech.dsp.bmefile.BmeFile;
 import com.cmtech.dsp.bmefile.BmeFileHead;
 import com.cmtech.dsp.exception.FileException;
-import com.cmtech.dsp.util.SeqUtil;
 
 
 public class RealSeq extends Seq<Double>{
 
 	private static final long serialVersionUID = 1L;
 	
-	private static final INumBasicOperator<Double> EOP = new DoubleBasicOperator();
+	private static final IElementBasicOperator<Double> ELEMENT_OP = new DoubleBasicOperator();
 	
 	@Override
-	public INumBasicOperator<Double> getBasicOperator() {
-		return EOP;
+	public IElementBasicOperator<Double> getBasicOperator() {
+		return ELEMENT_OP;
 	}
 	
 	public RealSeq() {
@@ -30,7 +29,7 @@ public class RealSeq extends Seq<Double>{
 		super(N);
 	}
 	
-	public RealSeq(double...d) {
+	public RealSeq(Double...d) {
 		super();
 		for(double ele : d) {
 			data.add(ele);
@@ -51,30 +50,6 @@ public class RealSeq extends Seq<Double>{
 
 	public Double min() {
 		return Collections.min(data);
-	}
-
-	@Override
-	public ComplexSeq dtft(RealSeq omega) {
-		ComplexSeq out = new ComplexSeq(this).dtft(omega);
-		return out;
-	}
-
-	@Override
-	public ComplexSeq dtft(int N) {
-		return dtft(SeqUtil.linSpace(0, Math.PI, N));
-	}
-
-	public double[] toArray() {
-		return toArray(size());
-	}
-
-	public double[] toArray(int N) {
-		double[] rtn = new double[N];
-		int min = Math.min(N, size());
-		for(int i = 0; i < min; i++) {
-			rtn[i] = data.get(i);
-		}
-		return rtn;
 	}
 	
 	public void saveAsBmeFile(String fileName) throws FileException {

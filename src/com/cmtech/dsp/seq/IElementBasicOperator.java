@@ -5,15 +5,15 @@ Copyright (c) 2008 chenm
 */
 
 /**
- * An interface of an operator with some basic operations for a number 
+ * An interface of an operator which do some basic operations for a element of a sequence 
  * @author chenm
  * @version 2008-03
- * @param <T> type of the number, which can be a complex
+ * @param <T> type of the element of a sequence, which can only be a extended Number or a Complex class
  */
-public interface INumBasicOperator<T> {
+public interface IElementBasicOperator<T> {
 	T zeroElement();  // create a zero element
 	T[] newArray(int N); // create a new array with length N
-	Seq<T> newSeq(); // create a new sequence with the element type <T>
+	Seq<T> nullSeq(); // create a new null sequence with the element type <T>
 	T add(T d1, T d2); // add two number
 	T subtract(T d1, T d2); // subtract 
 	T multiply(T d1, T d2); // multiply

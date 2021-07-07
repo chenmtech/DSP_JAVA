@@ -27,14 +27,14 @@ public class NotchDesigner {
 	}
 	
 	public static synchronized IIRFilter design(double w0, double deltaw) {
-		double[] b = new double[3];
-		double[] a = new double[3];
+		Double[] b = new Double[3];
+		Double[] a = new Double[3];
 		double r = 1-deltaw/2;
 		double cosw0 = Math.cos(w0);
 		b[0] = (1+r*r-2*r*cosw0)/(2-2*cosw0);
 		b[1] = -2*cosw0*b[0];
 		b[2] = b[0];
-		a[0] = 1;
+		a[0] = 1.0;
 		a[1] = -2*r*cosw0;
 		a[2] = r*r;
 		return new IIRFilter(b,a).createStructure(StructType.IIR_DF2);
