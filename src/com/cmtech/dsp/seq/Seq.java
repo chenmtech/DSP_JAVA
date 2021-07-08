@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import com.cmtech.dsp.util.Complex;
 import com.cmtech.dsp.util.FFT;
+import com.cmtech.dsp.util.FFT.FFTResult;
 import com.cmtech.dsp.util.SeqUtil;
 
 /**
@@ -32,7 +32,7 @@ public abstract class Seq<T> implements ISeq<T> {
 	
 	public Seq(int N) {
 		this();
-		zero(N);
+		setZero(N);
 	}
 	
 	public Seq(Collection<T> d) {
@@ -50,7 +50,7 @@ public abstract class Seq<T> implements ISeq<T> {
 	}
 	
 	@Override
-	public void zero(int N) {
+	public void setZero(int N) {
 		data = new ArrayList<T>();
 		for(int i = 0; i < N; i++) {
 			data.add(basicOp.zeroElement());
@@ -171,8 +171,8 @@ public abstract class Seq<T> implements ISeq<T> {
 	@Override
 	public T[] toArray(int N) {
 		T[] rtn = basicOp.newArray(N);
-		int min = Math.min(N, size());
-		for(int i = 0; i < min; i++) {
+		int minS = Math.min(N, size());
+		for(int i = 0; i < minS; i++) {
 			rtn[i] = data.get(i);
 		}
 		return rtn;
@@ -196,22 +196,26 @@ public abstract class Seq<T> implements ISeq<T> {
 
 	@Override
 	public ComplexSeq fft() {
-		return FFT.fft(this);
+		FFTResult rlt = FFT.fft(this.toArray());
+		return new ComplexSeq(rlt.re, rlt.im);
 	}
 
 	@Override
 	public ComplexSeq fft(int N) {
-		return FFT.fft(this, N);
+		FFTResult rlt = FFT.fft(this.toArray(),N);
+		return new ComplexSeq(rlt.re, rlt.im);
 	}
 
 	@Override
 	public ComplexSeq ifft() {
-		return FFT.ifft(this);
+		FFTResult rlt = FFT.ifft(this.toArray());
+		return new ComplexSeq(rlt.re, rlt.im);
 	}
 
 	@Override
 	public ComplexSeq ifft(int N) {
-		return FFT.ifft(this, N);
+		FFTResult rlt = FFT.ifft(this.toArray(),N);
+		return new ComplexSeq(rlt.re, rlt.im);
 	}	
 	
 	@Override

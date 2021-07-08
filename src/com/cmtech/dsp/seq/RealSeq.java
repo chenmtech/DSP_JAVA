@@ -9,7 +9,11 @@ import com.cmtech.dsp.bmefile.BmeFile;
 import com.cmtech.dsp.bmefile.BmeFileHead;
 import com.cmtech.dsp.exception.FileException;
 
-
+/**
+ * this is a sequence with Double values
+ * @author chenm
+ * @version 2008-06
+ */
 public class RealSeq extends Seq<Double>{
 
 	private static final long serialVersionUID = 1L;

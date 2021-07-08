@@ -18,7 +18,7 @@ public interface ISeq<T> extends Serializable{
 	int size(); 
 	
 	// set to a sequence with all the elements zero and the length N
-	void zero(int N);
+	void setZero(int N);
 	
 	// get the ith element
 	T get(int i); 
@@ -26,13 +26,13 @@ public interface ISeq<T> extends Serializable{
 	// set the ith element
 	boolean set(int i, T element);
 	
-	// clear all the elements
+	// clear and delete all the elements
 	void clear(); 
 	
 	// change the length of this sequence to N
 	void reSize(int N); 
 	
-	// calculate the absolute value of every element and create a RealSeq using the values
+	// calculate the absolute value of every element and create a RealSeq using these values
 	RealSeq abs(); 
 	
 	// calculate the angle value of every element and create a RealSeq using the values
@@ -47,28 +47,28 @@ public interface ISeq<T> extends Serializable{
 	// reverse the sequence and return a new sequence. the original sequence don't change
 	ISeq<T> reverse(); 
 	
-	// add every element with the "a". the original sequence don't change
+	// add every element value with the "a" and return a new sequence. the original sequence don't change
 	ISeq<T> add(T a); 
 	
-	// make every element subtracted with the "a". the original sequence don't change
+	// make every element subtracted with the "a" and return a new sequence. the original sequence don't change
 	ISeq<T> subtract(T a); 
 	
-	// make every element multiplied with the "a". the original sequence don't change
+	// make every element multiplied with the "a" and return a new sequence. the original sequence don't change
 	ISeq<T> multiply(T a); 
 	
-	// make every element divided with the "a". the original sequence don't change
+	// make every element divided with the "a" and return a new sequence. the original sequence don't change
 	ISeq<T> divide(T a); 
 	
-	// transfer to an array with the length N
+	// output an array with the length N
 	T[] toArray(int N);
 	
-	// transfer to an array
+	// output an array
 	T[] toArray();
 	
-	// return the DTFT values of this sequence at the frequencies omega
+	// return the DTFT values of this sequence at the frequency points contained in the RealSeq omega
 	ComplexSeq dtft(RealSeq omega); 
 	
-	// return the DTFT values of this sequence at the N frequencies between [0, pi]
+	// return the DTFT values of this sequence at the N frequency points in the range of [0, pi], or [0, 2*pi] for the ComplexSeq
 	ComplexSeq dtft(int N); 
 	
 	// return FFT values of this sequence. If the length of the sequence is not 2^X, the FFT length is changed to 2^X

@@ -1,11 +1,3 @@
-/**
- * Project Name:DSP_JAVA
- * File Name:FFT.java
- * Package Name:com.cmtech.dsp.seq
- * Date:2018骞�2鏈�7鏃ヤ笂鍗�9:29:17
- * Copyright (c) 2018, e_yujunquan@163.com All Rights Reserved.
- *
- */
 package com.cmtech.dsp.util;
 
 import static java.lang.Math.PI;
@@ -13,15 +5,10 @@ import static java.lang.Math.cos;
 import static java.lang.Math.pow;
 import static java.lang.Math.sin;
 
-import com.cmtech.dsp.seq.ComplexSeq;
-import com.cmtech.dsp.seq.ISeq;
-import com.cmtech.dsp.seq.RealSeq;
-import com.cmtech.dsp.seq.Seq;
-
 
 
 public final class FFT {
-	private static int N = 0;				// FFT鐨勭偣鏁帮紝蹇呴』涓�2鐨勫箓
+	private static int N = 0;				// FFT point number
 	private static int L = 0;				// N = 2^L
 	private static double[] re = new double[0];
 	private static double[] im = new double[0];
@@ -29,32 +16,56 @@ public final class FFT {
 	private FFT() {
 	}
 	
-
-	public synchronized static <T> ComplexSeq fft(ISeq<T> seq) {
-		return fft(seq, seq.size());
+	public static class FFTResult {
+	    public final double[] re;   
+	    public final double[] im;  
+	      
+	    public FFTResult(double[] real,double[] imag)  
+	    {  
+	        re=real;  
+	        im=imag;  
+	    }
 	}
 	
-
-	public synchronized static <T> ComplexSeq fft(ISeq<T> seq, int wishN) {
-		if(wishN <= 0) return null;
-		if(!initFFT(seq, wishN)) return null;
+	public synchronized static <T> FFTResult fft(T[] real) {
+		return fft(real, null, real.length);
+	}
+	
+	public synchronized static <T> FFTResult fft(T[] real, int wishN) {
+		return fft(real, null, wishN);
+	}
+	
+	public synchronized static <T> FFTResult fft(T[] real, T[] imag) {
+		return fft(real, imag, real.length);
+	}
+	
+	public synchronized static <T> FFTResult fft(T[] real, T[] imag, int wishN) {
+		if(real == null || real.length == 0 || wishN <= 0) return null;
+		if(imag != null && real.length != imag.length) return null;
+		initFFT(real, imag, real.length);
 		bitReverse();
 		doFFT();
-		return new ComplexSeq(re, im);
+		return new FFTResult(re, im);
+	}	
+
+	public synchronized static <T> FFTResult ifft(T[] real) {
+		return ifft(real, null, real.length);
 	}
 	
-
-	public synchronized static <T> ComplexSeq ifft(ISeq<T> seq) {
-		return ifft(seq, seq.size());
+	public synchronized static <T> FFTResult ifft(T[] real, int wishN) {
+		return ifft(real, null, wishN);
 	}
 	
-
-	public synchronized static <T> ComplexSeq ifft(ISeq<T> seq, int wishN)
+	public synchronized static <T> FFTResult ifft(T[] real, T[] imag) {
+		return ifft(real, imag, real.length);
+	}
+	
+	public synchronized static <T> FFTResult ifft(T[] real, T[] imag, int wishN)
 	{
-		if(wishN <= 0) return null;
-	    if(!initFFT(seq, wishN)) return null;
-	    
-	    //鍙栧叡杞� 
+		if(real == null || real.length == 0 || wishN <= 0) return null;
+		if(imag != null && real.length != imag.length) return null;
+		initFFT(real, imag, wishN);
+
 	    int i = 0;
 	    for(i = 0; i < N; i++)
 	         im[i] = -im[i];
@@ -68,13 +79,11 @@ public final class FFT {
 	         im[i] /= -N;
 	    } 
 	    
-	    return new ComplexSeq(re, im);
+		return new FFTResult(re, im);
 	}
 	
-	private static <T> boolean initFFT(ISeq<T> seq, int wishN) {
-		if(seq == null || seq.size() == 0) return false;
-		
-	    N = 1;
+	private static <T> void initFFT(T[] real, T[] imag, int wishN) {
+		N = 1;
 	    L = 0;
 	    
 	    while(N < wishN) 
@@ -85,24 +94,13 @@ public final class FFT {
 	    
 	    re = new double[N];
 	    im = new double[N];
-	    int S = Math.min(N, seq.size());
-
-	    Class<?> cl = ((Seq<T>)seq).getClass();
-	    if(cl == ComplexSeq.class) {
-		    	for(int i = 0; i < S; i++) {
-		    		re[i] = ((ComplexSeq)seq).get(i).getReal();
-		    		im[i] = ((ComplexSeq)seq).get(i).getImag();
-		    }
-	    } else if(cl == RealSeq.class) {
-		    	for(int i = 0; i < S; i++) {
-		    		re[i] = ((RealSeq)seq).get(i);
-		    		im[i] = 0.0;
-		    }
-	    } else {
-	    		return false;
-	    }
+	    int minS = Math.min(N, real.length);
 	    
-	    return true;
+	    for(int i = 0; i < minS; i++) {
+	    	re[i] = (double) real[i];
+	    	if(imag != null)
+	    		im[i] = (double) imag[i];
+	    }
 	}
 	
 	private static void bitReverse()
@@ -128,9 +126,9 @@ public final class FFT {
 	          }
 	          
 	          K = halfN;
-	          while(J >= K) //J鐨勬渶楂樹綅涓�1
+	          while(J >= K)
 	          {
-	               J -= K;  //缃�0
+	               J -= K;
 	               K = (K>>1); 
 	          } 
 	          J += K;
@@ -152,20 +150,19 @@ public final class FFT {
 	    int M = 0;
 	    int J = 0;
 	    int I = 0;
-	    for(M = 1; M <= L; M++)  //灞傚惊鐜� 
+	    for(M = 1; M <= L; M++)
 	    {
 	          LE = (int)pow(2,M);  
 	          LE1 = LE>>1;
 	          URe = 1.0; UIm = 0.0;
 	          WRe = cos(PI/LE1); WIm = -sin(PI/LE1);
 	          
-	          for(J = 0; J < LE1; J++)   //铦跺舰杩愮畻寰幆 
+	          for(J = 0; J < LE1; J++) 
 	          { 
-	               for(I = J; I < N; I += LE)   //灏廌FT寰幆
+	               for(I = J; I < N; I += LE)
 	               { 
 	                    IP = I + LE1;
 	                    
-	                    //涓嬮潰涓鸿澏褰㈠悓鍧�杩愮畻 
 	                    TRe = URe*re[IP] - UIm*im[IP];
 	                    TIm = URe*im[IP] + re[IP]*UIm;
 	                    
@@ -173,12 +170,8 @@ public final class FFT {
 	                    im[IP] = im[I] - TIm;
 	                    
 	                    re[I] += TRe;
-	                    im[I] += TIm;        
-	            
-	                    //铦跺舰杩愮畻缁撴潫 
+	                    im[I] += TIm;  
 	               }
-	               
-	               //鏇存柊涔樻硶绯绘暟
 	               TRe = URe*WRe - UIm*WIm;
 	               UIm = URe*WIm + WRe*UIm;
 	               URe = TRe; 

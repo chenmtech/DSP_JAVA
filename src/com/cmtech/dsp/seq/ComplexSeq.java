@@ -7,6 +7,8 @@ Copyright (c) 2008 chenm
 import java.util.Collection;
 
 import com.cmtech.dsp.util.Complex;
+import com.cmtech.dsp.util.FFT;
+import com.cmtech.dsp.util.FFT.FFTResult;
 import com.cmtech.dsp.util.SeqUtil;
 
 /**
@@ -92,7 +94,7 @@ public class ComplexSeq extends Seq<Complex> {
 		int N = size();
 		ComplexSeq ejwn, tmpseq;
 		for(int i = 0; i < Nw; i++) {
-			ejwn = SeqUtil.createEJWSeq(-omega.get(i), 0, N);
+			ejwn = SeqUtil.eJWSeq(-omega.get(i), 0, N);
 			tmpseq = (ComplexSeq)SeqUtil.multiple(this, ejwn);
 			out.set(i, tmpseq.sum());
 		}
@@ -101,9 +103,33 @@ public class ComplexSeq extends Seq<Complex> {
 	
 	@Override
 	public ComplexSeq dtft(int N) {
-		//复序列的DTFT没有对称性，所以需要求0~2*PI整个周期的频谱
+		// Because of the non-symmetry of the DTFT of the Complex Sequence, the frequency range should be [0, 2*PI].
 		return dtft(SeqUtil.linSpace(0, 2*Math.PI, N));	
 	}
+	
+	@Override
+	public ComplexSeq fft() {
+		FFTResult rlt = FFT.fft(this.getReal().toArray(), this.getImag().toArray());
+		return new ComplexSeq(rlt.re, rlt.im);
+	}
+	
+	@Override
+	public ComplexSeq fft(int N) {
+		FFTResult rlt = FFT.fft(this.getReal().toArray(), this.getImag().toArray(), N);
+		return new ComplexSeq(rlt.re, rlt.im);
+	}
+	
+	@Override
+	public ComplexSeq ifft() {
+		FFTResult rlt = FFT.ifft(this.getReal().toArray(), this.getImag().toArray());
+		return new ComplexSeq(rlt.re, rlt.im);
+	}
+
+	@Override
+	public ComplexSeq ifft(int N) {
+		FFTResult rlt = FFT.ifft(this.getReal().toArray(), this.getImag().toArray(), N);
+		return new ComplexSeq(rlt.re, rlt.im);
+	}	
 	
 	public RealSeq getReal() {
 		RealSeq out = new RealSeq();

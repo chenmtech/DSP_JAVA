@@ -7,6 +7,9 @@ import com.cmtech.dsp.filter.design.DCBlockDesigner;
 import com.cmtech.dsp.filter.design.FIRDesigner;
 import com.cmtech.dsp.filter.design.FilterType;
 import com.cmtech.dsp.filter.design.WinType;
+import com.cmtech.dsp.seq.ComplexSeq;
+import com.cmtech.dsp.seq.RealSeq;
+import com.cmtech.dsp.util.SeqUtil;
 
 public class DspApp {
 
@@ -29,6 +32,12 @@ public class DspApp {
 		IIRFilter dcBlocker = DCBlockDesigner.design(2, sampleRate);
 		System.out.println(dcBlocker);
 		
+		RealSeq seq = SeqUtil.randomSeq(10);
+		ComplexSeq fftSeq = seq.fft();
+		ComplexSeq ifftSeq = fftSeq.ifft();
+		System.out.println(seq);
+		System.out.println(fftSeq);
+		System.out.println(ifftSeq.getReal());
 	}
 	
 /*

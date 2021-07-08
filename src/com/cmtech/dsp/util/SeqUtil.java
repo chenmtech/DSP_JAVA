@@ -11,11 +11,16 @@ public class SeqUtil {
 	private SeqUtil() {
 	}
 	
-	private interface IBiOperator<T> {
+	private static interface IBiOperator<T> {
 		T operator(T op1, T op2);
-	}
-	
+	}	
 
+	/**
+	 * Add two sequences
+	 * @param seq1 sequence 1
+	 * @param seq2 sequence 1
+	 * @return sum of the two sequences
+	 */
 	public static <T> ISeq<T> add(ISeq<T> seq1, ISeq<T> seq2) {
 		return process(seq1, seq2, new IBiOperator<T>() {
 			@Override
@@ -25,7 +30,12 @@ public class SeqUtil {
 		});
 	}
 	
-
+	/**
+	 * Subtract two sequences
+	 * @param seq1 sequence 1
+	 * @param seq2 sequence 1
+	 * @return diff of the two sequences
+	 */
 	public static <T> ISeq<T> subtract(ISeq<T> seq1, ISeq<T> seq2) {
 		return process(seq1, seq2, new IBiOperator<T>() {
 			@Override
@@ -35,6 +45,12 @@ public class SeqUtil {
 		});
 	}
 	
+	/**
+	 * Multiply two sequences
+	 * @param seq1 sequence 1
+	 * @param seq2 sequence 1
+	 * @return product of the two sequences
+	 */
 	public static <T> ISeq<T> multiple(ISeq<T> seq1, ISeq<T> seq2) {
 		return process(seq1, seq2, new IBiOperator<T>() {
 			@Override
@@ -44,6 +60,12 @@ public class SeqUtil {
 		});
 	}
 	
+	/**
+	 * Divide two sequences
+	 * @param seq1 sequence 1
+	 * @param seq2 sequence 1
+	 * @return quotient of the two sequences
+	 */
 	public static <T> ISeq<T> divide(ISeq<T> seq1, ISeq<T> seq2) {
 		return process(seq1, seq2, new IBiOperator<T>() {
 			@Override
@@ -65,6 +87,12 @@ public class SeqUtil {
 		return out;	
 	}
 	
+	/**
+	 * Linear convolution two sequences done in the time domain
+	 * @param seq1 sequence 1
+	 * @param seq2 sequence 1
+	 * @return convolution of the two sequences
+	 */
 	public static <T> ISeq<T> conv(ISeq<T> seq1, ISeq<T> seq2) {
 	    int N1 = seq1.size();
 	    int N2 = seq2.size();
@@ -79,7 +107,7 @@ public class SeqUtil {
 	    T tmp = op.zeroElement();
 	    for(n = 0; n < N; n++)
 	    {
-	    		tmp = op.zeroElement();
+	    	tmp = op.zeroElement();
 	        for(m = 0; m < N1; m++)
 	        {
 	            n_m = n - m;
@@ -91,14 +119,12 @@ public class SeqUtil {
 	    return out;
 	}
 	
-	public static <T> ComplexSeq cirConvUsingDFT(ISeq<T> seq1, ISeq<T> seq2, int N)
-	{
-	    ComplexSeq seq1DFT = seq1.fft(N);
-	    ComplexSeq seq2DFT = seq2.fft(N);
-	    ComplexSeq dft = (ComplexSeq) SeqUtil.multiple(seq1DFT, seq2DFT);
-	    return dft.ifft();
-	}
-
+	/**
+	 * Linear convolution two sequences using DFT
+	 * @param seq1 sequence 1
+	 * @param seq2 sequence 1
+	 * @return convolution of the two sequences
+	 */
 	public static <T> ComplexSeq convUsingDFT(ISeq<T> seq1, ISeq<T> seq2)
 	{
 		int N = seq1.size()+seq2.size()-1;
@@ -107,15 +133,48 @@ public class SeqUtil {
 	    return out;
 	}
 	
-	public static RealSeq createZeroRealSeq(int N) {
+	/**
+	 * Circular convolution two sequences using DFT
+	 * @param seq1 sequence 1
+	 * @param seq2 sequence 1
+	 * @param N the length of circular convolution
+	 * @return circular convolution of the two sequences
+	 */
+	public static <T> ComplexSeq cirConvUsingDFT(ISeq<T> seq1, ISeq<T> seq2, int N)
+	{
+	    ComplexSeq seq1DFT = seq1.fft(N);
+	    ComplexSeq seq2DFT = seq2.fft(N);
+	    ComplexSeq dft = (ComplexSeq) SeqUtil.multiple(seq1DFT, seq2DFT);
+	    return dft.ifft();
+	}
+	
+	/**
+	 * create a new RealSeq with the length N
+	 * @param N length of the RealSeq
+	 * @return real seq
+	 */
+	public static RealSeq newRealSeq(int N) {
 		return new RealSeq(N);		
 	}
 	
-	public static ComplexSeq createZeroComplexSeq(int N) {
+	/**
+	 * create a new ComplexSeq with the length N
+	 * @param N length of the ComplexSeq
+	 * @return complex seq
+	 */
+	public static ComplexSeq newComplexSeq(int N) {
 		return new ComplexSeq(N);		
 	}
 	
-	public static RealSeq createSinSeq(double A, double w, double initphi, int N) {
+	/**
+	 * create a sin sequence with amplitude A, digital frequency w, initial phase initphi, and length N
+	 * @param A amplitude 
+	 * @param w digital frequency
+	 * @param initphi initial phase
+	 * @param N length
+	 * @return sin sequence
+	 */
+	public static RealSeq sinSeq(double A, double w, double initphi, int N) {
 		RealSeq out = new RealSeq(N);
 		for(int i = 0; i < N; i++) {
 			out.set(i, A*Math.sin(w*i+initphi));
@@ -123,11 +182,27 @@ public class SeqUtil {
 		return out;
 	}
 	
-	public static RealSeq createSinSeq(double A, double f, double initphi, double fs, int N)	{
-		return createSinSeq(A, 2*Math.PI*f/fs, initphi, N);
+	/**
+	 * create a sin sequence with amplitude A, analog frequency f, initial phase initphi, sampling frequency fs, and length N
+	 * @param A amplitude
+	 * @param f analog frequency
+	 * @param initphi initial phase
+	 * @param fs sampling frequency
+	 * @param N length
+	 * @return sin sequence
+	 */
+	public static RealSeq sinSeq(double A, double f, double initphi, double fs, int N)	{
+		return sinSeq(A, 2*Math.PI*f/fs, initphi, N);
 	}
 	
-	public static ComplexSeq createEJWSeq(double w, double initphi, int N) {
+	/**
+	 * create a complex sequence e^(i*w*n+initphi), i.e. cos(w*n+initphi) + i * sin(w*n+initphi)
+	 * @param w digital frequency
+	 * @param initphi initial phase
+	 * @param N length
+	 * @return e^(i*w*n+initphi)
+	 */
+	public static ComplexSeq eJWSeq(double w, double initphi, int N) {
 		ComplexSeq out = new ComplexSeq(N);
 		for(int i = 0; i < N; i++) {
 			out.set(i, new Complex(Math.cos(w*i+initphi), Math.sin(w*i+initphi)));
@@ -135,30 +210,37 @@ public class SeqUtil {
 		return out;
 	}
 	
+	/**
+	 * create a sequence which element values are (N-1) equally segment values between [begin, end], including the values of begin and end 
+	 * @param begin first value
+	 * @param end last value
+	 * @param N total value number
+	 * @return seq
+	 */
 	public static RealSeq linSpace(double begin, double end, int N)
 	{
-	    RealSeq out = new RealSeq(N);
-	    
+	    RealSeq out = new RealSeq(N);	    
 	    double delta = (end - begin)/(N-1);
-
 	    for(int i = 0; i < N-1; i++)
 	    {
 	        out.set(i, begin + delta*i);
 	    }    
 	    out.set(N-1, end);
-
 	    return out;
 	}
 	
-	public static RealSeq createRandomSeq(int N)
+	/**
+	 * create a random RealSeq
+	 * @param N length
+	 * @return random sequence
+	 */
+	public static RealSeq randomSeq(int N)
 	{
 	    RealSeq out = new RealSeq(N);
-
 	    for(int i = 0; i < N; i++)
 	    {
 	        out.set(i, Math.random());
 	    }    
-
 	    return out;
 	}
 
