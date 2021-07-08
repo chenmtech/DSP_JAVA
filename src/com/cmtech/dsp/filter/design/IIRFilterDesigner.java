@@ -17,7 +17,6 @@ import java.util.Map;
 
 import com.cmtech.dsp.filter.IIRFilter;
 import com.cmtech.dsp.filter.para.IIRPara;
-import com.cmtech.dsp.filter.structure.StructType;
 import com.cmtech.dsp.seq.RealSeq;
 import com.cmtech.dsp.util.ZT;
 
@@ -26,8 +25,8 @@ import com.cmtech.dsp.util.ZT;
  * @author chenm
  * @version 2008-07
  */
-public class IIRDesigner {
-	private IIRDesigner() {		
+public class IIRFilterDesigner {
+	private IIRFilterDesigner() {		
 	}
 	
 	/**

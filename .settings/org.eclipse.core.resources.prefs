@@ -1,7 +1,7 @@
 eclipse.preferences.version=1
 encoding//src/com/cmtech/dsp/DspApp.java=UTF-8
 encoding//src/com/cmtech/dsp/filter/design/AnalogLowpassFilterDesigner.java=UTF-8
-encoding//src/com/cmtech/dsp/filter/design/FIRDesigner.java=UTF-8
+encoding//src/com/cmtech/dsp/filter/design/FIRFilterDesigner.java=UTF-8
 encoding//src/com/cmtech/dsp/util/FFT.java=UTF-8
 encoding//src/com/cmtech/dsp/util/SeqUtil.java=UTF-8
 encoding/<project>=UTF-8

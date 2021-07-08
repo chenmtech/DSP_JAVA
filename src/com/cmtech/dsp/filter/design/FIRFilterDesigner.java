@@ -13,8 +13,7 @@ import java.util.Map;
 
 import com.cmtech.dsp.filter.FIRFilter;
 import com.cmtech.dsp.filter.para.FIRPara;
-import com.cmtech.dsp.filter.para.KaiserPara;
-import com.cmtech.dsp.filter.structure.StructType;
+import com.cmtech.dsp.filter.para.KaiserFIRPara;
 import com.cmtech.dsp.seq.RealSeq;
 import com.cmtech.dsp.util.SeqUtil;
 
@@ -23,19 +22,24 @@ import com.cmtech.dsp.util.SeqUtil;
  * @author chenm
  * @version 2008-08
  */
-public class FIRDesigner {
-	private FIRDesigner() {		
+public class FIRFilterDesigner {
+	private FIRFilterDesigner() {		
 	}
 	
 	public static FIRFilter design(double[] wp, double[] ws, double Rp, double As, FilterType fType) {
-		return design(wp,ws,Rp,As,fType,WinType.UNKNOWN).createStructure(StructType.FIR_DF);
+		Map<String, Object> outMap = designHn(wp,ws,Rp,As,fType,WinType.UNKNOWN);
+		RealSeq hnSeq = (RealSeq)outMap.get("HN");
+		FIRPara para = (FIRPara)outMap.get("PARA");
+		FIRFilter filter = new FIRFilter(hnSeq);
+	    filter.setFilterPara(para);
+	    return filter;
 	}
 	
-	public static FIRFilter design(double[] wp, double[] ws, double Rp, double As, FilterType fType, WinType wType) {
+	public static Map<String, Object> designHn(double[] wp, double[] ws, double Rp, double As, FilterType fType, WinType wType) {
 		if(wType != WinType.KAISER)
-			return designFIRUsingWindow(wp, ws, Rp, As, fType).createStructure(StructType.FIR_DF);
+			return designUsingNormalWindow(wp, ws, Rp, As, fType);
 		else
-			return designFIRUsingKaiser(wp, ws, Rp, As, fType).createStructure(StructType.FIR_DF);
+			return designUsingKaiserWindow(wp, ws, Rp, As, fType);
 	}
 	
 	//根据相对设计规格，用窗函数法设计FIR滤波器。注：这里的窗不包括凯泽窗
@@ -48,7 +52,7 @@ public class FIRDesigner {
 	//pN：滤波器h(n)的长度地址
 	//pWc：滤波器的截止频率地址
 	//pWType：滤波器采用的窗类型地址 
-	public static FIRFilter designFIRUsingWindow(double[] wp, double[] ws, double Rp, double As, FilterType fType)
+	private static Map<String, Object> designUsingNormalWindow(double[] wp, double[] ws, double Rp, double As, FilterType fType)
 	{
 	    RealSeq outSeq = null;
 	    
@@ -84,12 +88,13 @@ public class FIRDesigner {
 	    if(N == 0) return null;
 	    
 	    //第三步：用窗函数的参数设计滤波器 
-	    outSeq = designFIRUsingWindow(N, wc, wType, fType);
-	    
-	    FIRFilter filter = new FIRFilter(outSeq);
+	    outSeq = designUsingNormalWindow(N, wc, wType, fType);
 	    FIRPara para = new FIRPara(wp,ws,Rp,As,fType,N,wc,wType);
-	    filter.setFilterPara(para);
-	    return filter;
+
+	    Map<String, Object> rtnMap = new HashMap<>();
+	    rtnMap.put("HN", outSeq);
+	    rtnMap.put("PARA", para);	    
+	    return rtnMap;
 	}
 	
 	//根据窗函数的参数设计滤波器，参数包括滤波器的类型、h(n)的长度N和理想滤波器的截止频率wc。注：这里的窗不包括凯泽窗
@@ -97,13 +102,13 @@ public class FIRDesigner {
 	//wc：理想滤波器的截止频率地址
 	//wType：滤波器采用的窗类型 
 	//fType：滤波器类型
-	public static RealSeq designFIRUsingWindow(int N, double[] wc, WinType wType, FilterType fType)
+	public static RealSeq designUsingNormalWindow(int N, double[] wc, WinType wType, FilterType fType)
 	{
 	    //3.1：用窗长度和理想滤波器的截止频率确定理想滤波器的hd(n) 
 	    RealSeq idealSeq = designIdealFilter(N, wc, fType);
 	    
 	    //3.2：用窗类型和窗长度确定窗函数w(n) 
-	    RealSeq winSeq = getWindow(N, wType);
+	    RealSeq winSeq = getNormalWindow(N, wType);
 	    
 	    //3.3：求h(n) = hd(n)w(n) 
 	    idealSeq = (RealSeq) SeqUtil.multiple(idealSeq, winSeq);
@@ -121,7 +126,7 @@ public class FIRDesigner {
 	//pN：滤波器h(n)的长度地址
 	//pBeta：参数beta的地址 
 	//pWc：滤波器的截止频率地址
-	public static FIRFilter designFIRUsingKaiser(double[] wp, double[] ws, double Rp, double As, FilterType fType)
+	private static Map<String, Object> designUsingKaiserWindow(double[] wp, double[] ws, double Rp, double As, FilterType fType)
 	{
 	    RealSeq outSeq = null;
 	    
@@ -150,12 +155,14 @@ public class FIRDesigner {
 	    
 	    if(N <= 0) return null;
 	    
-	    outSeq = designFIRUsingKaiser(N, beta, wc, fType);
+	    outSeq = designUsingKaiserWindow(N, beta, wc, fType);
+	    KaiserFIRPara para = new KaiserFIRPara(wp,ws,Rp,As,fType,N,wc,beta);
 	    
-	    FIRFilter filter = new FIRFilter(outSeq);
-	    KaiserPara para = new KaiserPara(wp,ws,Rp,As,fType,N,wc,beta);
-	    filter.setFilterPara(para);
-	    return filter;
+	    Map<String, Object> rtnMap = new HashMap<>();
+	    rtnMap.put("HN", outSeq);
+	    rtnMap.put("PARA", para);	    
+	    
+	    return rtnMap;
 	}
 
 	//根据凯泽窗函数的参数设计滤波器，参数包括h(n)的长度N、Beta和理想滤波器的截止频率wc。
@@ -163,56 +170,44 @@ public class FIRDesigner {
 	//beta：凯泽窗的参数beta 
 	//wc：滤波器的截止频率地址
 	//fType：滤波器类型
-	public static RealSeq designFIRUsingKaiser(int N, double beta, double[] wc, FilterType fType)
+	public static RealSeq designUsingKaiserWindow(int N, double beta, double[] wc, FilterType fType)
 	{
 	    RealSeq idealSeq = designIdealFilter(N, wc, fType);
 	    RealSeq winSeq = getKaiserWindow(N, beta);
 	    
-	    idealSeq = (RealSeq) SeqUtil.multiple(idealSeq, winSeq);
-
-	    return idealSeq;
+	    return (RealSeq) SeqUtil.multiple(idealSeq, winSeq);
 	}
 
 	//用窗函数法设计微分器，如果是凯泽窗，要指定beta，如果不是，设beta=0 
 	//pN：滤波器h(n)的长度，注意可能输入N值会改变
 	//wType：窗类型 
 	//beta：凯泽窗的参数beta 
-	public static Map<String, Object> designDiff(int N, WinType wType, double beta)
+	public static RealSeq designDifferentiator(int N, WinType wType, double beta)
 	{
 		if( N % 2 == 1 ) N++;   //微分器建议用类型4，即长度为偶数的。你如果不想要，就去掉这一行
 	    
 	    RealSeq idealSeq = designIdealDifferentiator(N);
 	    RealSeq winSeq = null;  
 	    if(wType == WinType.KAISER)  winSeq = getKaiserWindow(N, beta);
-	    else winSeq = getWindow(N, wType);
+	    else winSeq = getNormalWindow(N, wType);
 
-	    idealSeq = (RealSeq) SeqUtil.multiple(idealSeq, winSeq);
-
-	    Map<String, Object> rtnMap = new HashMap<>();
-	    rtnMap.put("OUTSEQ", idealSeq);
-	    rtnMap.put("N", N);
-	    return rtnMap;
+	    return (RealSeq) SeqUtil.multiple(idealSeq, winSeq);
 	}
 
 	//用窗函数法设计Hilbert变换器，如果是凯泽窗，要指定beta，如果不是，设beta=0 
 	//pN：滤波器h(n)的长度，注意可能输入N值会改变
 	//wType：窗类型 
 	//beta：凯泽窗的参数beta
-	public static Map<String, Object> designHilbert(int N, WinType wType, double beta)
+	public static RealSeq designHilbert(int N, WinType wType, double beta)
 	{
 		if( N % 2 == 0 ) N++;   //Hilbert变换器建议用类型3，即长度为奇数的。你如果不想要，就去掉这一行
 	    
 	    RealSeq idealSeq = designIdealHilbertTransformer(N);
 	    RealSeq winSeq = null;  
 	    if(wType == WinType.KAISER)  winSeq = getKaiserWindow(N, beta);
-	    else winSeq = getWindow(N, wType);
+	    else winSeq = getNormalWindow(N, wType);
 
-	    idealSeq = (RealSeq) SeqUtil.multiple(idealSeq, winSeq);
-
-	    Map<String, Object> rtnMap = new HashMap<>();
-	    rtnMap.put("OUTSEQ", idealSeq);
-	    rtnMap.put("N", N);
-	    return rtnMap;
+	    return (RealSeq) SeqUtil.multiple(idealSeq, winSeq);
 	}
 
 
@@ -246,7 +241,7 @@ public class FIRDesigner {
 	//获取窗函数，不包括凯泽窗 
 	//N：窗长度
 	//wType：窗类型 
-	private static RealSeq getWindow(int N, WinType wType)
+	private static RealSeq getNormalWindow(int N, WinType wType)
 	{
 	    switch(wType)
 	    {

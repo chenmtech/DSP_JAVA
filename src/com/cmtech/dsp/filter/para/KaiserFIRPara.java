@@ -21,19 +21,19 @@ import com.cmtech.dsp.filter.design.WinType;
  * @version 0.0.1
  * @since JDK 1.6
  */
-public class KaiserPara extends FIRPara {
+public class KaiserFIRPara extends FIRPara {
 	private double beta = 0.0;
 	
-	public KaiserPara() {
+	public KaiserFIRPara() {
 		super.setWinType(WinType.KAISER);
 	}
 
-	public KaiserPara(double[] wp, double[] ws, double Rp, double As, FilterType fType) {
+	public KaiserFIRPara(double[] wp, double[] ws, double Rp, double As, FilterType fType) {
 		super(wp, ws, Rp, As, fType);
 		super.setWinType(WinType.KAISER);
 	}
 	
-	public KaiserPara(double[] wp, double[] ws, 
+	public KaiserFIRPara(double[] wp, double[] ws, 
 				   double Rp, double As, FilterType fType,
 				   int N, double[] wc, double beta) {
 		super(wp, ws, Rp, As, fType, N, wc, WinType.KAISER);

@@ -4,7 +4,7 @@ import com.cmtech.dsp.exception.DspException;
 import com.cmtech.dsp.filter.FIRFilter;
 import com.cmtech.dsp.filter.IIRFilter;
 import com.cmtech.dsp.filter.design.DCBlockDesigner;
-import com.cmtech.dsp.filter.design.FIRDesigner;
+import com.cmtech.dsp.filter.design.FIRFilterDesigner;
 import com.cmtech.dsp.filter.design.FilterType;
 import com.cmtech.dsp.filter.design.WinType;
 import com.cmtech.dsp.seq.ComplexSeq;
@@ -25,7 +25,7 @@ public class DspApp {
 		FilterType fType = FilterType.HIGHPASS;
 		WinType wType = WinType.HAMMING;
 		
-		FIRFilter filter = FIRDesigner.design(wp, ws, Rp, As, fType, wType);
+		FIRFilter filter = FIRFilterDesigner.designHn(wp, ws, Rp, As, fType, wType);
 		System.out.println(filter);
 		//System.out.println(filter.getB().size());
 		

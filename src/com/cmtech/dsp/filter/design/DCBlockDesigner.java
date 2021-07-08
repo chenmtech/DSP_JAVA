@@ -8,10 +8,12 @@
  */
 package com.cmtech.dsp.filter.design;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import com.cmtech.dsp.filter.IIRFilter;
-import com.cmtech.dsp.filter.structure.StructType;
+import com.cmtech.dsp.filter.structure.FilterStructType;
+import com.cmtech.dsp.seq.RealSeq;
 
 /**
  * ClassName: DCBlockDesigner
@@ -35,7 +37,11 @@ public class DCBlockDesigner {
 		b[1] = -b[0];
 		a[0] = 1.0;
 		a[1] = -r;
-		return new IIRFilter(b,a).createStructure(StructType.IIR_DF2);
+		return new IIRFilter(b,a);
+	}
+	
+	public static IIRFilter design(double deltaf, double fs) {
+		return design(2*Math.PI*deltaf/fs);
 	}
 	
 	public static Map<String, Object> designHz(double deltaw) {
@@ -46,11 +52,15 @@ public class DCBlockDesigner {
 		b[1] = -b[0];
 		a[0] = 1.0;
 		a[1] = -r;
-		return new IIRFilter(b,a).createStructure(StructType.IIR_DF2);
+	    
+	    Map<String, Object> rtnMap = new HashMap<>();
+	    rtnMap.put("BZ", new RealSeq(b));
+	    rtnMap.put("AZ", new RealSeq(a));
+	    return rtnMap;
 	}
 	
-	public static IIRFilter design(double deltaf, double fs) {
-		return design(2*Math.PI*deltaf/fs);
+	public static Map<String, Object> designHz(double deltaf, double fs) {
+		return designHz(2*Math.PI*deltaf/fs);
 	}
 
 }

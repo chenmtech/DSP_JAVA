@@ -3,7 +3,7 @@ package com.cmtech.dsp.filter.para;
 import com.cmtech.dsp.filter.design.AnalogFilterType;
 import com.cmtech.dsp.filter.design.FilterType;
 
-public class IIRPara extends DFPara {
+public class IIRPara extends DigitalFilterPara {
 	private AnalogFilterType afType = AnalogFilterType.NONE;
 	
 	public IIRPara() {

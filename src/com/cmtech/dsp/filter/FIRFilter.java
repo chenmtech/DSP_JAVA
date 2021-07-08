@@ -6,7 +6,7 @@ import com.cmtech.dsp.filter.structure.FIRLPF2Structure;
 import com.cmtech.dsp.filter.structure.FIRLPF3Structure;
 import com.cmtech.dsp.filter.structure.FIRLPF4Structure;
 import com.cmtech.dsp.filter.structure.FIRLPFStructure;
-import com.cmtech.dsp.filter.structure.StructType;
+import com.cmtech.dsp.filter.structure.FilterStructType;
 import com.cmtech.dsp.seq.ComplexSeq;
 import com.cmtech.dsp.seq.RealSeq;
 
@@ -85,10 +85,10 @@ public class FIRFilter extends DigitalFilter{
 	}
 
 	@Override
-	public FIRFilter createStructure(StructType sType) {
-		if(sType == StructType.FIR_DF) {
+	public FIRFilter createStructure(FilterStructType sType) {
+		if(sType == FilterStructType.FIR_DF) {
 			structure = new FIRDFStructure(b);
-		} else if(sType == StructType.FIR_LPF) {
+		} else if(sType == FilterStructType.FIR_LPF) {
 			structure = createLPFStructure();
 		} else
 			structure = null;

@@ -5,7 +5,7 @@ import java.util.Arrays;
 import com.cmtech.dsp.filter.design.FilterType;
 import com.cmtech.dsp.filter.design.WinType;
 
-public class FIRPara extends DFPara {
+public class FIRPara extends DigitalFilterPara {
 	private int N = 0;	// h(n)的长度
 	private double[] wc = {0.0,0.0};		// 理想滤波器的截止频率
 	private WinType wType = WinType.UNKNOWN;		// 窗函数类型

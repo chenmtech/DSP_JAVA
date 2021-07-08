@@ -3,14 +3,14 @@ package com.cmtech.dsp.filter.para;
 import com.cmtech.dsp.filter.design.AnalogFilterType;
 import com.cmtech.dsp.filter.design.FilterType;
 
-public class AFPara extends FilterPara {
+public class AnalogFilterPara extends FilterPara {
 	protected AnalogFilterType afType = AnalogFilterType.NONE;
 	
-	public AFPara() {
+	public AnalogFilterPara() {
 		
 	}
 	
-	public AFPara(double[] wp, double[] ws, double Rp, double As, FilterType fType, AnalogFilterType afType) {
+	public AnalogFilterPara(double[] wp, double[] ws, double Rp, double As, FilterType fType, AnalogFilterType afType) {
 		super(wp, ws, Rp, As, fType);
 		this.afType = afType;
 	}

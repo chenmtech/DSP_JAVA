@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.cmtech.dsp.filter.AnalogFilter;
-import com.cmtech.dsp.filter.para.AFPara;
+import com.cmtech.dsp.filter.para.AnalogFilterPara;
 import com.cmtech.dsp.seq.RealSeq;
 import com.cmtech.dsp.util.ZT;
 
@@ -48,7 +48,7 @@ public class AnalogFilterDesigner {
 		RealSeq as = (RealSeq)tmpMap.get("AS");
 		
 		AnalogFilter filter = new AnalogFilter(bs, as);
-		AFPara para = new AFPara(Qp, Qs, Rp, As, fType, afType);
+		AnalogFilterPara para = new AnalogFilterPara(Qp, Qs, Rp, As, fType, afType);
 		filter.setFilterPara(para);
 		return filter;
 	}

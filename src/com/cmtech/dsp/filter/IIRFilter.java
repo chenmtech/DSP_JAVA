@@ -7,7 +7,7 @@ import com.cmtech.dsp.filter.structure.IIRDF1Structure;
 import com.cmtech.dsp.filter.structure.IIRDF2Structure;
 import com.cmtech.dsp.filter.structure.IIRNotchStructure;
 import com.cmtech.dsp.filter.structure.IIRTDF2Structure;
-import com.cmtech.dsp.filter.structure.StructType;
+import com.cmtech.dsp.filter.structure.FilterStructType;
 import com.cmtech.dsp.seq.ComplexSeq;
 import com.cmtech.dsp.seq.RealSeq;
 import com.cmtech.dsp.util.SeqUtil;
@@ -51,16 +51,16 @@ public class IIRFilter extends DigitalFilter {
 
 
 	@Override
-	public IIRFilter createStructure(StructType sType) {
-		if(sType == StructType.IIR_DF1) {
+	public IIRFilter createStructure(FilterStructType sType) {
+		if(sType == FilterStructType.IIR_DF1) {
 			structure = new IIRDF1Structure(b, a);
-		} else if(sType == StructType.IIR_DF2) {
+		} else if(sType == FilterStructType.IIR_DF2) {
 			structure = new IIRDF2Structure(b, a);
-		} else if(sType == StructType.IIR_TDF2) {
+		} else if(sType == FilterStructType.IIR_TDF2) {
 			structure = new IIRTDF2Structure(b, a);
-		} else if(sType == StructType.IIR_DCBLOCK) {
+		} else if(sType == FilterStructType.IIR_DCBLOCK) {
 			structure = new IIRDCBlockStructure(b, a);
-		} else if(sType == StructType.IIR_NOTCH) {
+		} else if(sType == FilterStructType.IIR_NOTCH) {
 			structure = new IIRNotchStructure(b, a);
 		} else
 			structure = null;
