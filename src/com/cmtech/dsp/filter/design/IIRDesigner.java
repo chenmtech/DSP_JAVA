@@ -1,5 +1,9 @@
 package com.cmtech.dsp.filter.design;
 
+/*
+Copyright (c) 2008 chenm
+*/
+
 import static java.lang.Math.PI;
 import static java.lang.Math.abs;
 import static java.lang.Math.cos;
@@ -17,13 +21,20 @@ import com.cmtech.dsp.filter.structure.StructType;
 import com.cmtech.dsp.seq.RealSeq;
 import com.cmtech.dsp.util.ZT;
 
+/**
+ * IIR digital filter designer
+ * @author chenm
+ * @version 2008-07
+ */
 public class IIRDesigner {
-	private IIRDesigner() {
-		
+	private IIRDesigner() {		
 	}
 	
-	public static IIRFilter design(double[] wp, double[] ws, double Rp, double As, AFType afType, FilterType fType) {
-		IIRFilter filter = designIIRFilter(wp, ws, Rp, As, afType, fType);
+	public static IIRFilter design(double[] wp, double[] ws, double Rp, double As, AnalogFilterType afType, FilterType fType) {
+		Map<String, Object> rlt = designHz(wp, ws, Rp, As, afType, fType);
+		RealSeq bz = (RealSeq)rlt.get("BZ");
+		RealSeq az = (RealSeq)rlt.get("AZ");
+		IIRFilter filter = new IIRFilter(bz, az);
 		IIRPara para = new IIRPara(wp,ws,Rp,As,afType,fType);
 		filter.setFilterPara(para);
 		filter.createStructure(StructType.IIR_DF2);
@@ -40,7 +51,7 @@ public class IIRDesigner {
 	//下面为返回值： 
 	//pBz：滤波器系统函数分子多项式数组地址 
 	//pAz：滤波器系统函数分母多项式数组地址
-	private static IIRFilter designIIRFilter(double[] wp, double[] ws, double Rp, double As, AFType afType, FilterType fType) //, RealSeq * pBz, RealSeq * pAz)
+	public static Map<String, Object> designHz(double[] wp, double[] ws, double Rp, double As, AnalogFilterType afType, FilterType fType) //, RealSeq * pBz, RealSeq * pAz)
 	{
 	    double thetap = 0.0;    //相应数字低通滤波器通带截止频率
 	    double thetas = 0.0;    //相应数字低通滤波器阻带截止频率 
@@ -59,7 +70,7 @@ public class IIRDesigner {
 	    }
 	    else
 	    {
-	        tmpMap = GetLPMappingPara(wp, ws, fType);
+	        tmpMap = getLPMappingPara(wp, ws, fType);
 	        thetap = (double)tmpMap.get("THETAP");
 	        thetas = (double)tmpMap.get("THETAS");
 	        Nz = (RealSeq)tmpMap.get("NZ");
@@ -69,14 +80,14 @@ public class IIRDesigner {
 	    //第二步：获取相应的模拟低通滤波器的截止频率，因为A/D变换采用的是双线性变换，所以需要做频率预畸
 	    double Qp = 0.0;
 	    double Qs = 0.0;
-	    tmpMap = PreventDistortForBilinear(thetap, thetas, T);//, &Qp, &Qs);
+	    tmpMap = preventDistortForBilinear(thetap, thetas, T);//, &Qp, &Qs);
 	    Qp = (double)tmpMap.get("QP");
 	    Qs = (double)tmpMap.get("QS");
 	    
 	    //第三步：利用设计指标设计模拟低通滤波器 
 	    RealSeq bs = null;
 	    RealSeq as = null;
-	    tmpMap = ALPDesigner.DesignAnalogLowPassFilter(Qp, Qs, Rp, As, afType);//, &bs, &as);
+	    tmpMap = AnalogLowpassFilterDesigner.design(Qp, Qs, Rp, As, afType);//, &bs, &as);
 	    bs = (RealSeq)tmpMap.get("BS");
 	    as = (RealSeq)tmpMap.get("AS");
 	    
@@ -102,12 +113,10 @@ public class IIRDesigner {
 	        Az = (RealSeq)tmpMap.get("AZ");
 	    }
 	    
-	    IIRFilter filter = new IIRFilter(Bz, Az);
-	    return filter;
-	    /*Map<String, Object> rtnMap = new HashMap<>();
+	    Map<String, Object> rtnMap = new HashMap<>();
 	    rtnMap.put("BZ", Bz);
 	    rtnMap.put("AZ", Az);
-	    return rtnMap;*/
+	    return rtnMap;
 	}
 
 
@@ -120,18 +129,18 @@ public class IIRDesigner {
 	//pThetas：对应的数字低通滤波器的阻带截止频率 
 	//pNz：映射关系分子多项式数组地址 
 	//pDz：映射关系分母多项式数组地址
-	private static Map<String, Object> GetLPMappingPara(double[] wp, double[] ws, FilterType fType) //, double * pThetap, double * pThetas, RealSeq * pNz, RealSeq * pDz)
+	private static Map<String, Object> getLPMappingPara(double[] wp, double[] ws, FilterType fType) //, double * pThetap, double * pThetas, RealSeq * pNz, RealSeq * pDz)
 	{
 	    switch(fType)
 	    {
 	    case LOWPASS:
-	        return GetLP2LPMappingPara(wp[0], ws[0]);
+	        return getLP2LPMappingPara(wp[0], ws[0]);
 	    case HIGHPASS:
-	        return GetLP2HPMappingPara(wp[0], ws[0]);
+	        return getLP2HPMappingPara(wp[0], ws[0]);
 	    case BANDPASS:
-	        return GetLP2BPMappingPara(wp, ws);
+	        return getLP2BPMappingPara(wp, ws);
 	    case BANDSTOP:
-	        return GetLP2BSMappingPara(wp, ws);
+	        return getLP2BSMappingPara(wp, ws);
 	    default:
 	        break;
 	    }
@@ -145,7 +154,7 @@ public class IIRDesigner {
 	//下面为返回值：
 	//pQp：对应的模拟低通滤波器的通带截止频率
 	//pQs：对应的模拟低通滤波器的阻带截止频率 
-	private static Map<String, Object> PreventDistortForBilinear(double wp, double ws, double T)//, double * pQp, double * pQs)
+	private static Map<String, Object> preventDistortForBilinear(double wp, double ws, double T)//, double * pQp, double * pQs)
 	{
 	    double Qp = 2/T*tan(wp/2);
 	    double Qs = 2/T*tan(ws/2);
@@ -183,7 +192,7 @@ public class IIRDesigner {
 	//pThetas：对应的数字低通滤波器的阻带截止频率 
 	//pNz：映射关系分子多项式数组地址 
 	//pDz：映射关系分母多项式数组地址
-	private static Map<String, Object> GetLP2LPMappingPara(double wp, double ws) //, double * pThetap, double *pThetas, RealSeq * pNz, RealSeq * pDz)
+	private static Map<String, Object> getLP2LPMappingPara(double wp, double ws) //, double * pThetap, double *pThetas, RealSeq * pNz, RealSeq * pDz)
 	{
 	    double thetap = 0.2*PI;
 	    
@@ -217,7 +226,7 @@ public class IIRDesigner {
 	//pThetas：对应的数字低通滤波器的阻带截止频率 
 	//pNz：映射关系分子多项式数组地址 
 	//pDz：映射关系分母多项式数组地址
-	private static Map<String, Object> GetLP2HPMappingPara(double wp, double ws) //, double * pThetap, double *pThetas, RealSeq * pNz, RealSeq * pDz)
+	private static Map<String, Object> getLP2HPMappingPara(double wp, double ws) //, double * pThetap, double *pThetas, RealSeq * pNz, RealSeq * pDz)
 	{
 	    double thetap = 0.2*PI;
 	    
@@ -251,7 +260,7 @@ public class IIRDesigner {
 	//pThetas：对应的数字低通滤波器的阻带截止频率 
 	//pNz：映射关系分子多项式数组地址 
 	//pDz：映射关系分母多项式数组地址
-	private static Map<String, Object> GetLP2BPMappingPara(double[] wp, double[] ws) //, double * pThetap, double *pThetas, RealSeq * pNz, RealSeq * pDz)
+	private static Map<String, Object> getLP2BPMappingPara(double[] wp, double[] ws) //, double * pThetap, double *pThetas, RealSeq * pNz, RealSeq * pDz)
 	{
 	    double thetap = 0.2*PI;
 	    
@@ -289,7 +298,7 @@ public class IIRDesigner {
 	//pThetas：对应的数字低通滤波器的阻带截止频率 
 	//pNz：映射关系分子多项式数组地址 
 	//pDz：映射关系分母多项式数组地址
-	private static Map<String, Object> GetLP2BSMappingPara(double[] wp, double[] ws) //, double * pThetap, double *pThetas, RealSeq * pNz, RealSeq * pDz)
+	private static Map<String, Object> getLP2BSMappingPara(double[] wp, double[] ws) //, double * pThetap, double *pThetas, RealSeq * pNz, RealSeq * pDz)
 	{
 	    double thetap = 0.2*PI;
 	    

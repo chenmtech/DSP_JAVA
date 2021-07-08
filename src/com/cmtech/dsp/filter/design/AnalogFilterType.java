@@ -1,6 +1,6 @@
 package com.cmtech.dsp.filter.design;
 
-public enum AFType {
+public enum AnalogFilterType {
 	BUTT,
 	CHEB1,
 	CHEB2,

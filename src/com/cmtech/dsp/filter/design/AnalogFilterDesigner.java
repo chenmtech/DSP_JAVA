@@ -1,12 +1,8 @@
-/**
- * Project Name:DSP_JAVA
- * File Name:AFDesigner.java
- * Package Name:com.cmtech.dsp.filter.design
- * Date:2018年2月17日下午5:13:57
- * Copyright (c) 2018, e_yujunquan@163.com All Rights Reserved.
- *
- */
 package com.cmtech.dsp.filter.design;
+
+/*
+Copyright (c) 2008 chenm
+*/
 
 import static java.lang.Math.abs;
 
@@ -18,26 +14,32 @@ import com.cmtech.dsp.filter.para.AFPara;
 import com.cmtech.dsp.seq.RealSeq;
 import com.cmtech.dsp.util.ZT;
 
-/**
- * ClassName: AFDesigner
- * Function: TODO ADD FUNCTION. 
- * Reason: TODO ADD REASON(可选). 
- * date: 2018年2月17日 下午5:13:57 
- *
- * @author bme
- * @version 0.0.1
- * @since JDK 1.6
- */
-public class AFDesigner {
-	private AFDesigner() {
-		
-	}
 
+/**
+ * This class is for the design of analog filter. 
+ * The type of filter which can be designed contains Butt, Cheb1, Cheb2, and Elliptical.
+ * @author chenm
+ *@version 2008-07
+ */
+public class AnalogFilterDesigner {
+	private AnalogFilterDesigner() {		
+	}
 	
 	//根据设计规格设计各型模拟滤波器，用角频率 
-	public static AnalogFilter design(double[] Qp, double[] Qs, double Rp, double As, AFType afType, FilterType fType)
+	/**
+	 * design an analog filter
+	 * @param Qp analog angular frequency of passband, {2*PI*fp} for lowpass and highpass, {2*PI*fpl, 2*PI*fph} for bandpass and bandstop
+	 * @param Qs analog angular frequency of stopband, 2*PI*fs for lowpass and highpass, {2*PI*fpl, 2*PI*fph} for bandpass and bandstop
+	 * @param Rp ripple at Qp, unit:dB
+	 * @param As attenuation at Qs, unit:dB
+	 * @param afType analog filter type, which can be BUTT, CHEB1, CHEB2, ELLIP
+	 * @param fType filter type, which can be LOWPASS, HIGHPASS, BANDPASS, BANDSTOP
+	 * @return a analog filter
+	 */
+	public static AnalogFilter design(double[] Qp, double[] Qs, double Rp, double As, AnalogFilterType afType, FilterType fType)
 	{
-		Map<String, Object> tmpMap = DesignAnalogFilter(Qp, Qs, Rp, As, afType, fType);
+		Map<String, Object> tmpMap = designAnalogFilter(Qp, Qs, Rp, As, afType, fType);
+		if(tmpMap == null) return null;
 		RealSeq bs = (RealSeq)tmpMap.get("BS");
 		RealSeq as = (RealSeq)tmpMap.get("AS");
 		
@@ -57,27 +59,29 @@ public class AFDesigner {
 	//下面为返回值： 
 	//Bs：模拟滤波器系统函数分子多项式数组 
 	//As：模拟滤波器系统函数分母多项式数组
-	public static Map<String, Object> DesignAnalogFilter(double[] Qp, double[] Qs, double Rp, double As, AFType afType, FilterType fType)
+	private static Map<String, Object> designAnalogFilter(double[] Qp, double[] Qs, double Rp, double As, AnalogFilterType afType, FilterType fType)
 	{
 	    if(fType == FilterType.LOWPASS)    //低通，不用频带变换了，可以直接设计 
 	    {
-	        return ALPDesigner.DesignAnalogLowPassFilter(Qp[0], Qs[0], Rp, As, afType);
+	        return AnalogLowpassFilterDesigner.design(Qp[0], Qs[0], Rp, As, afType);
 	    }
 	    else
 	    {
 	        //第一步：获取频带变换映射关系，以及相应模拟低通滤波器参数 
-	    		Map<String, Object> tmpMap = GetAnalogLPMappingPara(Qp, Qs, fType);
+	    	Map<String, Object> tmpMap = getAnalogLPMappingPara(Qp, Qs, fType);
+	    	if(tmpMap == null) return null;
 	        double Q_p = (double)tmpMap.get("Q_P");
 	        double Q_s = (double)tmpMap.get("Q_S");
 	        RealSeq Ns = (RealSeq)tmpMap.get("NS");
 	        RealSeq Ds = (RealSeq)tmpMap.get("DS");
 	        
 	        //第二步：设计模拟低通滤波器
-	        tmpMap = ALPDesigner.DesignAnalogLowPassFilter(Q_p, Q_s, Rp, As, afType);
+	        tmpMap = AnalogLowpassFilterDesigner.design(Q_p, Q_s, Rp, As, afType);
+	        if(tmpMap == null) return null;
 	        RealSeq bS = (RealSeq)tmpMap.get("BS");
 	        RealSeq aS = (RealSeq)tmpMap.get("AS");
 	        //第三步：做频带变换，得到所需各型模拟滤波器
-	        return AnalogFreqBandTransform(bS, aS, Ns, Ds);     
+	        return analogFreqBandTransform(bS, aS, Ns, Ds);     
 	    }   
 	}
 
@@ -90,18 +94,18 @@ public class AFDesigner {
 	//pQ_s：相应低通滤波器的阻带截止频率 
 	//pNs：映射关系的分子多项式系数数组地址 
 	//pDs：映射关系的分母多项式系数数组地址
-	private static Map<String, Object> GetAnalogLPMappingPara(double[] Qp, double[] Qs, FilterType fType)
+	private static Map<String, Object> getAnalogLPMappingPara(double[] Qp, double[] Qs, FilterType fType)
 	{
 	    switch(fType)
 	    {
 	    case LOWPASS:
-	        return AnalogLP2LPMappingPara(Qp[0], Qs[0]);
+	        return analogLP2LPMappingPara(Qp[0], Qs[0]);
 	    case HIGHPASS:
-	        return AnalogLP2HPMappingPara(Qp[0], Qs[0]);
+	        return analogLP2HPMappingPara(Qp[0], Qs[0]);
 	    case BANDPASS:
-	        return AnalogLP2BPMappingPara(Qp, Qs);
+	        return analogLP2BPMappingPara(Qp, Qs);
 	    case BANDSTOP:
-	        return AnalogLP2BSMappingPara(Qp, Qs);
+	        return analogLP2BSMappingPara(Qp, Qs);
 	    default:
 	        return null;
 	    }
@@ -115,7 +119,7 @@ public class AFDesigner {
 	//pQ_s：相应低通滤波器的阻带截止频率 
 	//pNs：映射关系的分子多项式系数数组地址 
 	//pDs：映射关系的分母多项式系数数组地址
-	private static Map<String, Object> AnalogLP2LPMappingPara(double Qp, double Qs)
+	private static Map<String, Object> analogLP2LPMappingPara(double Qp, double Qs)
 	{
 	    double Q_p = 1;
 	    double Q_s = Qs/Qp;      //(7.5.97)
@@ -143,7 +147,7 @@ public class AFDesigner {
 	//pQ_s：相应低通滤波器的阻带截止频率 
 	//pNs：映射关系的分子多项式系数数组地址 
 	//pDs：映射关系的分母多项式系数数组地址
-	private static Map<String, Object> AnalogLP2HPMappingPara(double Qp, double Qs)//, double * pQ_p, double * pQ_s, RealSeq * pNs, RealSeq * pDs)
+	private static Map<String, Object> analogLP2HPMappingPara(double Qp, double Qs)//, double * pQ_p, double * pQ_s, RealSeq * pNs, RealSeq * pDs)
 	{
 	    double Q_p = 1;
 	    double Q_s = Qp/Qs;      //(7.5.99)
@@ -171,7 +175,7 @@ public class AFDesigner {
 	//pQ_s：相应低通滤波器的阻带截止频率 
 	//pNs：映射关系的分子多项式系数数组地址 
 	//pDs：映射关系的分母多项式系数数组地址
-	private static Map<String, Object> AnalogLP2BPMappingPara(double[] Qp, double[] Qs)
+	private static Map<String, Object> analogLP2BPMappingPara(double[] Qp, double[] Qs)
 	{
 	    double Q_p = 1;
 	    double Q_s1 = (Qs[0]*Qs[0] - Qp[0]*Qp[1])/( (Qp[1] - Qp[0]) * Qs[0] );  //(7.5.104)
@@ -201,7 +205,7 @@ public class AFDesigner {
 	//pQ_s：相应低通滤波器的阻带截止频率 
 	//pNs：映射关系的分子多项式系数数组地址 
 	//pDs：映射关系的分母多项式系数数组地址
-	private static Map<String, Object> AnalogLP2BSMappingPara(double[] Qp, double[] Qs)
+	private static Map<String, Object> analogLP2BSMappingPara(double[] Qp, double[] Qs)
 	{
 	    double Q_s = 1.0;
 	    double Q_p1 = ( (Qs[1] - Qs[0]) * Qp[0] )/(Qs[0]*Qs[1] - Qp[0]*Qp[0]);  //(7.5.109)
@@ -229,7 +233,7 @@ public class AFDesigner {
 	// ---- = ----|     N(s)
 	// a(s)   a(S)|@S = ----
 //	                  D(s) 
-	private static Map<String, Object> AnalogFreqBandTransform(RealSeq bS, RealSeq aS, RealSeq Ns, RealSeq Ds)
+	private static Map<String, Object> analogFreqBandTransform(RealSeq bS, RealSeq aS, RealSeq Ns, RealSeq Ds)
 	{
 	    bS = (RealSeq) bS.reverse();
 	    aS = (RealSeq) aS.reverse();
