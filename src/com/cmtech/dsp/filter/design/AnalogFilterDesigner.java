@@ -28,13 +28,17 @@ public class AnalogFilterDesigner {
 	//根据设计规格设计各型模拟滤波器，用角频率 
 	/**
 	 * design an analog filter
-	 * @param Qp analog angular frequency of passband, {2*PI*fp} for lowpass and highpass, {2*PI*fpl, 2*PI*fph} for bandpass and bandstop
-	 * @param Qs analog angular frequency of stopband, 2*PI*fs for lowpass and highpass, {2*PI*fpl, 2*PI*fph} for bandpass and bandstop
+	 * @param Qp analog angular frequency of passband, 
+	 *        {2*PI*fp} for lowpass and highpass filter, 
+	 *        {2*PI*fpl, 2*PI*fph} for bandpass and bandstop filter
+	 * @param Qs analog angular frequency of stopband, 
+	 *        {2*PI*fs} for lowpass and highpass, 
+	 *        {2*PI*fsl, 2*PI*fsh} for bandpass and bandstop filter
 	 * @param Rp ripple at Qp, unit:dB
 	 * @param As attenuation at Qs, unit:dB
 	 * @param afType analog filter type, which can be BUTT, CHEB1, CHEB2, ELLIP
 	 * @param fType filter type, which can be LOWPASS, HIGHPASS, BANDPASS, BANDSTOP
-	 * @return a analog filter
+	 * @return an AnalogFilter
 	 */
 	public static AnalogFilter design(double[] Qp, double[] Qs, double Rp, double As, AnalogFilterType afType, FilterType fType)
 	{

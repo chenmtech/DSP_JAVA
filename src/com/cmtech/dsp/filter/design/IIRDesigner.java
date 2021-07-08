@@ -30,6 +30,20 @@ public class IIRDesigner {
 	private IIRDesigner() {		
 	}
 	
+	/**
+	 * design an IIR digital filter.
+	 * @param wp digital angular frequency of passband, 
+	 *        {2*PI*wp} for lowpass and highpass filter, 
+	 *        {2*PI*wpl, 2*PI*wph} for bandpass and bandstop filter
+	 * @param ws digital angular frequency of stopband, 
+	 *        {2*PI*ws} for lowpass and highpass, 
+	 *        {2*PI*wsl, 2*PI*wsh} for bandpass and bandstop filter
+	 * @param Rp ripple at wp, unit:dB
+	 * @param As attenuation at ws, unit:dB
+	 * @param afType analog filter type used, which can be BUTT, CHEB1, CHEB2, ELLIP
+	 * @param fType filter type, which can be LOWPASS, HIGHPASS, BANDPASS, BANDSTOP
+	 * @return a IIRFilter
+	 */
 	public static IIRFilter design(double[] wp, double[] ws, double Rp, double As, AnalogFilterType afType, FilterType fType) {
 		Map<String, Object> rlt = designHz(wp, ws, Rp, As, afType, fType);
 		RealSeq bz = (RealSeq)rlt.get("BZ");
@@ -37,7 +51,7 @@ public class IIRDesigner {
 		IIRFilter filter = new IIRFilter(bz, az);
 		IIRPara para = new IIRPara(wp,ws,Rp,As,afType,fType);
 		filter.setFilterPara(para);
-		filter.createStructure(StructType.IIR_DF2);
+		//filter.createStructure(StructType.IIR_DF2);
 		return filter;
 	}
 	
@@ -51,6 +65,22 @@ public class IIRDesigner {
 	//下面为返回值： 
 	//pBz：滤波器系统函数分子多项式数组地址 
 	//pAz：滤波器系统函数分母多项式数组地址
+	/**
+	 * design an IIR digital filter to get its system function H(z)
+	 * @param wp digital angular frequency of passband, 
+	 *        {2*PI*wp} for lowpass and highpass filter, 
+	 *        {2*PI*wpl, 2*PI*wph} for bandpass and bandstop filter
+	 * @param ws digital angular frequency of stopband, 
+	 *        {2*PI*ws} for lowpass and highpass, 
+	 *        {2*PI*wsl, 2*PI*wsh} for bandpass and bandstop filter
+	 * @param Rp ripple at wp, unit:dB
+	 * @param As attenuation at ws, unit:dB
+	 * @param afType analog filter type used, which can be BUTT, CHEB1, CHEB2, ELLIP
+	 * @param fType filter type, which can be LOWPASS, HIGHPASS, BANDPASS, BANDSTOP
+	 * @return a map including two elements, which stand for the system function H(z). 
+	 *               using RealSeq bz = (RealSeq)map.get("BZ"), you can get the numerator of H(z)
+	 *               using RealSeq az = (RealSeq)map.get("AZ"), you can get the denominator of H(z)
+	 */
 	public static Map<String, Object> designHz(double[] wp, double[] ws, double Rp, double As, AnalogFilterType afType, FilterType fType) //, RealSeq * pBz, RealSeq * pAz)
 	{
 	    double thetap = 0.0;    //相应数字低通滤波器通带截止频率
@@ -94,7 +124,7 @@ public class IIRDesigner {
 	    //第四步：做A/D滤波器变换,得到相应的数字低通滤波器 
 	    RealSeq bZ = null;
 	    RealSeq aZ = null;
-	    tmpMap = A2DTransformUsingBilinear(bs, as, T);//, &bZ, &aZ);
+	    tmpMap = doA2DTransformUsingBilinearMapping(bs, as, T);//, &bZ, &aZ);
 	    bZ = (RealSeq)tmpMap.get("BZ");
 	    aZ = (RealSeq)tmpMap.get("AZ");
 	    
@@ -172,7 +202,7 @@ public class IIRDesigner {
 	//下面为返回值：
 	//pBz：变换后的数字滤波器分子多项式系数数组
 	//pAz：变换后的数字滤波器分母多项式系数数组 
-	private static Map<String, Object> A2DTransformUsingBilinear(RealSeq bs, RealSeq as, double T) //, RealSeq * pBz, RealSeq * pAz)
+	private static Map<String, Object> doA2DTransformUsingBilinearMapping(RealSeq bs, RealSeq as, double T) //, RealSeq * pBz, RealSeq * pAz)
 	{
 		RealSeq bs1 = (RealSeq) bs.reverse();
 		RealSeq as1 = (RealSeq) as.reverse();

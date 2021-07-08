@@ -8,6 +8,8 @@
  */
 package com.cmtech.dsp.filter.design;
 
+import java.util.Map;
+
 import com.cmtech.dsp.filter.IIRFilter;
 import com.cmtech.dsp.filter.structure.StructType;
 
@@ -22,11 +24,10 @@ import com.cmtech.dsp.filter.structure.StructType;
  * @since JDK 1.6
  */
 public class DCBlockDesigner {
-	private DCBlockDesigner() {
-		
+	private DCBlockDesigner() {		
 	}
 	
-	public static synchronized IIRFilter design(double deltaw) {
+	public static IIRFilter design(double deltaw) {
 		Double[] b = new Double[2];
 		Double[] a = new Double[2];
 		double r = 1-deltaw;
@@ -37,7 +38,18 @@ public class DCBlockDesigner {
 		return new IIRFilter(b,a).createStructure(StructType.IIR_DF2);
 	}
 	
-	public static synchronized IIRFilter design(double deltaf, double fs) {
+	public static Map<String, Object> designHz(double deltaw) {
+		Double[] b = new Double[2];
+		Double[] a = new Double[2];
+		double r = 1-deltaw;
+		b[0] = (1+r)/2;
+		b[1] = -b[0];
+		a[0] = 1.0;
+		a[1] = -r;
+		return new IIRFilter(b,a).createStructure(StructType.IIR_DF2);
+	}
+	
+	public static IIRFilter design(double deltaf, double fs) {
 		return design(2*Math.PI*deltaf/fs);
 	}
 

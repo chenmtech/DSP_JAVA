@@ -1,5 +1,9 @@
 package com.cmtech.dsp.filter.design;
 
+/*
+Copyright (c) 2008 chenm
+*/
+
 import static java.lang.Math.PI;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
@@ -14,17 +18,20 @@ import com.cmtech.dsp.filter.structure.StructType;
 import com.cmtech.dsp.seq.RealSeq;
 import com.cmtech.dsp.util.SeqUtil;
 
-
+/**
+ * FIR digital filter designer using window function method.
+ * @author chenm
+ * @version 2008-08
+ */
 public class FIRDesigner {
-	private FIRDesigner() {
-		
+	private FIRDesigner() {		
 	}
 	
-	public static synchronized FIRFilter design(double[] wp, double[] ws, double Rp, double As, FilterType fType) {
+	public static FIRFilter design(double[] wp, double[] ws, double Rp, double As, FilterType fType) {
 		return design(wp,ws,Rp,As,fType,WinType.UNKNOWN).createStructure(StructType.FIR_DF);
 	}
 	
-	public static synchronized FIRFilter design(double[] wp, double[] ws, double Rp, double As, FilterType fType, WinType wType) {
+	public static FIRFilter design(double[] wp, double[] ws, double Rp, double As, FilterType fType, WinType wType) {
 		if(wType != WinType.KAISER)
 			return designFIRUsingWindow(wp, ws, Rp, As, fType).createStructure(StructType.FIR_DF);
 		else
@@ -47,13 +54,13 @@ public class FIRDesigner {
 	    
 	    //步骤见幻灯45页 
 	    //第一步：修正设计规格 
-	    Map<String, Object> tmpMap = ReviseRpAsForWindow(Rp, As);
+	    Map<String, Object> tmpMap = reviseRpAsForWindow(Rp, As);
 	    Rp = (double)tmpMap.get("RP");
 	    As = (double)tmpMap.get("AS");
 	    
 	    //第二步：确定窗函数的参数
 	    //2.1：确定窗类型 
-	    WinType wType = DetermineWinType(As);
+	    WinType wType = determineWinType(As);
 	    if(wType == WinType.UNKNOWN) return null;
 	    
 	    //2.2：计算带宽和理想滤波器的截止频率Qc 
@@ -73,11 +80,11 @@ public class FIRDesigner {
 	    }
 	    
 	    //2.3：用带宽确定窗函数的长度 
-	    int N = DeterminWinLength(deltaw, wType, fType);
+	    int N = determineWinLength(deltaw, wType, fType);
 	    if(N == 0) return null;
 	    
 	    //第三步：用窗函数的参数设计滤波器 
-	    outSeq = FIRUsingWindow(N, wc, wType, fType);
+	    outSeq = designFIRUsingWindow(N, wc, wType, fType);
 	    
 	    FIRFilter filter = new FIRFilter(outSeq);
 	    FIRPara para = new FIRPara(wp,ws,Rp,As,fType,N,wc,wType);
@@ -90,13 +97,13 @@ public class FIRDesigner {
 	//wc：理想滤波器的截止频率地址
 	//wType：滤波器采用的窗类型 
 	//fType：滤波器类型
-	public static RealSeq FIRUsingWindow(int N, double[] wc, WinType wType, FilterType fType)
+	public static RealSeq designFIRUsingWindow(int N, double[] wc, WinType wType, FilterType fType)
 	{
 	    //3.1：用窗长度和理想滤波器的截止频率确定理想滤波器的hd(n) 
-	    RealSeq idealSeq = IdealFilter(N, wc, fType);
+	    RealSeq idealSeq = designIdealFilter(N, wc, fType);
 	    
 	    //3.2：用窗类型和窗长度确定窗函数w(n) 
-	    RealSeq winSeq = Window(N, wType);
+	    RealSeq winSeq = getWindow(N, wType);
 	    
 	    //3.3：求h(n) = hd(n)w(n) 
 	    idealSeq = (RealSeq) SeqUtil.multiple(idealSeq, winSeq);
@@ -118,7 +125,7 @@ public class FIRDesigner {
 	{
 	    RealSeq outSeq = null;
 	    
-	    Map<String, Object> tmpMap = ReviseRpAsForWindow(Rp, As);
+	    Map<String, Object> tmpMap = reviseRpAsForWindow(Rp, As);
 	    Rp = (double)tmpMap.get("RP");
 	    As = (double)tmpMap.get("AS");
 	    
@@ -137,13 +144,13 @@ public class FIRDesigner {
 	        wc[1] = (wp[1] + ws[1])/2;
 	    }
 	    
-	    tmpMap = CalcKaiserPara(As, deltaw, fType);
+	    tmpMap = calcKaiserPara(As, deltaw, fType);
 	    int N = (int)tmpMap.get("N");
 	    double beta = (double)tmpMap.get("BETA");	    
 	    
 	    if(N <= 0) return null;
 	    
-	    outSeq = FIRUsingKaiser(N, beta, wc, fType);
+	    outSeq = designFIRUsingKaiser(N, beta, wc, fType);
 	    
 	    FIRFilter filter = new FIRFilter(outSeq);
 	    KaiserPara para = new KaiserPara(wp,ws,Rp,As,fType,N,wc,beta);
@@ -156,10 +163,10 @@ public class FIRDesigner {
 	//beta：凯泽窗的参数beta 
 	//wc：滤波器的截止频率地址
 	//fType：滤波器类型
-	public static RealSeq FIRUsingKaiser(int N, double beta, double[] wc, FilterType fType)
+	public static RealSeq designFIRUsingKaiser(int N, double beta, double[] wc, FilterType fType)
 	{
-	    RealSeq idealSeq = IdealFilter(N, wc, fType);
-	    RealSeq winSeq = Kaiser(N, beta);
+	    RealSeq idealSeq = designIdealFilter(N, wc, fType);
+	    RealSeq winSeq = getKaiserWindow(N, beta);
 	    
 	    idealSeq = (RealSeq) SeqUtil.multiple(idealSeq, winSeq);
 
@@ -170,14 +177,14 @@ public class FIRDesigner {
 	//pN：滤波器h(n)的长度，注意可能输入N值会改变
 	//wType：窗类型 
 	//beta：凯泽窗的参数beta 
-	public static Map<String, Object> DesignDiff(int N, WinType wType, double beta)
+	public static Map<String, Object> designDiff(int N, WinType wType, double beta)
 	{
 		if( N % 2 == 1 ) N++;   //微分器建议用类型4，即长度为偶数的。你如果不想要，就去掉这一行
 	    
-	    RealSeq idealSeq = IdealDifferentiator(N);
+	    RealSeq idealSeq = designIdealDifferentiator(N);
 	    RealSeq winSeq = null;  
-	    if(wType == WinType.KAISER)  winSeq = Kaiser(N, beta);
-	    else winSeq = Window(N, wType);
+	    if(wType == WinType.KAISER)  winSeq = getKaiserWindow(N, beta);
+	    else winSeq = getWindow(N, wType);
 
 	    idealSeq = (RealSeq) SeqUtil.multiple(idealSeq, winSeq);
 
@@ -191,14 +198,14 @@ public class FIRDesigner {
 	//pN：滤波器h(n)的长度，注意可能输入N值会改变
 	//wType：窗类型 
 	//beta：凯泽窗的参数beta
-	public static Map<String, Object> DesignHilbert(int N, WinType wType, double beta)
+	public static Map<String, Object> designHilbert(int N, WinType wType, double beta)
 	{
 		if( N % 2 == 0 ) N++;   //Hilbert变换器建议用类型3，即长度为奇数的。你如果不想要，就去掉这一行
 	    
-	    RealSeq idealSeq = IdealHilbertTransformer(N);
+	    RealSeq idealSeq = designIdealHilbertTransformer(N);
 	    RealSeq winSeq = null;  
-	    if(wType == WinType.KAISER)  winSeq = Kaiser(N, beta);
-	    else winSeq = Window(N, wType);
+	    if(wType == WinType.KAISER)  winSeq = getKaiserWindow(N, beta);
+	    else winSeq = getWindow(N, wType);
 
 	    idealSeq = (RealSeq) SeqUtil.multiple(idealSeq, winSeq);
 
@@ -213,24 +220,24 @@ public class FIRDesigner {
 	//N：滤波器的h(n)长度
 	//wc：滤波器的截止频率地址
 	//fType：滤波器的类型 
-	private static RealSeq IdealFilter(int N, double[] wc, FilterType fType)
+	private static RealSeq designIdealFilter(int N, double[] wc, FilterType fType)
 	{
 	    RealSeq outSeq = null;
 	    
 	    switch(fType)
 	    {
 	    case LOWPASS:
-	         return IdealLowpassFilter(N, wc[0]);
+	         return designIdealLowpassFilter(N, wc[0]);
 	    case HIGHPASS:
-	         return IdealHighpassFilter(N, wc[0]);
+	         return designIdealHighpassFilter(N, wc[0]);
 	    case BANDPASS:
-	         return IdealBandpassFilter(N, wc);
+	         return designIdealBandpassFilter(N, wc);
 	    case BANDSTOP:
-	         return IdealBandstopFilter(N, wc);
+	         return designIdealBandstopFilter(N, wc);
 	    case DIFF:
-	         return IdealDifferentiator(N);
+	         return designIdealDifferentiator(N);
 	    case HILBERT:
-	         return IdealHilbertTransformer(N);
+	         return designIdealHilbertTransformer(N);
 	    default:
 	         return outSeq;
 	    }
@@ -239,20 +246,20 @@ public class FIRDesigner {
 	//获取窗函数，不包括凯泽窗 
 	//N：窗长度
 	//wType：窗类型 
-	private static RealSeq Window(int N, WinType wType)
+	private static RealSeq getWindow(int N, WinType wType)
 	{
 	    switch(wType)
 	    {
 	    case RECT:
-	        return Rectangle(N);
+	        return getRectangleWindow(N);
 	    case BARTLETT:
-	        return Bartlett(N);
+	        return getBartlettWindow(N);
 	    case HANN:
-	        return Hann(N);
+	        return getHannWindow(N);
 	    case HAMMING:
-	        return Hamming(N);
+	        return getHammingWindow(N);
 	    case BLACKMAN:
-	        return Blackman(N);
+	        return getBlackmanWindow(N);
 	    default:
 	        break;
 	    }
@@ -262,26 +269,26 @@ public class FIRDesigner {
 	//获取凯泽窗函数
 	//N：窗长度
 	//beta：参数beta 
-	private static RealSeq Kaiser(int N, double beta)
+	private static RealSeq getKaiserWindow(int N, double beta)
 	{
-	    if(Math.abs(beta -0.0) < 0.0001) return Rectangle(N);   //beta==0, 用矩形窗
+	    if(Math.abs(beta -0.0) < 0.0001) return getRectangleWindow(N);   //beta==0, 用矩形窗
 	    
 	    RealSeq outSeq = new RealSeq(N);
 	        
-	    double deno = Bessel(beta);    
+	    double deno = calculateBesselValue(beta);    
 	    int i = 0;
 	    double x = 0.0;
 	    for(i = 0; i < N; i++)
 	    {
 	        x = beta*Math.sqrt( 1- ( 1 - 2.0*i/(N-1) )*( 1 - 2.0*i/(N-1) ) );
-	        outSeq.set(i, Bessel(x)/deno);
+	        outSeq.set(i, calculateBesselValue(x)/deno);
 	    }
 
 	    return outSeq;          
 	}
 
 	//获取线性相位的理想低通滤波器的hd(n) 
-	private static RealSeq IdealLowpassFilter(int N, double wc)
+	private static RealSeq designIdealLowpassFilter(int N, double wc)
 	{
 	    RealSeq outSeq = new RealSeq(N);
 	    
@@ -300,31 +307,31 @@ public class FIRDesigner {
 	}
 
 	//获取线性相位的理想高通滤波器的hd(n) 
-	private static RealSeq IdealHighpassFilter(int N, double wc)
+	private static RealSeq designIdealHighpassFilter(int N, double wc)
 	{
-	    RealSeq allSeq = IdealLowpassFilter(N, PI);
-	    RealSeq lowSeq = IdealLowpassFilter(N, wc);
+	    RealSeq allSeq = designIdealLowpassFilter(N, PI);
+	    RealSeq lowSeq = designIdealLowpassFilter(N, wc);
 	    return (RealSeq) SeqUtil.subtract(allSeq, lowSeq);
 	}
 
 	//获取线性相位的理想带通滤波器的hd(n) 
-	private static RealSeq IdealBandpassFilter(int N, double[] wc)
+	private static RealSeq designIdealBandpassFilter(int N, double[] wc)
 	{
-	    RealSeq seq1 = IdealLowpassFilter(N, wc[1]);
-	    RealSeq seq2 = IdealLowpassFilter(N, wc[0]);
+	    RealSeq seq1 = designIdealLowpassFilter(N, wc[1]);
+	    RealSeq seq2 = designIdealLowpassFilter(N, wc[0]);
 	    return (RealSeq) SeqUtil.subtract(seq1, seq2);  
 	}
 
 	//获取线性相位的理想带阻滤波器的hd(n) 
-	private static RealSeq IdealBandstopFilter(int N, double[] wc)
+	private static RealSeq designIdealBandstopFilter(int N, double[] wc)
 	{
-	    RealSeq allSeq = IdealLowpassFilter(N, PI);
-	    RealSeq bpSeq = IdealBandpassFilter(N, wc);
+	    RealSeq allSeq = designIdealLowpassFilter(N, PI);
+	    RealSeq bpSeq = designIdealBandpassFilter(N, wc);
 	    return (RealSeq) SeqUtil.subtract(allSeq, bpSeq);  
 	}
 
 	//获取线性相位的理想微分器的hd(n) 
-	private static RealSeq IdealDifferentiator(int N)
+	private static RealSeq designIdealDifferentiator(int N)
 	{
 	    RealSeq outSeq = new RealSeq(N);
 	    
@@ -347,7 +354,7 @@ public class FIRDesigner {
 	}
 
 	//获取线性相位的理想Hilbert变换器的hd(n) 
-	private static RealSeq IdealHilbertTransformer(int N)
+	private static RealSeq designIdealHilbertTransformer(int N)
 	{
 	    RealSeq outSeq = new RealSeq(N);
 	    
@@ -370,7 +377,7 @@ public class FIRDesigner {
 	}
 
 	//获取矩形窗的窗函数序列 
-	private static RealSeq Rectangle(int N)
+	private static RealSeq getRectangleWindow(int N)
 	{
 	    RealSeq outSeq = new RealSeq(N);
 	    
@@ -382,7 +389,7 @@ public class FIRDesigner {
 	}
 
 	//获取Bartlett窗的窗函数序列 
-	private static RealSeq Bartlett(int N)
+	private static RealSeq getBartlettWindow(int N)
 	{
 	    RealSeq outSeq = new RealSeq(N);
 	    
@@ -397,7 +404,7 @@ public class FIRDesigner {
 	}
 
 	//获取Hanning窗的窗函数序列 
-	private static RealSeq Hann(int N)
+	private static RealSeq getHannWindow(int N)
 	{
 	    RealSeq outSeq = new RealSeq(N);
 	    
@@ -409,7 +416,7 @@ public class FIRDesigner {
 	}
 
 	//获取Hamming窗的窗函数序列 
-	private static RealSeq Hamming(int N)
+	private static RealSeq getHammingWindow(int N)
 	{
 	    RealSeq outSeq = new RealSeq(N);
 	    
@@ -421,7 +428,7 @@ public class FIRDesigner {
 	}
 
 	//获取Blackman窗的窗函数序列 
-	private static RealSeq Blackman(int N)
+	private static RealSeq getBlackmanWindow(int N)
 	{
 	    RealSeq outSeq = new RealSeq(N);
 	    
@@ -437,7 +444,7 @@ public class FIRDesigner {
 	}
 
 	//计算零阶贝塞尔函数值 
-	private static double Bessel(double x)
+	private static double calculateBesselValue(double x)
 	{
 	    int K = 25;
 	    double sum = 1.0;
@@ -452,11 +459,11 @@ public class FIRDesigner {
 	}
 
 	//由于窗函数法设计出来的滤波器一定是delta1==delta2，为此，在设计之前要对Rp,As做一个修正 
-	private static Map<String, Object> ReviseRpAsForWindow(double Rp, double As)
+	private static Map<String, Object> reviseRpAsForWindow(double Rp, double As)
 	{
 		double delta1 = 0.0;
 	    double delta2 = 0.0;
-	    Map<String, Object> tmpMap = FIRDb2Delta(Rp, As);//, &delta1, &delta2);
+	    Map<String, Object> tmpMap = doFIRDb2Delta(Rp, As);//, &delta1, &delta2);
 	    delta1 = (double)tmpMap.get("DELTA1");
 	    delta2 = (double)tmpMap.get("DELTA2");
 	    
@@ -469,12 +476,12 @@ public class FIRDesigner {
 	    }
 	     
 	    delta2 = delta1;
-	    rtnMap = FIRDelta2Db(delta1, delta2);
+	    rtnMap = doFIRDelta2Db(delta1, delta2);
 	    return rtnMap;
 	}
 
 	//根据As确定窗类型 
-	private static WinType DetermineWinType(double As)
+	private static WinType determineWinType(double As)
 	{
 	    if(As <= 21)
 	        return WinType.RECT;
@@ -495,7 +502,7 @@ public class FIRDesigner {
 	}
 
 	//根据带宽和窗类型，确定窗长度 
-	private static int DeterminWinLength(double deltaw, WinType wType, FilterType fType)
+	private static int determineWinLength(double deltaw, WinType wType, FilterType fType)
 	{
 	    int N = 0;
 	    switch(wType)
@@ -526,7 +533,7 @@ public class FIRDesigner {
 	}
 
 	//根据经验公式，用设计指标计算Kaiser窗的参数 
-	private static Map<String, Object> CalcKaiserPara(double As, double deltaw, FilterType fType)//, int * pN, double * pBeta)
+	private static Map<String, Object> calcKaiserPara(double As, double deltaw, FilterType fType)//, int * pN, double * pBeta)
 	{
 		int N = (int)( (As - 7.95)/2.285/deltaw + 1 + 0.5 );
 	    if( N % 2 == 0 )
@@ -554,7 +561,7 @@ public class FIRDesigner {
 
 
 	//绝对指标转换为相对指标
-	private static Map<String, Object> FIRDelta2Db(double delta1, double delta2)
+	private static Map<String, Object> doFIRDelta2Db(double delta1, double delta2)
 	{
 		double Rp = -20*Math.log10((1-delta1)/(1+delta1));
 	    double As = -20*Math.log10(delta2/(1+delta1));
@@ -565,7 +572,7 @@ public class FIRDesigner {
 	}
 
 	//相对指标转换为绝对指标
-	private static Map<String, Object> FIRDb2Delta(double Rp, double As)
+	private static Map<String, Object> doFIRDb2Delta(double Rp, double As)
 	{
 		double tmp = Math.pow(10, -Rp/20);
 	    double delta1 = (1-tmp)/(1+tmp);

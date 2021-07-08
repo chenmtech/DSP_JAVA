@@ -1,11 +1,3 @@
-/**
- * Project Name:DSP_JAVA
- * File Name:NotchDesigner.java
- * Package Name:com.cmtech.dsp.filter.design
- * Date:2018年2月17日下午4:23:49
- * Copyright (c) 2018, e_yujunquan@163.com All Rights Reserved.
- *
- */
 package com.cmtech.dsp.filter.design;
 
 import com.cmtech.dsp.filter.IIRFilter;
@@ -22,11 +14,10 @@ import com.cmtech.dsp.filter.structure.StructType;
  * @since JDK 1.6
  */
 public class NotchDesigner {
-	private NotchDesigner() {
-		
+	private NotchDesigner() {		
 	}
 	
-	public static synchronized IIRFilter design(double w0, double deltaw) {
+	public static IIRFilter design(double w0, double deltaw) {
 		Double[] b = new Double[3];
 		Double[] a = new Double[3];
 		double r = 1-deltaw/2;
@@ -40,7 +31,7 @@ public class NotchDesigner {
 		return new IIRFilter(b,a).createStructure(StructType.IIR_DF2);
 	}
 	
-	public static synchronized IIRFilter design(double f0, double deltaf, double fs) {
+	public static IIRFilter design(double f0, double deltaf, double fs) {
 		return design(2*Math.PI*f0/fs, 2*Math.PI*deltaf/fs);
 	}
 }

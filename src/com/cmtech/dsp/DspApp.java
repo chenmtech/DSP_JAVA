@@ -26,7 +26,7 @@ public class DspApp {
 		WinType wType = WinType.HAMMING;
 		
 		FIRFilter filter = FIRDesigner.design(wp, ws, Rp, As, fType, wType);
-		//System.out.println(filter);
+		System.out.println(filter);
 		//System.out.println(filter.getB().size());
 		
 		IIRFilter dcBlocker = DCBlockDesigner.design(2, sampleRate);
