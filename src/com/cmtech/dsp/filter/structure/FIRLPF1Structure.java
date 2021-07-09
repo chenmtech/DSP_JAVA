@@ -23,7 +23,7 @@ public class FIRLPF1Structure extends FIRLPFStructure {
 	
 	/**
 	 * TODO 简单描述该方法的实现功能（可选）.
-	 * @see com.cmtech.dsp.filter.structure.IDFStructure#filter(double)
+	 * @see com.cmtech.dsp.filter.structure.IDigitalFilterStructure#filter(double)
 	 */
 	@Override
 	public double filter(double x) {

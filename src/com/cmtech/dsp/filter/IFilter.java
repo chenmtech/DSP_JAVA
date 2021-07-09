@@ -2,6 +2,7 @@ package com.cmtech.dsp.filter;
 /*
 Copyright (c) 2008 chenm
 */
+
 import com.cmtech.dsp.seq.ComplexSeq;
 import com.cmtech.dsp.seq.RealSeq;
 

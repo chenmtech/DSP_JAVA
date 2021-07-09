@@ -9,6 +9,6 @@
 package com.cmtech.dsp.filter.structure;
 
 
-public interface IDFStructure {
+public interface IDigitalFilterStructure {
 	double filter(double x);
 }

@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.cmtech.dsp.filter.IIRFilter;
-import com.cmtech.dsp.filter.structure.DigitalFilterStructType;
 import com.cmtech.dsp.seq.RealSeq;
 
 /**

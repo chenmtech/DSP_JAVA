@@ -12,12 +12,13 @@ import com.cmtech.dsp.seq.RealSeq;
 
 public class FIRFilter extends AbstractDigitalFilter{
 	private static final double EPS = 2.220446049250313e-016;
-	
-	public static final int DF = 0;
-	public static final int LPF = 1;
 	 
 	public FIRFilter(Double[] b) {
 		super(b, new Double[]{1.0});
+		if(whichType() == LinearPhaseFilterType.NOTLP) 
+			createStructure(DigitalFilterStructType.FIR_DF);
+		else
+			createStructure(DigitalFilterStructType.FIR_LPF);
 	}
 	
 	public FIRFilter(Double[] b, double a) {
@@ -38,9 +39,9 @@ public class FIRFilter extends AbstractDigitalFilter{
 		return new RealSeq(b).dtft(omega);
 	}
 	
-	public LPFType whichType() {
+	public LinearPhaseFilterType whichType() {
 		RealSeq hn = new RealSeq(getB());
-		if(hn == null || hn.size() == 0) return LPFType.NOTLP;
+		if(hn == null || hn.size() == 0) return LinearPhaseFilterType.NOTLP;
 		
 	    int N = hn.size();
 	    
@@ -59,24 +60,24 @@ public class FIRFilter extends AbstractDigitalFilter{
 		
 		//奇对称且长度为奇数，中间数必须为0，否则不是线性相位
 		if(isOddSymm && N % 2 == 1 && Math.abs(hn.get(halfN)) >EPS)  
-			return LPFType.NOTLP;  
+			return LinearPhaseFilterType.NOTLP;  
 	    
 	    if(!isEvenSymm && !isOddSymm)	//不满足对称性，不是线性相位 
-	    	return LPFType.NOTLP;
+	    	return LinearPhaseFilterType.NOTLP;
 			
 		if(isEvenSymm)
 		{ 
 			if(N % 2 == 1)	//偶对称，长度为奇数，类型1
-				return LPFType.TYPE1;
+				return LinearPhaseFilterType.TYPE1;
 			else
-				return LPFType.TYPE2;	//偶对称，长度为偶数，类型2
+				return LinearPhaseFilterType.TYPE2;	//偶对称，长度为偶数，类型2
 		}
 		else
 		{
 			if(N % 2 == 1)	//奇对称，长度为奇数，类型3
-				return LPFType.TYPE3;
+				return LinearPhaseFilterType.TYPE3;
 			else
-				return LPFType.TYPE4; 	//奇对称，长度为偶数，类型4
+				return LinearPhaseFilterType.TYPE4; 	//奇对称，长度为偶数，类型4
 		}
 	}
 
@@ -91,7 +92,7 @@ public class FIRFilter extends AbstractDigitalFilter{
 	}
 	
 	private FIRLPFStructure createLPFStructure() {
-		LPFType lpfType = whichType();
+		LinearPhaseFilterType lpfType = whichType();
 		switch(lpfType) {
 		case TYPE1:
 			return new FIRLPF1Structure(b);

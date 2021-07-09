@@ -18,7 +18,7 @@ package com.cmtech.dsp.filter.structure;
  * @version 0.0.1
  * @since JDK 1.6
  */
-public abstract class AbstractDFStructure implements IDFStructure {
+public abstract class AbstractDFStructure implements IDigitalFilterStructure {
 	
 	@Override
 	public String toString() {

@@ -2,13 +2,13 @@ package com.cmtech.dsp.filter;
 /*
 Copyright (c) 2008 chenm
 */
-import com.cmtech.dsp.filter.structure.IDFStructure;
+import com.cmtech.dsp.filter.structure.IDigitalFilterStructure;
 import com.cmtech.dsp.seq.ComplexSeq;
 import com.cmtech.dsp.seq.RealSeq;
 import com.cmtech.dsp.util.SeqUtil;
 
 public abstract class AbstractDigitalFilter extends AbstractFilter implements IDigitalFilter{
-	protected IDFStructure structure;
+	protected IDigitalFilterStructure structure;
 	
 	public AbstractDigitalFilter(Double[] b, Double[] a) {
 		super(b, a);
@@ -29,7 +29,7 @@ public abstract class AbstractDigitalFilter extends AbstractFilter implements ID
 	}
 	
 
-	public IDFStructure getStructure() {
+	public IDigitalFilterStructure getStructure() {
 		return structure;
 	}
 

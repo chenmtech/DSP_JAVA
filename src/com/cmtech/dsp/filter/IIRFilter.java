@@ -15,12 +15,9 @@ import com.cmtech.dsp.util.ZT;
 
 public class IIRFilter extends AbstractDigitalFilter {
 	
-	public static final int DF1 = 0;
-	public static final int DF2 = 1;
-	public static final int TDF2 = 2;
-	
 	public IIRFilter(Double[] b, Double[] a) {
 		super(b, a);
+		createStructure(DigitalFilterStructType.IIR_DF2);
 	}
 
 	@Override

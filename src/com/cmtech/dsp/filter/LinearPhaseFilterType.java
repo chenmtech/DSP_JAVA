@@ -18,7 +18,7 @@ package com.cmtech.dsp.filter;
  * @version 0.0.1
  * @since JDK 1.6
  */
-public enum LPFType {
+public enum LinearPhaseFilterType {
 	NOTLP,
 	TYPE1,
 	TYPE2,
