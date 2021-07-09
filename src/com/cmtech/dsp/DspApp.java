@@ -23,9 +23,8 @@ public class DspApp {
 		double Rp = 1;
 		double As = 46;
 		FilterType fType = FilterType.HIGHPASS;
-		WinType wType = WinType.HAMMING;
 		
-		FIRFilter filter = FIRFilterDesigner.designHn(wp, ws, Rp, As, fType, wType);
+		FIRFilter filter = FIRFilterDesigner.design(wp, ws, Rp, As, fType);
 		System.out.println(filter);
 		//System.out.println(filter.getB().size());
 		

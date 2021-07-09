@@ -30,7 +30,7 @@ public class FIRFilterDesigner {
 		Map<String, Object> outMap = designHn(wp,ws,Rp,As,fType,WinType.UNKNOWN);
 		RealSeq hnSeq = (RealSeq)outMap.get("HN");
 		FIRPara para = (FIRPara)outMap.get("PARA");
-		FIRFilter filter = new FIRFilter(hnSeq);
+		FIRFilter filter = new FIRFilter(hnSeq.toArray());
 	    filter.setFilterPara(para);
 	    return filter;
 	}

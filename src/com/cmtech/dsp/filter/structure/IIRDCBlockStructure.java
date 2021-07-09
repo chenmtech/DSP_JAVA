@@ -32,7 +32,7 @@ public class IIRDCBlockStructure extends AbstractDFStructure {
 	}
 	
 	public IIRDCBlockStructure(IIRFilter filter) {
-		this(filter.getB().toArray(), filter.getA().toArray());
+		this(filter.getB(), filter.getA());
 	}
 	
 	

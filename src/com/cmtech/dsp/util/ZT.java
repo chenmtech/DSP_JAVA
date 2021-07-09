@@ -50,7 +50,7 @@ public class ZT {
 	 * AZ:RealSeq,代表变换后分母多项式系数组RealSeq
 	 * @since JDK 1.6
 	 */
-	public static Map<String, Object> ZMapping(RealSeq bZ, RealSeq aZ, RealSeq Nz, RealSeq Dz) {
+	public static Map<String, Object> zMapping(RealSeq bZ, RealSeq aZ, RealSeq Nz, RealSeq Dz) {
 		int M = bZ.size();
 	    int N = aZ.size();
 	    int Max = (M > N)? M : N;

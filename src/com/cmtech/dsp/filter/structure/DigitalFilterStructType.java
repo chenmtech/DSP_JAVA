@@ -9,7 +9,7 @@
 package com.cmtech.dsp.filter.structure;
 
 
-public enum FilterStructType {
+public enum DigitalFilterStructType {
 	FIR_DF,
 	FIR_LPF,
 	IIR_DF1,

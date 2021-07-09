@@ -40,7 +40,7 @@ public class IIRNotchStructure extends AbstractDFStructure {
 	}
 	
 	public IIRNotchStructure(IIRFilter filter) {
-		this(filter.getB().toArray(), filter.getA().toArray());
+		this(filter.getB(), filter.getA());
 	}
 	
 	/**

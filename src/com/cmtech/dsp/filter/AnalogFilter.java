@@ -10,30 +10,25 @@ public class AnalogFilter extends AbstractFilter implements IAnalogFilter {
 	public AnalogFilter(Double[] b, Double[] a) {
 		super(b, a);
 	}
-	
-	public AnalogFilter(RealSeq bseq, RealSeq aseq){
-		super(bseq, aseq);
-	}
-
 
 	@Override
-	public ComplexSeq freq(double Qmax, int Num) {
+	public ComplexSeq freqResponse(double Qmax, int Num) {
 	    RealSeq QSeq = SeqUtil.linSpace(0, Qmax, Num);
-	    return freq(QSeq);
+	    return freqResponse(QSeq);
 	}
 	
 	@Override
-	public RealSeq mag(double Qmax, int Num) {
-	    return freq(Qmax, Num).abs();
+	public RealSeq magResponse(double Qmax, int Num) {
+	    return freqResponse(Qmax, Num).abs();
 	}
 	
 	@Override
-	public RealSeq pha(double Qmax, int Num) {
-	    return freq(Qmax, Num).abs();
+	public RealSeq phaResponse(double Qmax, int Num) {
+	    return freqResponse(Qmax, Num).abs();
 	}
 
 	@Override
-	public ComplexSeq freq(RealSeq QSeq) {
+	public ComplexSeq freqResponse(RealSeq QSeq) {
 		int M = b.length;
 	    int N = a.length;
 	    int Num = QSeq.size();

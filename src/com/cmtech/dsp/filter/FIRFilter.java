@@ -6,11 +6,11 @@ import com.cmtech.dsp.filter.structure.FIRLPF2Structure;
 import com.cmtech.dsp.filter.structure.FIRLPF3Structure;
 import com.cmtech.dsp.filter.structure.FIRLPF4Structure;
 import com.cmtech.dsp.filter.structure.FIRLPFStructure;
-import com.cmtech.dsp.filter.structure.FilterStructType;
+import com.cmtech.dsp.filter.structure.DigitalFilterStructType;
 import com.cmtech.dsp.seq.ComplexSeq;
 import com.cmtech.dsp.seq.RealSeq;
 
-public class FIRFilter extends DigitalFilter{
+public class FIRFilter extends AbstractDigitalFilter{
 	private static final double EPS = 2.220446049250313e-016;
 	
 	public static final int DF = 0;
@@ -20,30 +20,26 @@ public class FIRFilter extends DigitalFilter{
 		super(b, new Double[]{1.0});
 	}
 	
-	public FIRFilter(RealSeq hseq){
-		super(hseq, new RealSeq(1.0));
-	}
-	
-	public FIRFilter(RealSeq hseq, double a){
-		super((RealSeq)hseq.multiply(1/a), new RealSeq(1.0));
+	public FIRFilter(Double[] b, double a) {
+		this(new RealSeq(b).multiply(1/a).toArray());
 	}
 
-	public RealSeq getHn() {
+	public Double[] getHn() {
 		return getB();
 	}
 
 	@Override
-	public void setA(RealSeq a) {
-		return;
+	public void setA(Double[] a) {
+		throw new IllegalArgumentException();
 	}
 
 	@Override
-	public ComplexSeq freq(RealSeq omega) {
+	public ComplexSeq freqResponse(RealSeq omega) {
 		return new RealSeq(b).dtft(omega);
 	}
 	
 	public LPFType whichType() {
-		RealSeq hn = getB();
+		RealSeq hn = new RealSeq(getB());
 		if(hn == null || hn.size() == 0) return LPFType.NOTLP;
 		
 	    int N = hn.size();
@@ -85,14 +81,13 @@ public class FIRFilter extends DigitalFilter{
 	}
 
 	@Override
-	public FIRFilter createStructure(FilterStructType sType) {
-		if(sType == FilterStructType.FIR_DF) {
+	public void createStructure(DigitalFilterStructType sType) {
+		if(sType == DigitalFilterStructType.FIR_DF) {
 			structure = new FIRDFStructure(b);
-		} else if(sType == FilterStructType.FIR_LPF) {
+		} else if(sType == DigitalFilterStructType.FIR_LPF) {
 			structure = createLPFStructure();
 		} else
 			structure = null;
-		return this;
 	}
 	
 	private FIRLPFStructure createLPFStructure() {

@@ -27,7 +27,7 @@ public abstract class FIRLPFStructure extends AbstractDFStructure {
 	}
 	
 	public FIRLPFStructure(FIRFilter filter) {
-		this(filter.getB().toArray());
+		this(filter.getB());
 	}
 	
 

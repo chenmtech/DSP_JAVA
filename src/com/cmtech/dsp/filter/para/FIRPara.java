@@ -6,9 +6,9 @@ import com.cmtech.dsp.filter.design.FilterType;
 import com.cmtech.dsp.filter.design.WinType;
 
 public class FIRPara extends DigitalFilterPara {
-	private int N = 0;	// h(n)的长度
-	private double[] wc = {0.0,0.0};		// 理想滤波器的截止频率
-	private WinType wType = WinType.UNKNOWN;		// 窗函数类型
+	private int N = 0;	// the length of h(n)
+	private double[] wc = {0.0,0.0};		// digital frequencies of ideal filter
+	private WinType wType = WinType.UNKNOWN;		// the type of window used when designing the filter
 	
 	public FIRPara() {
 		

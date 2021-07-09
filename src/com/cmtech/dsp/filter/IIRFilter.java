@@ -7,13 +7,13 @@ import com.cmtech.dsp.filter.structure.IIRDF1Structure;
 import com.cmtech.dsp.filter.structure.IIRDF2Structure;
 import com.cmtech.dsp.filter.structure.IIRNotchStructure;
 import com.cmtech.dsp.filter.structure.IIRTDF2Structure;
-import com.cmtech.dsp.filter.structure.FilterStructType;
+import com.cmtech.dsp.filter.structure.DigitalFilterStructType;
 import com.cmtech.dsp.seq.ComplexSeq;
 import com.cmtech.dsp.seq.RealSeq;
 import com.cmtech.dsp.util.SeqUtil;
 import com.cmtech.dsp.util.ZT;
 
-public class IIRFilter extends DigitalFilter {
+public class IIRFilter extends AbstractDigitalFilter {
 	
 	public static final int DF1 = 0;
 	public static final int DF2 = 1;
@@ -22,13 +22,9 @@ public class IIRFilter extends DigitalFilter {
 	public IIRFilter(Double[] b, Double[] a) {
 		super(b, a);
 	}
-	
-	public IIRFilter(RealSeq bseq, RealSeq aseq){
-		super(bseq, aseq);
-	}
 
 	@Override
-	public ComplexSeq freq(RealSeq omega) {
+	public ComplexSeq freqResponse(RealSeq omega) {
 		ComplexSeq fenzi = new RealSeq(b).dtft(omega);
 		ComplexSeq fenmu = new RealSeq(a).dtft(omega);
 		
@@ -43,28 +39,27 @@ public class IIRFilter extends DigitalFilter {
 	// A(z)   a(Z)|@Z = ----
 	//	                D(z)
 	public IIRFilter FreqBandTransform(RealSeq Nz, RealSeq Dz) {
-		Map<String, Object> tmpMap = ZT.ZMapping(getB(), getA(), Nz, Dz);
+		Map<String, Object> tmpMap = ZT.zMapping(new RealSeq(getB()), new RealSeq(getA()), Nz, Dz);
 		RealSeq Bz = (RealSeq)tmpMap.get("BZ");
 		RealSeq Az = (RealSeq)tmpMap.get("AZ");
-	    return new IIRFilter(Bz, Az);
+	    return new IIRFilter(Bz.toArray(), Az.toArray());
 	}
 
 
 	@Override
-	public IIRFilter createStructure(FilterStructType sType) {
-		if(sType == FilterStructType.IIR_DF1) {
+	public void createStructure(DigitalFilterStructType sType) {
+		if(sType == DigitalFilterStructType.IIR_DF1) {
 			structure = new IIRDF1Structure(b, a);
-		} else if(sType == FilterStructType.IIR_DF2) {
+		} else if(sType == DigitalFilterStructType.IIR_DF2) {
 			structure = new IIRDF2Structure(b, a);
-		} else if(sType == FilterStructType.IIR_TDF2) {
+		} else if(sType == DigitalFilterStructType.IIR_TDF2) {
 			structure = new IIRTDF2Structure(b, a);
-		} else if(sType == FilterStructType.IIR_DCBLOCK) {
+		} else if(sType == DigitalFilterStructType.IIR_DCBLOCK) {
 			structure = new IIRDCBlockStructure(b, a);
-		} else if(sType == FilterStructType.IIR_NOTCH) {
+		} else if(sType == DigitalFilterStructType.IIR_NOTCH) {
 			structure = new IIRNotchStructure(b, a);
 		} else
 			structure = null;
-		return this;
 	}
 
 

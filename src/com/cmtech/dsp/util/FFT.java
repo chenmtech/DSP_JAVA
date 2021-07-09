@@ -1,5 +1,7 @@
 package com.cmtech.dsp.util;
-
+/*
+Copyright (c) 2008 chenm
+*/
 import static java.lang.Math.PI;
 import static java.lang.Math.cos;
 import static java.lang.Math.pow;

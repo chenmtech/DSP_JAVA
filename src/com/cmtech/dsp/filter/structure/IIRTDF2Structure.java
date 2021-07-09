@@ -38,7 +38,7 @@ public class IIRTDF2Structure extends AbstractDFStructure {
 	}
 	
 	public IIRTDF2Structure(IIRFilter filter) {
-		this(filter.getB().toArray(), filter.getA().toArray());
+		this(filter.getB(), filter.getA());
 	}
 	
 	/**

@@ -15,13 +15,13 @@ public class AnalogFilterPara extends FilterPara {
 		this.afType = afType;
 	}
 	
-	public AnalogFilterType getAFType() {
+	public AnalogFilterType getAnalogFilterType() {
 		return afType;
 	}
 	
 	@Override
 	public String toString() {
-		return super.toString() + ',' + "AFType=" + afType; 
+		return super.toString() + ',' + "AnalogFilterType=" + afType; 
 	}
 	
 	

@@ -1,9 +1,12 @@
 package com.cmtech.dsp.filter;
-
+/*
+Copyright (c) 2008 chenm
+*/
 import java.util.Arrays;
 
 import com.cmtech.dsp.filter.para.FilterPara;
 import com.cmtech.dsp.seq.RealSeq;
+
 
 public abstract class AbstractFilter implements IFilter {
 	protected Double[] b;
@@ -14,35 +17,29 @@ public abstract class AbstractFilter implements IFilter {
 	}
 	
 	public AbstractFilter(Double[] b, Double[] a) {
-		this.b = new Double[b.length];
 		this.b = Arrays.copyOf(b, b.length);
 		this.a = Arrays.copyOf(a, a.length);
 	}
-	
-	public AbstractFilter(RealSeq bseq, RealSeq aseq){
-		if(bseq != null) b = bseq.toArray();
-		if(aseq != null) a = aseq.toArray();
+
+	@Override
+	public Double[] getB() {
+		return b;
 	}
 
 	@Override
-	public RealSeq getB() {
-		return new RealSeq(b);
+	public Double[] getA() {
+		return a;
 	}
 
 	@Override
-	public RealSeq getA() {
-		return new RealSeq(a);
-	}
-
-	@Override
-	public void setB(RealSeq b) {
-		if(b != null) this.b = b.toArray();
+	public void setB(Double[] b) {
+		if(b != null) this.b = Arrays.copyOf(b, b.length);
 		else this.b = null;
 	}
 
 	@Override
-	public void setA(RealSeq a) {
-		if(a != null) this.a = a.toArray();
+	public void setA(Double[] a) {
+		if(a != null) this.a = Arrays.copyOf(a, a.length);
 		else this.a = null;
 	}
 
@@ -61,18 +58,19 @@ public abstract class AbstractFilter implements IFilter {
 		String str = getClass().getSimpleName() + ": b=" + Arrays.toString(b) + ",a=" + Arrays.toString(a) + '\n';
 		strBuilder.append(str);
 		if(para != null) strBuilder.append(para.toString());
+		else strBuilder.append("FilterPara: No Para");
 		
 		return strBuilder.toString();
 	}
 	
 	@Override
-	public RealSeq mag(RealSeq omega) {
-		return freq(omega).abs();
+	public RealSeq magResponse(RealSeq omega) {
+		return freqResponse(omega).abs();
 	}
 	
 	@Override
-	public RealSeq pha(RealSeq omega) {
-		return freq(omega).angle();
+	public RealSeq phaResponse(RealSeq omega) {
+		return freqResponse(omega).angle();
 	}
 	
 }

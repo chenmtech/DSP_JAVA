@@ -42,12 +42,12 @@ public class AnalogFilterDesigner {
 	 */
 	public static AnalogFilter design(double[] Qp, double[] Qs, double Rp, double As, AnalogFilterType afType, FilterType fType)
 	{
-		Map<String, Object> tmpMap = designAnalogFilter(Qp, Qs, Rp, As, afType, fType);
+		Map<String, Object> tmpMap = designHs(Qp, Qs, Rp, As, afType, fType);
 		if(tmpMap == null) return null;
 		RealSeq bs = (RealSeq)tmpMap.get("BS");
 		RealSeq as = (RealSeq)tmpMap.get("AS");
 		
-		AnalogFilter filter = new AnalogFilter(bs, as);
+		AnalogFilter filter = new AnalogFilter(bs.toArray(), as.toArray());
 		AnalogFilterPara para = new AnalogFilterPara(Qp, Qs, Rp, As, fType, afType);
 		filter.setFilterPara(para);
 		return filter;
@@ -63,7 +63,7 @@ public class AnalogFilterDesigner {
 	//下面为返回值： 
 	//Bs：模拟滤波器系统函数分子多项式数组 
 	//As：模拟滤波器系统函数分母多项式数组
-	private static Map<String, Object> designAnalogFilter(double[] Qp, double[] Qs, double Rp, double As, AnalogFilterType afType, FilterType fType)
+	public static Map<String, Object> designHs(double[] Qp, double[] Qs, double Rp, double As, AnalogFilterType afType, FilterType fType)
 	{
 	    if(fType == FilterType.LOWPASS)    //低通，不用频带变换了，可以直接设计 
 	    {
@@ -244,7 +244,7 @@ public class AnalogFilterDesigner {
 	    Ns = (RealSeq) Ns.reverse();
 	    Ds = (RealSeq) Ds.reverse();
 
-	    Map<String, Object> tmpMap = ZT.ZMapping(bS, aS, Ns, Ds);
+	    Map<String, Object> tmpMap = ZT.zMapping(bS, aS, Ns, Ds);
 	    RealSeq Bs = (RealSeq)tmpMap.get("BZ");
 	    RealSeq As = (RealSeq)tmpMap.get("AZ");
 	    Bs = (RealSeq) Bs.reverse();

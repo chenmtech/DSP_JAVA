@@ -1,5 +1,7 @@
 package com.cmtech.dsp.util;
-
+/*
+Copyright (c) 2008 chenm
+*/
 import com.cmtech.dsp.seq.ComplexSeq;
 import com.cmtech.dsp.seq.ISeq;
 import com.cmtech.dsp.seq.IElementBasicOperator;

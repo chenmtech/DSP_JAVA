@@ -57,7 +57,7 @@ public abstract class FilterPara {
 	@Override
 	public String toString() {
 		StringBuilder strBuilder = new StringBuilder();
-		strBuilder.append(getClass().getSimpleName() + ':');
+		strBuilder.append(getClass().getSimpleName() + ": ");
 		if(fType == FilterType.BANDPASS || fType == FilterType.BANDSTOP) {
 			strBuilder.append("wp=" + Arrays.toString(wp) + ',');
 			strBuilder.append("ws=" + Arrays.toString(ws) + ',');

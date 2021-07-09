@@ -47,10 +47,9 @@ public class IIRFilterDesigner {
 		Map<String, Object> rlt = designHz(wp, ws, Rp, As, afType, fType);
 		RealSeq bz = (RealSeq)rlt.get("BZ");
 		RealSeq az = (RealSeq)rlt.get("AZ");
-		IIRFilter filter = new IIRFilter(bz, az);
+		IIRFilter filter = new IIRFilter(bz.toArray(), az.toArray());
 		IIRPara para = new IIRPara(wp,ws,Rp,As,afType,fType);
 		filter.setFilterPara(para);
-		//filter.createStructure(StructType.IIR_DF2);
 		return filter;
 	}
 	
@@ -137,7 +136,7 @@ public class IIRFilterDesigner {
 	    } 
 	    else
 	    {
-	        tmpMap = ZT.ZMapping(bZ, aZ, Nz, Dz);
+	        tmpMap = ZT.zMapping(bZ, aZ, Nz, Dz);
 	        Bz = (RealSeq)tmpMap.get("BZ");
 	        Az = (RealSeq)tmpMap.get("AZ");
 	    }
@@ -209,7 +208,7 @@ public class IIRFilterDesigner {
 	    RealSeq Nz = new RealSeq(2/T, -2/T);
 	    RealSeq Dz = new RealSeq(1.0, 1.0);
 	    
-	    return ZT.ZMapping(bs1, as1, Nz, Dz);
+	    return ZT.zMapping(bs1, as1, Nz, Dz);
 	}
 
 
@@ -236,7 +235,7 @@ public class IIRFilterDesigner {
 	    
 	    //求*pThetas
 	    RealSeq omega = new RealSeq(ws);
-	    RealSeq phase = new IIRFilter(Nz, Dz).freq(omega).angle();
+	    RealSeq phase = new IIRFilter(Nz.toArray(), Dz.toArray()).freqResponse(omega).angle();
 	    double thetas = abs(phase.get(0));  
 	    
 	    Map<String, Object> rtnMap = new HashMap<>();
@@ -270,7 +269,7 @@ public class IIRFilterDesigner {
 	    
 	    //求*pThetas
 	    RealSeq omega = new RealSeq(ws);
-	    RealSeq phase = new IIRFilter(Nz, Dz).freq(omega).angle();
+	    RealSeq phase = new IIRFilter(Nz.toArray(), Dz.toArray()).freqResponse(omega).angle();
 	    double thetas = abs(phase.get(0));   
 	    
 	    Map<String, Object> rtnMap = new HashMap<>();
@@ -308,7 +307,7 @@ public class IIRFilterDesigner {
 	    
 	    //求*pThetas
 	    RealSeq omega = new RealSeq(ws[0], ws[1]);
-	    RealSeq phase = new IIRFilter(Nz, Dz).freq(omega).angle();	
+	    RealSeq phase = new IIRFilter(Nz.toArray(), Dz.toArray()).freqResponse(omega).angle();	
 	    double thetas = phase.abs().min();
 	    
 	    Map<String, Object> rtnMap = new HashMap<>();
@@ -346,7 +345,7 @@ public class IIRFilterDesigner {
 	    
 	    //求*pThetas
 	    RealSeq omega = new RealSeq(ws[0], ws[1]);
-	    RealSeq phase = new IIRFilter(Nz, Dz).freq(omega).angle();	
+	    RealSeq phase = new IIRFilter(Nz.toArray(), Dz.toArray()).freqResponse(omega).angle();	
 	    double thetas = phase.abs().min();
 	    
 	    Map<String, Object> rtnMap = new HashMap<>();
